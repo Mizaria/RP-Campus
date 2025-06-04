@@ -1,48 +1,77 @@
-// Entry file for the backend app
-// where we register the express app
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+const connectDB = require('./config/db');
+const path = require('path');
 
-// dovenv is the package that loads environment variables
-// from .env file into process.env object available globally in node.js environment
-// config() attaches environment variables to process.env
-require("dotenv").config();
-
-// Require express that installed via npm
-const express = require("express");
-// Require mongoose that installed via npm
-const mongoose = require("mongoose");
-// Require routes
-const workoutRoutes = require("./routes/workouts");
-const cors = require("cors");
-// Set up the express app
+// Initialize Express
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 
-// Middleware:
-// any code that executes between us getting a request on the server
-// and us sending a response back to the client
+// Connect to MongoDB
+connectDB();
+
+// Middleware
 app.use(cors());
-// Parse and attach data sent to server to request object
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Global middleware
-// the arrow function will fire for each request that comes in
-app.use((req, res, next) => {
-  console.log(req.path, req.method);
-  next();
+// Make uploads directory static
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Test route
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working!' });
 });
 
 // Routes
-// workoutRoutes is triggered when we make a request to /api/workouts
-app.use("/api/workouts", workoutRoutes);
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/reports', require('./routes/reports'));
+app.use('/api/announcements', require('./routes/announcements'));
+app.use('/api/chat', require('./routes/chat'));
 
-// Connect to DB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    // Listen for requests
-    app.listen(process.env.PORT, () => {
-      console.log("Connected to DB & listening on port", process.env.PORT);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
+// Socket.IO Connection
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  // Join private room for notifications
+  socket.on('join', (userId) => {
+    socket.join(userId);
   });
+
+  // Handle chat messages
+  socket.on('sendMessage', (data) => {
+    io.to(data.recipientId).emit('message', {
+      senderId: data.senderId,
+      content: data.content
+    });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+const { errorHandler, notFound } = require('./middleware/errorHandler');
+const { createUploadDirs } = require('./utils/helpers');
+
+// Create upload directories
+createUploadDirs();
+
+// Error Handling
+app.use(notFound);
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 5000;
+
+httpServer.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
