@@ -25,8 +25,7 @@ body {
 
 .login-btn {
 
-    background-color: #000000;
-    color: white;
+    background-color: #F0FAE9;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -34,7 +33,8 @@ body {
 }
 
 .signup-btn {
-    background-color: #F0FAE9;
+    background-color: #000000;
+    color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -45,7 +45,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 15px;
+    padding-top: px;
 }
 
 .logo-container {
@@ -63,13 +63,14 @@ body {
     color: #000000;
     font-size: 20px;
     margin-bottom: 12px;
-    font-family: sens-serif;
+    font-family: 'Sen', sans-serif;
+    font-weight: 600;
     font-style: bold;
 }
 
 .form-container {
     background-color: white;
-    padding: 15px;
+    padding: 30px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
