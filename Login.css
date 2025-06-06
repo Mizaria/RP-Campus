@@ -14,14 +14,14 @@ body {
 }
 
 .top-nav {
-    padding: 20px;
+    padding: 12px;
     display: flex;
     justify-content: flex-end;
 }
 
 .nav-buttons {
     display: flex;
-    gap: 15px;
+    gap: 10px;
 }
 
 .login-btn {
