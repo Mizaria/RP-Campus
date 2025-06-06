@@ -13,18 +13,26 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.top-nav {    padding: 12px;
+.top-nav {
+    padding: 20px;
     display: flex;
     justify-content: flex-end;
 }
 
 .nav-buttons {
     display: flex;
-    gap: 10px;
+    gap: 15px;
 }
 
 .login-btn {
+    background-color: #F0FAE9;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
+.signup-btn {
     background-color: #000000;
     color: white;
     border: none;
@@ -33,68 +41,59 @@ body {
     cursor: pointer;
 }
 
-.signup-btn {
-    background-color: #F0FAE9;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.main-container {
-    display: flex;
+.main-container {    display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 15px;
+    padding-top: 30px;
 }
 
 .logo-container {
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .logo {
-    width: 120px;
+    width: 150px;
     height: auto;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .title {
     color: #000000;
-    font-size: 20px;
-    margin-bottom: 12px;
+    font-size: 24px;
+    margin-bottom: 20px;
     font-family: sans-serif;
 }
 
 .form-container {
     background-color: white;
-    padding: 15px;
+    padding: 30px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 360px;
+    max-width: 400px;
 }
 
 .input-group {
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
 .input-group input {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
 }
 
 .login-button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background-color: #75BA3F;
     color: black;
     border: none;

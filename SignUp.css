@@ -13,26 +13,18 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.top-nav {
-    padding: 20px;
+.top-nav {    padding: 12px;
     display: flex;
     justify-content: flex-end;
 }
 
 .nav-buttons {
     display: flex;
-    gap: 15px;
+    gap: 10px;
 }
 
 .login-btn {
-    background-color: #F0FAE9;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
-.signup-btn {
     background-color: #000000;
     color: white;
     border: none;
@@ -41,59 +33,69 @@ body {
     cursor: pointer;
 }
 
-.main-container {    display: flex;
+.signup-btn {
+    background-color: #F0FAE9;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.main-container {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 30px;
+    padding-top: 15px;
 }
 
 .logo-container {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .logo {
-    width: 150px;
+    width: 120px;
     height: auto;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .title {
     color: #000000;
-    font-size: 24px;
-    margin-bottom: 20px;
-    font-family: sans-serif;
+    font-size: 20px;
+    margin-bottom: 12px;
+    font-family: sens-serif;
+    font-style: bold;
 }
 
 .form-container {
     background-color: white;
-    padding: 30px;
+    padding: 15px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 360px;
 }
 
 .input-group {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     font-weight: bold;
 }
 
 .input-group input {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
     border: 1px solid #ddd;
     border-radius: 5px;
 }
 
 .login-button {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     background-color: #75BA3F;
     color: black;
     border: none;
