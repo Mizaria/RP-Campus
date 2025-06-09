@@ -190,8 +190,59 @@ body {
 .section-title {
     font-size: 20px;
     color: #333;
-    margin: 16px 0 8px 0;
+    margin: 0 0 16px 0;
     font-weight: 600;
+}
+
+.report-progress {
+    margin-bottom: 32px;
+}
+
+.status-boxes {
+    display: flex;
+    gap: 16px;
+}
+
+.status-box {
+    background: white;
+    border-radius: 12px;
+    padding: 16px 24px;
+    min-width: 180px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.status-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.status-count {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.pending-box {
+    border-left: 4px solid #FFB800;
+}
+
+.progress-box {
+    border-left: 4px solid #0066FF;
+}
+
+.resolved-box {
+    border-left: 4px solid #75BA3F;
+}
+
+.report-history {
+    margin-top: 32px;
 }
 
 .create-report-btn {
@@ -218,7 +269,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 24px;
-    margin-top: 16px;
+    margin-top: 24px;
     max-height: calc(100vh - 280px);
     overflow-y: auto;
     padding-right: 8px;
