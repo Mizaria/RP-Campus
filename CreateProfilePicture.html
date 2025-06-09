@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RP Campus Care - Login </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RP Campus Care - Create Profile Picture</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="Login.css">
+    <link rel="stylesheet" href="CreateProfilePicture.css">
 </head>
 <body>
     <nav class="top-nav">
@@ -19,18 +20,16 @@
     <main class="main-container">
         <div class="logo-container">            <img src="images/Logo.png" alt="RP Campus Care Logo" class="logo">
             <h1 class="title">RP Campus Care</h1>
-        </div>
-
-        <div class="form-container">
-            <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your email...">
+        </div>        <div class="profile-container">
+            <h2 class="section-title">Create your profile picture</h2>            <div class="profile-picture-holder">
+                <img src="images/Frame 47.svg" alt="Profile Picture Placeholder" class="profile-placeholder">
+                <button class="add-photo-btn">
+                    <img src="images/Plus.svg" alt="Add Photo" class="plus-icon">
+                </button>
             </div>
-            <div class="input-group">
-                <label for="name">Password</label>
-                <input type="text" id="password" placeholder="Enter your password...">
+            <div class="button-container">
+                <button class="skip-button">Skip</button>
             </div>
-            <button class="login-button">Login</button>
         </div>
     </main>
 </body>
