@@ -188,5 +188,15 @@ body {
         border-radius: 5px;
         cursor: pointer;
     }
+    .background-2{
+    position: absolute;
+    min-width: 1250px;
+    max-width: 100%;
+    z-index: -1;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: 0;
+}
+    
 
 }
