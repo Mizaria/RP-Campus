@@ -27,7 +27,7 @@ body {
 }
 .background-2{
     position: absolute;
-    min-width: 1250px;
+    min-width: 100%;
     max-width: 100%;
     z-index: -1;
     transform: translateX(-50%);
@@ -158,4 +158,35 @@ body {
 
 .login-button:hover {
     opacity: 0.9;
+}
+@media (max-width: 400px){
+    .top-nav {    
+        padding: 12px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .nav-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .login-btn {
+
+        background-color: #F0FAE9;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .signup-btn {
+        background-color: #000000;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
 }
