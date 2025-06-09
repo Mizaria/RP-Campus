@@ -1,0 +1,161 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Sen', sans-serif;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.background-1{
+    position: absolute;
+    width: 180%;
+    z-index: -1;
+    transform: translateX(-50%);
+    left: 50%;
+    top: -98%;
+      /* Ensure height scales but doesn't distort */
+    height: auto; /* Maintain aspect ratio */
+    min-height: 120vh; /* Always covers enough height */
+    /* If it's an image: */
+    object-fit: cover; /* Prevents stretching */
+    /* transform: translate(-250px,-440px); */
+}
+.background-2{
+    position: absolute;
+    min-width: 1250px;
+    max-width: 100%;
+    z-index: -1;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: 0;
+}
+.background-3{
+    position: absolute;
+    width: 180%;
+    z-index: -2;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: -95%;
+      /* Ensure height scales but doesn't distort */
+    height: auto; /* Maintain aspect ratio */
+    min-height: 120vh; /* Always covers enough height */
+    /* If it's an image: */
+    object-fit: cover; /* Prevents stretching */
+    /* transform: translate(-250px,-440px); */
+}
+.top-nav {
+    position: fixed;
+    top: 12px;       /* Consistent spacing from top */
+    right: 12px;     /* Consistent spacing from right */
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    /* Optional: Add padding for better touch targets on mobile */
+    padding: 8px;
+    /* Optional: Ensure nav doesn't grow too wide on large screens */
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+    /* Allow buttons to wrap on tiny screens if needed */
+    flex-wrap: wrap;
+    justify-content: flex-end; /* Align buttons to the right */
+}
+
+.login-btn, .signup-btn {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    /* Smooth scaling for mobile */
+    font-size: clamp(12px, 2vw, 14px);
+    /* Prevent button text from wrapping */
+    white-space: nowrap;
+}
+
+.login-btn {
+    background-color: #F0FAE9;
+}
+
+.signup-btn {
+    background-color: #000000;
+    color: white;
+}
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 35px;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+.title {
+    color: #000000;
+    font-size: 24px;
+    margin-bottom: 5px;
+    font-weight:normal;
+    font-weight: bold;
+}
+
+.form-container {
+    background-color: white;
+    padding: 18px 20px 16px 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 360px;
+}
+
+.input-group {
+    margin-bottom: 12px;
+    
+}
+.input-group label {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    background-color: #F0F0F0;
+    border: none;
+    border-radius: 5px;
+     font-size: 14px;
+}
+.button{
+    display: flex;
+    justify-content: right;
+}
+.login-button {
+    padding: 10px;
+    background-color: #75BA3F;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    justify-content: right;
+}
+
+.login-button:hover {
+    opacity: 0.9;
+}
