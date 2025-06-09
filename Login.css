@@ -5,7 +5,7 @@
 }
 
 body {
-    background-image: url('background.png');
+    background-image: url('images/background.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -39,6 +39,9 @@ body {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+}
+.signup-btn:hover {
+    background-color: #75BA3F;
 }
 
 .main-container {    display: flex;
@@ -87,10 +90,12 @@ body {
 }
 
 .input-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
+     width: 100%;
+    padding: 8px;
+    background-color: #F0F0F0;
+    border: none;
     border-radius: 5px;
+     font-size: 14px;
 }
 
 .login-button {
