@@ -159,7 +159,7 @@ body {
 .login-button:hover {
     opacity: 0.9;
 }
-@media (max-width: 400px){
+@media (min-width: 400px){
     .top-nav {    
         padding: 12px;
         display: flex;
