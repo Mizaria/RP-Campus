@@ -122,6 +122,9 @@ body {
     margin-left: 20px;
     font-family: 'Sen', sans-serif;
 }
+.bar-search input:focus {
+    outline: none;
+}
 .main-content {
     margin-top: 26px;
     display: flex;
