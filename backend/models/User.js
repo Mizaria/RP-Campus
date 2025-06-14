@@ -34,8 +34,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters long'],
     select: false // Don't include password in queries by default
-  },
-  role: {
+  },  role: {
     type: String,
     enum: {
       values: ['student', 'staff', 'admin'],
@@ -43,6 +42,10 @@ const userSchema = new mongoose.Schema({
     },
     required: [true, 'Role is required'],
     default: 'student'
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt fields
