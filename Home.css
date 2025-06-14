@@ -23,6 +23,8 @@ body {
     background-size: cover;
     width: 100%;
     height: 30%;
+    margin-top: -20px;
+    padding-top: 20px;
 }
 
 .main-section {
@@ -38,6 +40,8 @@ body {
     background-size: cover;
     width: 100%;
     height: 35%;
+    margin-top: -20px;
+    padding-top: 20px;
 }
 
 .nav-menu {
