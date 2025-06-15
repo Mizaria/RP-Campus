@@ -238,6 +238,7 @@ body {
     object-fit: cover;
 }
 
+
 /* Report Sections Styles */
 .report-process-section,
 .report-history-section {
@@ -246,6 +247,8 @@ body {
     border-radius: 15px;
     padding: 20px;
     
+    height: 300px; /* Adjust as needed */
+    overflow-y: auto;
 }
 
 .section-header {
@@ -392,4 +395,11 @@ body {
 .status-count {
     margin-left: 8px;
     font-weight: 600;
+}
+
+.assigned-to {
+    color: #666;
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: normal;
 }
