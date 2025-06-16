@@ -325,6 +325,10 @@ body {
     border-radius: 20px;
     padding: 16px;
 }
+.report-card:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    transform : scale(1.02);
+}
 .report-top-bot{
     display: flex;
     justify-content: space-between;
