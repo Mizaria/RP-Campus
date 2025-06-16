@@ -245,7 +245,8 @@ body {
     margin: 20px;
     overflow-y: auto;
     padding-right: 10px;
-    width: 1230px
+    width: 1230px;
+    margin-top: 40px
 }
 
 /* Report Sections Styles */
