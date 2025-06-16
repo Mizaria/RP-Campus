@@ -245,12 +245,14 @@ body {
     margin: 20px;
     overflow-y: auto;
     padding-right: 10px;
-    width: 1230px
+    width: 1230px;
+    margin-top: 40px;
+   
 }
 
 /* Report Sections Styles */
-.report-process-section,
-.report-history-section {
+.report-process-section
+ {
     background-color: white;
     border-radius: 15px;
     padding: 20px;
@@ -260,8 +262,21 @@ body {
     overflow-y: hidden;
     white-space: nowrap;
     box-sizing: border-box;
+     
 }
-
+.report-history-section
+ {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    height: 300px;
+    max-width: 100vw; /* Important */
+    overflow-x: hidden;
+    overflow-y: auto;
+   
+    box-sizing: border-box;
+     
+}
 /* Card width and spacing */
 
 
