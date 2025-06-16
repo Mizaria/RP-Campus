@@ -135,6 +135,12 @@ body {
     margin-left: 20px;
     font-family: 'Sen', sans-serif;
 }
+
+.bar-search input:focus {
+    outline: none;
+    border: none;
+}
+
 .main-content {
     margin-top: 26px;
     display: flex;
@@ -369,19 +375,18 @@ body {
     color: #5B5B5B;
 }
 .report-vertical {
-    display: flex;
-    flex-wrap: wrap;        /* Allows wrapping */               /* Optional: space between cards */
-    padding: 10px 20px 10px 5px;
-    justify-content: space-between;
-
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 20px 20px 5px;
+    width: 100%;
 }
-.report-vertical .report-card {
 
-    flex: 0 1 300px;
+.report-vertical .report-card {
     height: 240px;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 10px;
+    width: 100%;
 }
 
 @media screen and (max-width: 1000px) {
