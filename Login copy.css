@@ -24,7 +24,7 @@ body {
     gap: 10px;
 }
 
-.login-btn {
+.login-btn { 
     background-color: #000000;
     color: white;
     border: none;
