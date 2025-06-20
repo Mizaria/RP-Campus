@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RP Campus Care - Login </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ReportForm.css">
+</head>
+
+<body>
+    <!-- <img src="images/MacBook Air - 22.svg" alt="Background Image" class="background-1"> -->
+    <div class="nav-menu">
+        <div class="navBackground">
+            <div class="nav-box">
+                <div class="nav-container">
+                    <div class="nav-title">
+                        <img src="images/Logo.png" alt="RP Campus Care Logo" class="nav-logo">
+                        <p class="nav-text-title">Campus Care</p>
+                    </div>
+                    <div class="nav-create">
+                        <img src="images/Plus.svg" alt="Create Icon" class="nav-icon" width="20px" height="20px">
+                        <p class="nav-text">create</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/Dashboard Icon.svg" alt="Create Icon" class="nav-icon" width="20px"
+                            height="20px">
+                        <p class="nav-text">Dashboard</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/My Reports Icon.svg" alt="Create Icon" class="nav-icon" width="20px"
+                            height="20px">
+                        <p class="nav-text">My Report</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/Account Icon.svg" alt="Create Icon" class="nav-icon" width="20px"
+                            height="20px">
+                        <p class="nav-text">Account</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/Notification Icon.svg" alt="Create Icon" class="nav-icon" width="20px"
+                            height="20px">
+                        <p class="nav-text">Notification</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/Chat Icon.svg" alt="Create Icon" class="nav-icon" width="20px" height="20px">
+                        <p class="nav-text">Chat</p>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-box-holder">
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="dashboard">
+        <div class="mainBackground">
+            <div class="nav-bar">
+                <div class="bar-item">
+                    <img src="images/Menu Icon.svg" alt="RP Campus Care Logo" width="20px" height="20px">
+                </div>
+                <div class="bar-search">
+                    <img src="images/Search Icon.svg" alt="RP Campus Care Logo" width="20px" height="20px">
+                    <input type="text" placeholder="Search report...">
+                </div>
+                <div class="bar-item">
+                    <img src="images/Notification Icon.svg" alt="RP Campus Care Logo" width="20px" height="20px">
+                    <img src="images/Green Circle.svg" alt="RP Campus Care Logo" class="notification-circle">
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="dashboard-title">
+                    <h2>Report</h2>
+                    <p style="padding-top: 4px;">#1203</p>
+                </div>
+                <div class="main-right">
+                    <li>
+                        <img src="images/more vertical.svg" alt="Menu Icon" class="menu-icon" width="22px"
+                            height="22px">
+                        <ul class="dropdown">
+                            <li><a><img src="images/edit.svg" alt="Edit Icon" class="dropdown-icon" width="22px"
+                                        height="22px">Edit</a></li>
+                            <li><a><img src="images/delete.svg" alt="Delete Icon" class="dropdown-icon" width="22px"
+                                        height="22px">Delete</a></li>
+                        </ul>
+                    </li>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-content">
+            <form class="report-info-container">
+                <div class="report-left">
+                    <div class="fault-Location">
+                        <p class="report-info-title">Fault Location</p>
+                        <label for="reportBuilding"></label>
+                        <input type="text" id="reportBuilding" name="reportLocation"
+                            placeholder="Bulidng name..." required class="report-fields">
+                            <label for="reportFloor"></label>
+                        <input type="text" id="reportFloor" name="reportLocation"
+                            placeholder="Floor..." required class="report-fields">
+                            <label for="reportRoom"></label>
+                        <input type="text" id="reportRoom" name="reportLocation"
+                            placeholder="Room..." required class="report-fields">
+                    </div>
+                    <div class="fault-des">
+                        <p class="report-info-title">Fault Information</p>
+                        <label for="reportCategory"></label>
+                        <select id="reportCategory" name="reportCategory">
+                            <option value="" disabled selected>Select Category...</option>
+                            <option value="Electrical">Electrical</option>
+                            <option value="Plumbing">Plumbing</option>
+                            <option value="Cleaning">Cleaning</option>
+                            <option value="IT">IT</option>
+                            <option value="Maintenance">Maintenance</option>
+                        </select>
+                        <label for="reportDes"></label>
+                        <textarea id="reportDes" name="reportDes" placeholder="Description of the fault.... "></textarea>
+                    </div>
+
+                </div>
+                <div class="report-right">
+                    <div class="report-image-container">
+                        <div class="image-present">
+                            <img src="images/image 5.png" alt="" class="report-image"height="100%">
+                            <img src="images/update.svg" alt="update Icon" class="update-icon" width="35px" height="35px">
+                        </div> 
+                        <!-- <div class="img-add-container">
+                            <img src="images/imageupload 1.svg" alt="Add Image Icon" class="add-image-icon"
+                                width="130px">
+                            <p class="add-image-text">Image of fault (optional)</p>
+                            <div class="line-divider"></div>
+                            <div class="image-btn-container">
+                                <label for="fileInput" class="image-input">
+                                    <img src="images/Plus.svg" alt="Upload Icon" class="upload-icon" width="15px"
+                                        height="15px">
+                                    Upload
+                                </label>
+                                <input type="file" id="fileInput" style="display:none;">
+                                <label for="cameraInput" class="image-input">
+                                    Use Camera
+                                </label>
+                                <input type="file" id="cameraInput" accept="image/*" capture="environment"
+                                    class="image-input" style="display:none;">
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="button-container">
+                        <button class="create-btn" type="submit">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+</body>
+
+</html>
