@@ -152,7 +152,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-right: 20px;
 }
 
 .main-right {
@@ -584,7 +583,9 @@ body {
     .mainBackground {
         height: 20%;
     }
-
+     .nav-bar {
+        height: 35%;
+    }
     .dashboard-content {
         height: 80%;
     }
