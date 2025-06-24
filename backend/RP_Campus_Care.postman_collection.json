@@ -1,0 +1,633 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "RP Campus Care API",
+		"description": "API collection for RP Campus Care application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"testuser\",\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"role\": \"student\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/me",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "me"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Create Report",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "description",
+									"value": "Test report description",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Electrical",
+									"type": "text"
+								},
+								{
+									"key": "priority",
+									"value": "Low",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "Building A",
+									"type": "text"
+								},
+								{
+									"key": "building",
+									"value": "Main Building",
+									"type": "text"
+								},
+								{
+									"key": "room",
+									"value": "Room 101",
+									"type": "text"
+								},
+								{
+									"key": "contactNumber",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "test@example.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/reports",
+							"host": ["{{base_url}}"],
+							"path": ["reports"]
+						}
+					}
+				},
+				{
+					"name": "Get All Reports",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports",
+							"host": ["{{base_url}}"],
+							"path": ["reports"]
+						}
+					}
+				},
+				{
+					"name": "Get User's Reports",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/user/me",
+							"host": ["{{base_url}}"],
+							"path": ["reports", "user", "me"]
+						}
+					}
+				},
+				{
+					"name": "Get Single Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/:id",
+							"host": ["{{base_url}}"],
+							"path": ["reports", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{report_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Add Comment to Report",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "commentText",
+									"value": "Test comment",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/reports/:id/comments",
+							"host": ["{{base_url}}"],
+							"path": ["reports", ":id", "comments"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{report_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Report Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"In Progress\",\n    \"taskDetails\": {\n        \"title\": \"Fix electrical issue\",\n        \"description\": \"Investigate and fix the reported electrical problem\",\n        \"assignedTo\": \"{{admin_id}}\",\n        \"priority\": \"High\",\n        \"dueDate\": \"{{due_date}}\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reports/:id/status",
+							"host": ["{{base_url}}"],
+							"path": ["reports", ":id", "status"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{report_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Report",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/:id",
+							"host": ["{{base_url}}"],
+							"path": ["reports", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{report_id}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin Tasks",
+			"item": [
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Test Task\",\n    \"description\": \"Test task description\",\n    \"reportId\": \"{{report_id}}\",\n    \"assignedTo\": \"{{user_id}}\",\n    \"priority\": \"High\",\n    \"dueDate\": \"{{due_date}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/tasks",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "tasks"]
+						}
+					}
+				},
+				{
+					"name": "Get All Tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/tasks",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "tasks"]
+						}
+					}
+				},
+				{
+					"name": "Get Overdue Tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/tasks/overdue",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "tasks", "overdue"]
+						}
+					}
+				},
+				{
+					"name": "Get Tasks by Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/tasks/status/:status",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "tasks", "status", ":status"],
+							"variable": [
+								{
+									"key": "status",
+									"value": "Pending"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Tasks by User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/tasks/user/:userId",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "tasks", "user", ":userId"],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{user_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Single Task",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/tasks/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "tasks", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{task_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Task Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"In Progress\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/tasks/:id/status",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "tasks", ":id", "status"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{task_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Add Task Note",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"text\": \"Test note\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/tasks/:id/notes",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "tasks", ":id", "notes"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{task_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/tasks/:id",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "tasks", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{task_id}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get All Notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications",
+							"host": ["{{base_url}}"],
+							"path": ["notifications"]
+						}
+					}
+				},
+				{
+					"name": "Get Unread Notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/unread",
+							"host": ["{{base_url}}"],
+							"path": ["notifications", "unread"]
+						}
+					}
+				},
+				{
+					"name": "Mark Notification as Read",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/:id/read",
+							"host": ["{{base_url}}"],
+							"path": ["notifications", ":id", "read"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{notification_id}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [""]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [""]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "your_jwt_token_here",
+			"type": "string"
+		},
+		{
+			"key": "report_id",
+			"value": "report_id_here",
+			"type": "string"
+		},
+		{
+			"key": "task_id",
+			"value": "task_id_here",
+			"type": "string"
+		},
+		{
+			"key": "notification_id",
+			"value": "notification_id_here",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "user_id_here",
+			"type": "string"
+		},
+		{
+			"key": "admin_id",
+			"value": "admin_id_here",
+			"type": "string"
+		},
+		{
+			"key": "due_date",
+			"value": "2024-12-31T23:59:59Z",
+			"type": "string"
+		}
+	]
+} 
