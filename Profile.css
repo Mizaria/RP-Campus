@@ -1,0 +1,66 @@
+.profile-container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: bold;
+  position: relative;
+}
+
+.edit-icon {
+  width: 18px;
+  height: 18px;
+  margin-left: 10px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.profile-email {
+  font-size: 16px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.profile-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+}
+
+.stat-card {
+  background-color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 30%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.stat-card img {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 10px;
+}
+
+.stat-card p {
+  font-size: 14px;
+  color: #333;
+  margin: 5px 0;
+}
+
+.stat-card span {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+}
