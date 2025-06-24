@@ -205,9 +205,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
+    
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-left: 110px;
+   
 }
 
 .profile-circle img {
@@ -462,6 +462,7 @@ body {
     max-width: 100%;
     height: auto;
 }
+
 
 @media screen and (max-width: 1000px) {
     .nav-menu {
