@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>    <meta charset="UTF-8">
+
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RP Campus Care - Sign Up</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="SignUp.css">
 </head>
+
 <body>
     <nav class="top-nav">
         <div class="nav-buttons">
@@ -17,7 +20,7 @@
     </nav>
 
     <main class="main-container">
-        <div class="logo-container">            <img src="images/Logo.png" alt="RP Campus Care Logo" class="logo">
+        <div class="logo-container"> <img src="images/Logo.png" alt="RP Campus Care Logo" class="logo">
             <h1 class="title">RP Campus Care</h1>
         </div>
 
@@ -35,16 +38,21 @@
                 <input type="email" id="email" placeholder="Enter your email...">
             </div>
             <div class="input-group">
-                <label for="name">Phone No.</label>
-                <input type="text" id="name" placeholder="Enter your phone number...">
-            </div>
-            <div class="input-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Enter your password...">
+            </div>
+            <div class="input-group">
+                <label for="role">Phone No.</label>
+                <select id="role "class="custom-select">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
             </div>
 
             <button class="login-button">Sign Up</button>
         </div>
     </main>
 </body>
+
 </html>

@@ -98,6 +98,15 @@ body {
     border-radius: 5px;
      font-size: 14px;
 }
+.input-group select {
+   width: 100%;
+    padding: 8px;
+    background-color: #F0F0F0;
+    border: none;
+    border-radius: 5px;
+     font-size: 14px;
+     border-right: 16px solid #F0F0F0;
+}
 
 
 .login-button {
