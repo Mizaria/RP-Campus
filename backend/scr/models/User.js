@@ -30,10 +30,6 @@ const userSchema = new mongoose.Schema({
         enum: ['student', 'staff', 'admin'],
         required: [true, 'Role is required'],
         default: 'student'
-    },
-    contactNumber: {
-        type: String,
-        trim: true
     }
 }, {
     timestamps: true

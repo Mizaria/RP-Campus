@@ -21,12 +21,10 @@ export const useSignup = () => {
         headers: {
           'Content-Type': 'application/json',
         },        body: JSON.stringify({
-          username: formData.username || formData.email,
-          name: formData.name,
+          username: formData.username,
           email: formData.email,
           password: formData.password,
-          role: formData.role || 'student',
-          phone: formData.phone
+          role: formData.role || 'student'
         }),
       });
 

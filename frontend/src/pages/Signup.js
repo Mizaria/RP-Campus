@@ -7,15 +7,11 @@ import './Signup.css';
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { handleSignup, loading, error, success, clearError } = useSignup();
-  
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+  const { handleSignup, loading, error, success, clearError } = useSignup();  const [formData, setFormData] = useState({
+    username: '',
     email: '',
-    phone: '',
     password: '',
-    role: 'student' // Default role
+    role: 'student' // Default role 
   });
 
   const handleChange = (e) => {
@@ -24,17 +20,12 @@ const Signup = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    clearError(); // Clear any previous errors
-    
-    // Prepare data in the format expected by useSignup hook
+    clearError(); // Clear any previous errors      // Prepare data in the format expected by useSignup hook
     const signupData = {
-      username: formData.email,
+      username: formData.username,
       email: formData.email,
       password: formData.password,
-      role: formData.role,
-      // Additional fields that might be needed
-      name: formData.firstName + ' ' + formData.lastName,
-      phone: formData.phone
+      role: formData.role
     };
     
     const result = await handleSignup(signupData);
@@ -66,14 +57,9 @@ const Signup = () => {
             <div className="success-message">
               Registration successful! Redirecting to dashboard...
             </div>
-          )}
-          <div className="input-group">
-            <label htmlFor="firstName">First Name</label>
-            <input type="text" id="firstName" placeholder="Enter your first name..." value={formData.firstName} onChange={handleChange} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="lastName">Last Name</label>
-            <input type="text" id="lastName" placeholder="Enter your last name..." value={formData.lastName} onChange={handleChange} required />
+          )}          <div className="input-group">
+            <label htmlFor="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username..." value={formData.username} onChange={handleChange} required />
           </div>
           <div className="input-group">
             <label htmlFor="email">Email</label>
