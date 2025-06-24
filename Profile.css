@@ -1,86 +1,147 @@
-.account-banner {
-  width: 100%;
-  background: #e9f7e6;
-  border-radius: 0 0 40px 40px;
-  padding: 40px 20px 60px;
-  text-align: center;
-  position: relative;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9fdf9;
 }
 
-.profile-picture {
+.container {
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  background: white;
+  padding: 1rem;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar .logo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar nav ul li {
+  margin: 10px 0;
+}
+
+.sidebar nav ul li.active a {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.sidebar nav a {
+  color: black;
+  text-decoration: none;
+}
+
+.nav-btn {
+  margin-bottom: 1rem;
+  background: #4CAF50;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-bar {
+  flex-grow: 1;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  max-width: 400px;
+}
+
+.notif-icon, .menu-icon {
+  margin-left: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.profile-img {
   width: 110px;
   height: 110px;
-  object-fit: cover;
   border-radius: 50%;
-  border: 4px solid white;
-  margin: 0 auto 20px;
+  margin-right: 1.5rem;
+  object-fit: cover;
 }
 
-.account-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.name-edit-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.account-name {
+.profile-info h2 {
+  display: inline-block;
   font-size: 24px;
-  font-weight: 600;
-  color: #1f1f1f;
   margin: 0;
+}
+
+.name-edit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .edit-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
 }
 
-.account-email {
-  margin: 8px 0 20px;
-  font-size: 16px;
-  color: #4f4f4f;
+.email {
+  color: #555;
+  margin-top: 0.3rem;
 }
 
-.account-stats {
+.report-summary {
+  margin-top: 2rem;
   display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 30px;
-  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
-.stat-card {
+.report-box {
+  flex: 1;
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 20px 30px;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   text-align: center;
-  width: 200px;
-  transition: all 0.3s ease;
 }
 
-.stat-card img {
-  width: 32px;
-  height: 32px;
-  margin-bottom: 10px;
+.report-box img {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 0.5rem;
 }
 
-.stat-card p {
+.label {
   font-size: 14px;
-  color: #444;
-  margin: 0 0 8px;
+  color: #666;
+  margin-bottom: 0.3rem;
 }
 
-.stat-card h3 {
-  font-size: 22px;
-  margin: 0;
+.value {
+  font-size: 20px;
   font-weight: bold;
-  color: #1a1a1a;
+  color: #333;
 }
