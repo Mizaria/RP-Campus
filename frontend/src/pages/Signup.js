@@ -1,55 +1,51 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../../images/Logo.png';
-import '../../styles/SignUp.css';
+import { useSignup } from '../hooks/useSignup';
+import Logo from '../assets/images/Logo.png';
+import backgroundImage from '../assets/images/background.png';
+import './Signup.css';
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { handleSignup, loading, error, success, clearError } = useSignup();
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    password: ''
+    password: '',
+    role: 'student' // Default role
   });
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData(prev => ({ ...prev, [id]: value }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: formData.email,
-          name: formData.firstName + ' ' + formData.lastName,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.phone
-        })
-      });
-      const data = await response.json();
-      if (response.ok) {
-        alert('Signup successful! Please login.');
-        navigate('/login');
-      } else {
-        alert(data.message || 'Signup failed');
-      }
-    } catch (err) {
-      alert('An error occurred during signup');
-    } finally {
-      setLoading(false);
+    clearError(); // Clear any previous errors
+    
+    // Prepare data in the format expected by useSignup hook
+    const signupData = {
+      username: formData.email,
+      email: formData.email,
+      password: formData.password,
+      role: formData.role,
+      // Additional fields that might be needed
+      name: formData.firstName + ' ' + formData.lastName,
+      phone: formData.phone
+    };
+    
+    const result = await handleSignup(signupData);
+    if (!result.success) {
+      // Error handling is done by the hook
+      console.log('Signup failed:', result.error);
     }
   };
 
   return (
-    <div>
+    <div className="signup-page" style={{ backgroundImage: `url(${backgroundImage})` }}>
       <nav className="top-nav">
         <div className="nav-buttons">
           <button className="login-btn" onClick={() => navigate('/login')}>Login</button>
@@ -60,8 +56,17 @@ const Signup = () => {
         <div className="logo-container">
           <img src={Logo} alt="RP Campus Care Logo" className="logo" />
           <h1 className="title">RP Campus Care</h1>
-        </div>
-        <form className="form-container" onSubmit={handleSubmit}>
+        </div>        <form className="form-container" onSubmit={handleSubmit}>
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="success-message">
+              Registration successful! Redirecting to dashboard...
+            </div>
+          )}
           <div className="input-group">
             <label htmlFor="firstName">First Name</label>
             <input type="text" id="firstName" placeholder="Enter your first name..." value={formData.firstName} onChange={handleChange} required />
@@ -73,14 +78,17 @@ const Signup = () => {
           <div className="input-group">
             <label htmlFor="email">Email</label>
             <input type="email" id="email" placeholder="Enter your email..." value={formData.email} onChange={handleChange} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="phone">Phone No.</label>
-            <input type="text" id="phone" placeholder="Enter your phone number..." value={formData.phone} onChange={handleChange} />
-          </div>
-          <div className="input-group">
+          </div>          <div className="input-group">
             <label htmlFor="password">Password</label>
             <input type="password" id="password" placeholder="Enter your password..." value={formData.password} onChange={handleChange} required />
+          </div>
+          <div className="input-group">
+            <label htmlFor="role">Role</label>
+            <select id="role" className="custom-select" value={formData.role} onChange={handleChange}>
+              <option value="student">Student</option>
+              <option value="staff">Staff</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
           <button type="submit" className="login-button" disabled={loading}>{loading ? 'Signing Up...' : 'Sign Up'}</button>
         </form>
@@ -89,4 +97,4 @@ const Signup = () => {
   );
 };
 
-// export default Signup;
+export default Signup;

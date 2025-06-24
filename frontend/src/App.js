@@ -1,10 +1,9 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Container } from '@mui/material';
 
 // Import pages (we'll create these next)
 import Login from './pages/Login';
-import SignUp from './pages/Signup';
+import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import ReportForm from './pages/ReportForm';
 import MyReports from './pages/MyReports';
@@ -34,10 +33,9 @@ function App() {
           <Route 
             path="/login" 
             element={user ? <Navigate to="/dashboard" /> : <Login />} 
-          />
-          <Route 
+          />          <Route 
             path="/signup" 
-            element={user ? <Navigate to="/dashboard" /> : <SignUp />} 
+            element={user ? <Navigate to="/dashboard" /> : <Signup />} 
           />
           
           {/* Protected routes */}

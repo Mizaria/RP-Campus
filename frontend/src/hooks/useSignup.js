@@ -20,13 +20,13 @@ export const useSignup = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: formData.username,
+        },        body: JSON.stringify({
+          username: formData.username || formData.email,
+          name: formData.name,
           email: formData.email,
           password: formData.password,
-          studentId: formData.studentId,
-          role: formData.role || 'student'
+          role: formData.role || 'student',
+          phone: formData.phone
         }),
       });
 
