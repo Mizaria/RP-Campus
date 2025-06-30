@@ -101,12 +101,6 @@ const SecNav = () => {
                 console.log('Image loaded successfully:', user?.profileImage ? `${API_BASE_URL}/uploads/${user.profileImage}` : "default");
               }}
             />
-            {/* Debug: Show the constructed URL and user object */}
-            <div style={{ fontSize: '10px', color: 'blue', marginTop: '5px', wordBreak: 'break-all' }}>
-              <div>user.profileImage: {String(user?.profileImage)}</div>
-              <div>Image URL: {user?.profileImage ? `${API_BASE_URL}/uploads/${user.profileImage}` : 'N/A'}</div>
-              <div>User object: <pre style={{whiteSpace:'pre-wrap',wordBreak:'break-all'}}>{JSON.stringify(user, null, 2)}</pre></div>
-            </div>
           </div>
         </div>
       </div>

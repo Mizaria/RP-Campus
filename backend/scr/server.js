@@ -56,11 +56,10 @@ app.use('/api/', limiter);
 
 // Serve static files from uploads directory with CORS headers
 app.use('/uploads', (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin'); // Add this line
     next();
-}, express.static(path.join(__dirname, '../uploads')));
+  }, express.static(path.join(__dirname, '../uploads')));
 
 // Mount routes
 app.use('/api/auth', authRoutes);
