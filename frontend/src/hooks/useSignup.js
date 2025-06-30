@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './useAuth';
+import { useAuth } from '../contexts/AuthContext';
 
 export const useSignup = () => {
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ export const useSignup = () => {
 
     try {
       // Call your backend API
-      const response = await fetch('http://localhost:3000/api/auth/register', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,15 +34,14 @@ export const useSignup = () => {
         // Signup successful
         setSuccess(true);
         
-        // Auto-login after successful signup
-        login(data.user, data.token);
+        // Store token for profile image step
+        sessionStorage.setItem('signupToken', data.token);
         
-        // Navigate to dashboard after short delay
-        setTimeout(() => {
-          navigate('/dashboard');
-        }, 1500);
-        
-        return { success: true };
+        return { 
+          success: true, 
+          userData: data.user, 
+          token: data.token 
+        };
       } else {
         // Signup failed
         setError(data.message || 'Registration failed');

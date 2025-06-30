@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './useAuth';
+import { useAuth } from '../contexts/AuthContext';
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ export const useLogin = () => {
 
     try {
       // Call your backend API
-      const response = await fetch('http://localhost:3000/api/auth/login', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

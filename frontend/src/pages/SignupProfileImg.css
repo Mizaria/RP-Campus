@@ -4,10 +4,9 @@
     box-sizing: border-box;
 }
 
-body {
-    background-image: url('images/background.png');
+.signup-profile-img-page {
     background-size: cover;
-    background-position: center;
+    background-position: center;        
     background-repeat: no-repeat;
     min-height: 100vh;
     font-family: 'Sen', sans-serif;
@@ -139,6 +138,7 @@ body {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+    gap: 10px;
     margin-top: 10px;
 }
 
@@ -154,5 +154,22 @@ body {
 }
 
 .skip-button:hover {
+    transform: scale(1.01);
+}
+
+.continue-button {
+    background-color: #75BA3F;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Sen', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.continue-button:hover {
+    background-color: #5fa032;
     transform: scale(1.01);
 }

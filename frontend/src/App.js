@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 // Import pages (we'll create these next)
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import SignupProfileImg from './pages/SignupProfileImg';
 import Dashboard from './pages/Dashboard';
 import ReportForm from './pages/ReportForm';
 import MyReports from './pages/MyReports';
@@ -13,10 +14,10 @@ import Profile from './pages/Profile';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
-// Import hooks
-import { useAuth } from './hooks/useAuth';
+// Import AuthProvider and useAuth
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-function App() {
+function AppContent() {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -36,6 +37,10 @@ function App() {
           />          <Route 
             path="/signup" 
             element={user ? <Navigate to="/dashboard" /> : <Signup />} 
+          />
+          <Route 
+            path="/signup-profile" 
+            element={user ? <Navigate to="/dashboard" /> : <SignupProfileImg />} 
           />
           
           {/* Protected routes */}
@@ -86,6 +91,14 @@ function App() {
         </Routes>
       {/* </Container> */}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

@@ -37,7 +37,10 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Middleware
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:3001', 'http://localhost:3000'], // Allow both frontend and any other origins
+    credentials: true
+}));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -51,8 +54,13 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// Serve static files from uploads directory
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Serve static files from uploads directory with CORS headers
+app.use('/uploads', (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+}, express.static(path.join(__dirname, '../uploads')));
 
 // Mount routes
 app.use('/api/auth', authRoutes);

@@ -20,7 +20,9 @@ const Signup = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    clearError(); // Clear any previous errors      // Prepare data in the format expected by useSignup hook
+    clearError(); // Clear any previous errors
+    
+    // Prepare data in the format expected by useSignup hook
     const signupData = {
       username: formData.username,
       email: formData.email,
@@ -29,7 +31,12 @@ const Signup = () => {
     };
     
     const result = await handleSignup(signupData);
-    if (!result.success) {
+    if (result.success) {
+      // Store signup data temporarily for profile image step
+      sessionStorage.setItem('signupData', JSON.stringify(result.userData));
+      // Navigate to profile image setup instead of dashboard
+      navigate('/signup-profile');
+    } else {
       // Error handling is done by the hook
       console.log('Signup failed:', result.error);
     }

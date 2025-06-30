@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
         enum: ['student', 'staff', 'admin'],
         required: [true, 'Role is required'],
         default: 'student'
+    },
+    profileImage: {
+        type: String,
+        default: null
     }
 }, {
     timestamps: true
