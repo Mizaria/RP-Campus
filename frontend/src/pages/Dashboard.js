@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext';
 import '../assets/styles/Dashboard.css';
 import backgroundImage from '../assets/images/mainBackground.svg';
 
-// Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 const SecNav = () => {
@@ -13,7 +12,6 @@ const SecNav = () => {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const currentDate = new Date();
 
-  // Debug: Log user data to see if profileImage is included
   useEffect(() => {
     console.log('Dashboard user data:', user);
     console.log('API_BASE_URL:', API_BASE_URL);
@@ -30,19 +28,16 @@ const SecNav = () => {
 
   const handleLogout = () => {
     logout();
-    // Use replace instead of regular navigate to ensure proper navigation
     navigate('/login', { replace: true });
   };
 
   const toggleNavbar = () => {
     setIsNavbarVisible(!isNavbarVisible);
-    // Dispatch custom event to toggle navbar
     window.dispatchEvent(new CustomEvent('toggleNavbar', {
       detail: { isVisible: !isNavbarVisible }
     }));
   };
 
-  // Listen for navbar toggle events from other components
   useEffect(() => {
     const handleNavbarToggle = (event) => {
       setIsNavbarVisible(event.detail.isVisible);
@@ -55,11 +50,11 @@ const SecNav = () => {
   }, []);
 
   const toggleModel = () => {
-    // Dispatch custom event to toggle modal
     window.dispatchEvent(new CustomEvent('toggleModal', {
       detail: { isOpen: true }
     }));
   };
+
   return (
     <div className="mainBackground" style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className="nav-bar">
@@ -84,22 +79,13 @@ const SecNav = () => {
           <p style={{ paddingTop: 4 }}>{formattedDate}</p>
         </div>
         <div className="main-right">
-          <img src="images/Log Out Icon.svg" alt="Calendar Icon" className="calendar-icon" width="18px"
-            height="18px" onClick={handleLogout}/>
+          <img src="images/Log Out Icon.svg" alt="Log Out Icon" className="calendar-icon" width="18px" height="18px" onClick={handleLogout} />
           <div className="acc-frame">
-            
-            <img 
-              src={user?.profileImage ? `${API_BASE_URL}/uploads/${user.profileImage}` : "images/Frame 47.svg"} 
-              alt="Avatar" 
+            <img
+              src={user?.profileImage ? `${API_BASE_URL}/uploads/${user.profileImage}` : "images/Frame 47.svg"}
+              alt="Avatar"
               className="acc-img"
-              onError={(e) => {
-                console.log('Image load error for URL:', e.target.src);
-                console.log('Falling back to default');
-                e.target.src = "images/Frame 47.svg";
-              }}
-              onLoad={() => {
-                console.log('Image loaded successfully:', user?.profileImage ? `${API_BASE_URL}/uploads/${user.profileImage}` : "default");
-              }}
+              onError={(e) => { e.target.src = "images/Frame 47.svg"; }}
             />
           </div>
         </div>
@@ -107,48 +93,11 @@ const SecNav = () => {
     </div>
   );
 };
-const ReportCard1 = () => {
-  return (
-    <div className="report-card">
-      <div className="report-top-bot">
-        <div className="report-top-left">
-          <span className="status-circle" style={{ backgroundColor: '#A7A7A7' }}></span>
-          <p className="report-id">#1033</p>
-        </div>
-        <div className="main-right">
-          <li>
-            <img src="images/more vertical.svg" alt="Menu Icon" className="menu-icon" width="22px"
-              height="22px" />
-            <ul className="dropdown">
-              <li><img src="images/edit.svg" alt="Edit Icon" className="dropdown-icon" width="22px"
-                height="22px" />Edit</li>
-              <li><img src="images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px"
-                height="22px" />Delete</li>
-            </ul>
-          </li>
-        </div>
-      </div>
-      <div className="report-info-main">
-        <p className="report-info-title">Equipment Problem</p>
-        <p className="report-sub-text"> massgna falxsxsxsxsxsxsxsxsxsxsxsxsxsxsxsxiqua.</p>
-      </div>
-      <div className="report-info-sub">
-        <p className="report-sub-text"><span className="light-bold">Assigned to:</span> ???</p>
-        {/* <p className="report-sub-text"><span className="light-bold">Resolved In:</span> 26/4/2025</p> for when status is resolved */}
-      </div>
-      <div className="report-top-bot">
-        <div className="report-location" style={{ backgroundColor: '#EAE0D8' }}>
-          <p className="report-sub-text">W64A</p>
-        </div>
-        <p className="report-date">12/4/2025</p>
-      </div>
-    </div>
-  );
-}
+
 const Dashboard = () => {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [reports, setReports] = useState([]);
 
-  // Listen for navbar toggle events from other components
   useEffect(() => {
     const handleNavbarToggle = (event) => {
       setIsNavbarVisible(event.detail.isVisible);
@@ -161,7 +110,25 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    // Initialize horizontal scroll functionality
+    const fetchReports = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/reports`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        const data = await res.json();
+        setReports(data);
+      } catch (err) {
+        console.error('Failed to fetch reports:', err);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  useEffect(() => {
     const slider = document.querySelector('.report-horizontal');
     if (!slider) return;
 
@@ -199,7 +166,6 @@ const Dashboard = () => {
     slider.addEventListener('mouseup', handleMouseUp);
     slider.addEventListener('mousemove', handleMouseMove);
 
-    // Cleanup event listeners
     return () => {
       slider.removeEventListener('mousedown', handleMouseDown);
       slider.removeEventListener('mouseleave', handleMouseLeave);
@@ -207,6 +173,7 @@ const Dashboard = () => {
       slider.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
+
   return (
     <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
       <SecNav />
@@ -218,13 +185,13 @@ const Dashboard = () => {
               <div className="pending">
                 <p>Pending</p>
                 <div className="tab-count">
-                  <p>1</p>
+                  <p>{reports.filter(r => r.status === 'Pending').length}</p>
                 </div>
               </div>
               <div className="in-progress">
                 <p>In Progress</p>
                 <div className="tab-count">
-                  <p>2</p>
+                  <p>{reports.filter(r => r.status === 'In Progress').length}</p>
                 </div>
               </div>
             </div>
@@ -234,20 +201,90 @@ const Dashboard = () => {
             <span>Create</span>
           </div>
         </div>
+
         <div className="report-horizontal">
-          <ReportCard1 />
+          {reports
+            .filter(r => r.status === 'Pending' || r.status === 'In Progress')
+            .map((report) => (
+              <div key={report._id} className="report-card">
+                <div className="report-top-bot">
+                  <div className="report-top-left">
+                    <span className="status-circle" style={{ backgroundColor: report.status === 'Pending' ? '#A7A7A7' : '#F0B429' }}></span>
+                    <p className="report-id">#{report._id.slice(-4)}</p>
+                  </div>
+                  <div className="main-right">
+                    <li>
+                      <img src="images/more vertical.svg" alt="Menu Icon" className="menu-icon" width="22px" height="22px" />
+                      <ul className="dropdown">
+                        <li><img src="images/edit.svg" alt="Edit Icon" className="dropdown-icon" width="22px" height="22px" />Edit</li>
+                        <li><img src="images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px" height="22px" />Delete</li>
+                      </ul>
+                    </li>
+                  </div>
+                </div>
+                <div className="report-info-main">
+                  <p className="report-info-title">{report.category} Issue</p>
+                  <p className="report-sub-text">{report.description}</p>
+                </div>
+                <div className="report-info-sub">
+                  <p className="report-sub-text"><span className="light-bold">Assigned to:</span> {report.assignedTo?.username || '???'}</p>
+                </div>
+                <div className="report-top-bot">
+                  <div className="report-location" style={{ backgroundColor: '#EAE0D8' }}>
+                    <p className="report-sub-text">{report.room || 'Unknown'}</p>
+                  </div>
+                  <p className="report-date">{new Date(report.createdAt).toLocaleDateString('en-GB')}</p>
+                </div>
+              </div>
+            ))}
         </div>
+
         <h2 className="page-title">Report History</h2>
         <div className="status-tab">
           <div className="resolved">
             <p>Resolved</p>
             <div className="tab-count">
-              <p>1</p>
+              <p>{reports.filter(r => r.status === 'Resolved').length}</p>
             </div>
           </div>
         </div>
+
         <div className="report-vertical">
-          <ReportCard1 />
+          {reports
+            .filter(r => r.status === 'Resolved')
+            .map((report) => (
+              <div key={report._id} className="report-card">
+                <div className="report-top-bot">
+                  <div className="report-top-left">
+                    <span className="status-circle" style={{ backgroundColor: '#76BB3F' }}></span>
+                    <p className="report-id">#{report._id.slice(-4)}</p>
+                  </div>
+                  <div className="main-right">
+                    <li>
+                      <img src="images/more vertical.svg" alt="Menu Icon" className="menu-icon" width="22px" height="22px" />
+                      <ul className="dropdown">
+                        <li><img src="images/edit.svg" alt="Edit Icon" className="dropdown-icon" width="22px" height="22px" />Edit</li>
+                        <li><img src="images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px" height="22px" />Delete</li>
+                      </ul>
+                    </li>
+                  </div>
+                </div>
+                <div className="report-info-main">
+                  <p className="report-info-title">{report.category} Issue</p>
+                  <p className="report-sub-text">{report.description}</p>
+                </div>
+                <div className="report-info-sub">
+                  <p className="report-sub-text"><span className="light-bold">Assigned to:</span> {report.assignedTo?.username || '???'}</p>
+                  <p className="report-sub-text"><span className="light-bold">Resolved In:</span> {new Date(report.updatedAt).toLocaleDateString('en-GB')}</p>
+                </div>
+                <div className="report-top-bot">
+                  <div className="report-location" style={{ backgroundColor: '#EAE0D8' }}>
+                    <p className="report-sub-text">{report.room || 'Unknown'}</p>
+                  </div>
+                  <p className="report-date">{new Date(report.createdAt).toLocaleDateString('en-GB')}</p>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </div>
@@ -255,3 +292,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
