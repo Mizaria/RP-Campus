@@ -20,10 +20,10 @@ router.post('/', upload.single('photo'), createReport);
 router.get('/user/me', getUserReports);
 router.get('/:id', getReport);
 router.post('/:id/comments', upload.single('photo'), addComment);
+router.delete('/:id', deleteReport); // Users can delete own pending reports
 
 // Admin only routes
 router.get('/', authorize('admin'), getReports);
 router.put('/:id/status', authorize('admin'), updateReportStatus);
-router.delete('/:id', authorize('admin'), deleteReport);
 
 module.exports = router; 

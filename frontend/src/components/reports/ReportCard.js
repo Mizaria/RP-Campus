@@ -70,10 +70,15 @@ export const ReportCard = ({ report, onEdit, onDelete }) => {
               : '???'
           }
         </p>
+        {report.status === 'Resolved' && (
+          <p className="report-sub-text">
+            <span className="light-bold">Resolved In:</span> {formatDate(report.updatedAt)}
+          </p>
+        )}
       </div>
       <div className="report-top-bot">
         <div className="report-location" style={{ backgroundColor: '#EAE0D8' }}>
-          <p className="report-sub-text">{report.building}, {report.location}, {report.room}</p>
+          <p className="report-sub-text">{report.building}{report.location}{report.room}</p>
         </div>
         <p className="report-date">{formatDate(report.createdAt)}</p>
       </div>
