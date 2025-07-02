@@ -48,7 +48,7 @@ const Navbar = () => {
   if (!user) {
     return null; // Don't show navbar if user is not logged in
   }
-  const navbarClasses = `nav-menu ${!isVisible ? 'nav-hidden' : ''}`;
+  const navbarClasses = `nav-menu${user?.role === 'admin' ? ' admin' : ''}${!isVisible ? ' nav-hidden' : ''}`;
 
   return (
     <>
@@ -74,16 +74,43 @@ const Navbar = () => {
                   height="20px" />
                 <p className="nav-text">Dashboard</p>
               </NavLink>
-              <NavLink
-                to="/reports"
-                className={({ isActive }) =>
-                  `nav-items ${isActive ? "active" : ""}`
-                }
-              >
-                <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
-                  height="20px"/>
-                <p className="nav-text">My Reports</p>
-              </NavLink>
+              {/* Show My Tasks for admin, My Reports for student/staff */}
+              {user?.role === 'admin' ? (
+                <NavLink
+                  to="/reports"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
+                    height="20px"/>
+                  <p className="nav-text">My Tasks</p>
+                </NavLink>
+              ) : (
+                <NavLink
+                  to="/reports"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
+                    height="20px"/>
+                  <p className="nav-text">My Reports</p>
+                </NavLink>
+              )}
+              {/* Show History only for admin */}
+              {user?.role === 'admin' && (
+                <NavLink
+                  to="/history"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/Timemachine.svg" className="nav-icon" alt='Dashboard' width="20px"
+                    height="20px" />
+                  <p className="nav-text">History</p>
+                </NavLink>
+              )}
               <NavLink
                 to="/profile"
                 className={({ isActive }) =>

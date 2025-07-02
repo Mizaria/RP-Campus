@@ -123,6 +123,11 @@
     background-color: #E9F8DD;
 }
 
+/* Admin active color override */
+.nav-menu.admin .nav-items.active {
+    background-color: #F8F8DD !important;
+}
+
 .nav-container .nav-items:hover {
     background-color: #f6f7f6;
 }
