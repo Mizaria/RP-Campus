@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import '../assets/styles/Dashboard.css';
+import { ReportCard } from '../components/reports/ReportCard';
+import useMyReport from '../hooks/useMyReport';
+import '../assets/styles/MyReports.css';
 import backgroundImage from '../assets/images/mainBackground.svg';
 
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
-const SecNav = () => {
+const SecNav = ({ currentSort, handleSortChange }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
@@ -80,21 +82,31 @@ const SecNav = () => {
       </div>
       <div className="main-content">
         <div className="Page-header">
-          <h2>Create Report</h2>
+          <h2>My Reports</h2>
           <div className="main-right">
-          <li>
-            <img src="/images/more vertical.svg" alt="Menu Icon" className="menu-icon" width="22px"
-              height="22px" />
-            <ul className="dropdown">
-              <li><img src="/images/edit.svg" alt="Edit Icon" className="dropdown-icon" width="22px"
-                height="22px" />Edit</li>
-              <li><img src="/images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px"
-                height="22px" />Delete</li>
-            </ul>
-          </li>
+            <li>
+              <img src="images/Descending Sorting.svg" alt="Arrow Icon" width="20px" height="20px" />
+              <ul className="dropdown">
+                <li onClick={() => handleSortChange('All')}>
+                  <a>All{currentSort === 'All' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
+                </li>
+                <li onClick={() => handleSortChange('Location')}>
+                  <a>Location{currentSort === 'Location' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
+                </li>
+                <li onClick={() => handleSortChange('Problem')}>
+                  <a>Problem{currentSort === 'Problem' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
+                </li>
+                <li onClick={() => handleSortChange('Status')}>
+                  <a>Status{currentSort === 'Status' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
+                </li>
+                <li onClick={() => handleSortChange('Created')}>
+                  <a>Created{currentSort === 'Created' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
+                </li>
+              </ul>
+            </li>
+          </div>
         </div>
-        </div>
-        <div className="create-button">
+        <div className="create-button" onClick={() => navigate('/report-form')}>
           <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px" />
           <span>Create</span>
         </div>
@@ -102,46 +114,86 @@ const SecNav = () => {
     </div>
   );
 };
-const ReportCard1 = () => {
-  return (
-    <div className="report-card">
-      <div className="report-top-bot">
-        <div className="report-top-left">
-          <span className="status-circle" style={{ backgroundColor: '#A7A7A7' }}></span>
-          <p className="report-id">#1033</p>
-        </div>
-        <div className="main-right">
-          <li>
-            <img src="images/more vertical.svg" alt="Menu Icon" className="menu-icon" width="22px"
-              height="22px" />
-            <ul className="dropdown">
-              <li><img src="images/edit.svg" alt="Edit Icon" className="dropdown-icon" width="22px"
-                height="22px" />Edit</li>
-              <li><img src="images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px"
-                height="22px" />Delete</li>
-            </ul>
-          </li>
-        </div>
-      </div>
-      <div className="report-info-main">
-        <p className="report-info-title">Equipment Problem</p>
-        <p className="report-sub-text"> massgna falxsxsxsxsxsxsxsxsxsxsxsxsxsxsxsxiqua.</p>
-      </div>
-      <div className="report-info-sub">
-        <p className="report-sub-text"><span className="light-bold">Assigned to:</span> ???</p>
-        {/* <p className="report-sub-text"><span className="light-bold">Resolved In:</span> 26/4/2025</p> for when status is resolved */}
-      </div>
-      <div className="report-top-bot">
-        <div className="report-location" style={{ backgroundColor: '#EAE0D8' }}>
-          <p className="report-sub-text">W64A</p>
-        </div>
-        <p className="report-date">12/4/2025</p>
-      </div>
-    </div>
-  );
-}
+
 const MyReport = () => {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [currentSort, setCurrentSort] = useState('All');
+  const navigate = useNavigate();
+  
+  // Use the custom hook to fetch reports
+  const { 
+    reports, 
+    loading, 
+    error, 
+    deleteReport, 
+    getReportCounts, 
+    fetchReports 
+  } = useMyReport();
+  
+  // Get report counts for the status tabs
+  const reportCounts = getReportCounts();
+
+  // Sort reports based on current sort option
+  const getSortedReports = () => {
+    let sortedReports = [...reports];
+    
+    switch (currentSort) {
+      case 'Location':
+        sortedReports.sort((a, b) => {
+          const locationA = `${a.building}${a.location}${a.room}`.toLowerCase();
+          const locationB = `${b.building}${b.location}${b.room}`.toLowerCase();
+          return locationA.localeCompare(locationB);
+        });
+        break;
+      case 'Problem':
+        sortedReports.sort((a, b) => a.category.localeCompare(b.category));
+        break;
+      case 'Status':
+        sortedReports.sort((a, b) => {
+          const statusOrder = { 'Pending': 0, 'In Progress': 1, 'Resolved': 2 };
+          return statusOrder[a.status] - statusOrder[b.status];
+        });
+        break;
+      case 'Created':
+        sortedReports.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        break;
+      case 'All':
+      default:
+        // Default sorting by status (Pending -> In Progress -> Resolved)
+        sortedReports.sort((a, b) => {
+          const statusOrder = { 'Pending': 0, 'In Progress': 1, 'Resolved': 2 };
+          return statusOrder[a.status] - statusOrder[b.status];
+        });
+        break;
+    }
+    
+    return sortedReports;
+  };
+
+  // Handle sort option selection
+  const handleSortChange = (sortOption) => {
+    setCurrentSort(sortOption);
+  };
+
+  // Handle edit report
+  const handleEditReport = (report) => {
+    // Navigate to edit page with report data
+    navigate(`/edit-report/${report._id}`, { state: { report } });
+  };
+
+  // Handle delete report
+  const handleDeleteReport = async (report) => {
+    if (window.confirm('Are you sure you want to delete this report?')) {
+      const result = await deleteReport(report._id);
+      if (result.success) {
+        // Optionally show success message
+        console.log('Report deleted successfully');
+      } else {
+        // Show error message
+        alert('Failed to delete report: ' + result.error);
+      }
+    }
+  };
 
   // Listen for navbar toggle events from other components
   useEffect(() => {
@@ -204,45 +256,58 @@ const MyReport = () => {
   }, []);
   return (
     <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
-      <SecNav />
-      <div className="dashboard-content">
-        <div className="dashboard-top-container">
-          <div>
-            <h2 className="page-title">Report Progress</h2>
-            <div className="status-tab">
-              <div className="pending">
-                <p>Pending</p>
-                <div className="tab-count">
-                  <p>1</p>
-                </div>
-              </div>
-              <div className="in-progress">
-                <p>In Progress</p>
-                <div className="tab-count">
-                  <p>2</p>
-                </div>
+      <SecNav currentSort={currentSort} handleSortChange={handleSortChange} />
+      <div class="dashboard-content">
+
+        <h2 class="page-title">Report Progress</h2>
+        <div class="report-horizontal">
+          <div class="status-tab">
+            <div class="pending">
+              <p>Pending</p>
+              <div class="tab-count">
+                <p>{reportCounts.pending}</p>
               </div>
             </div>
-          </div>
-          <div className="create-button">
-            <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px" />
-            <span>Create</span>
-          </div>
-        </div>
-        <div className="report-horizontal">
-          <ReportCard1 />
-        </div>
-        <h2 className="page-title">Report History</h2>
-        <div className="status-tab">
-          <div className="resolved">
-            <p>Resolved</p>
-            <div className="tab-count">
-              <p>1</p>
+            <div class="in-progress">
+              <p>In Progress</p>
+              <div class="tab-count">
+                <p>{reportCounts.inProgress}</p>
+              </div>
+            </div>
+            <div class="resolved">
+              <p>Resolved</p>
+              <div class="tab-count">
+                <p>{reportCounts.resolved}</p>
+              </div>
             </div>
           </div>
         </div>
         <div className="report-vertical">
-          <ReportCard1 />
+          {loading ? (
+            <div className="loading-message">
+              <p>Loading your reports...</p>
+            </div>
+          ) : error ? (
+            <div className="error-message">
+              <p>Error loading reports: {error}</p>
+              <button onClick={fetchReports} className="retry-button">
+                Retry
+              </button>
+            </div>
+          ) : reports.length === 0 ? (
+            <div className="no-reports-message">
+              <p>No reports found. Create your first report!</p>
+            </div>
+          ) : (
+            getSortedReports().map((report) => (
+              <ReportCard
+                key={report._id}
+                report={report}
+                onEdit={handleEditReport}
+                onDelete={handleDeleteReport}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>

@@ -275,12 +275,24 @@ exports.updateReportStatus = asyncHandler(async (req, res, next) => {
 
 // @desc    Delete a report
 // @route   DELETE /api/reports/:id
-// @access  Private/Admin
+// @access  Private (own reports for users, any report for admin)
 exports.deleteReport = asyncHandler(async (req, res, next) => {
     const report = await Report.findById(req.params.id);
 
     if (!report) {
         return next(new AppError('Report not found', 404));
+    }
+
+    // Check if user is authorized to delete this report
+    // Users can only delete their own pending reports, admins can delete any report
+    if (req.user.role !== 'admin') {
+        if (report.reporter.toString() !== req.user._id.toString()) {
+            return next(new AppError('Not authorized to delete this report', 403));
+        }
+        
+        if (report.status !== 'Pending') {
+            return next(new AppError('Can only delete reports with Pending status', 400));
+        }
     }
 
     // Delete associated tasks
