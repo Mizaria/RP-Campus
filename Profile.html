@@ -1,63 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Profile</title>
-  <link rel="stylesheet" href="Profile.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RP Campus Care - Login </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Dashboard.css">
 </head>
+
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <div class="logo">Campus Care</div>
-      <nav>
-        <button class="nav-btn">Create</button>
-        <ul>
-          <li><a href="#">Dashboard</a></li>
-          <li><a href="#">My Reports</a></li>
-          <li class="active"><a href="#">Account</a></li>
-          <li><a href="#">Notification</a></li>
-          <li><a href="#">Chat</a></li>
-        </ul>
-      </nav>
+    <!-- <img src="images/MacBook Air - 22.svg" alt="Background Image" class="background-1"> -->
+    <div class="nav-menu">
+        <div class="navBackground">
+            <div class="nav-box">
+                <div class="nav-container">
+                    <div class="nav-title">
+                        <img src="images/Logo.png" alt="RP Campus Care Logo" class="nav-logo">
+                        <p class="nav-text-title">Campus Care</p>
+                    </div>
+                    <div class="nav-create">
+                        <img src="images/Plus.svg" alt="Create Icon" class="nav-icon" width="20px" height="20px">
+                        <p class="nav-text">create</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/Dashboard Icon.svg" alt="Create Icon" class="nav-icon" width="20px"
+                            height="20px">
+                        <p class="nav-text">Dashboard</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/My Reports Icon.svg" alt="Create Icon" class="nav-icon" width="20px"
+                            height="20px">
+                        <p class="nav-text">My Report</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/Account Icon.svg" alt="Create Icon" class="nav-icon" width="20px"
+                            height="20px">
+                        <p class="nav-text">Account</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/Notification Icon.svg" alt="Create Icon" class="nav-icon" width="20px"
+                            height="20px">
+                        <p class="nav-text">Notification</p>
+                    </div>
+                    <div class="nav-items">
+                        <img src="images/Chat Icon.svg" alt="Create Icon" class="nav-icon" width="20px" height="20px">
+                        <p class="nav-text">Chat</p>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-box-holder">
+
+            </div>
+        </div>
     </div>
-
-    <div class="main-content">
-      <div class="top-bar">
-        <input type="text" placeholder="Search report...." class="search-bar"/>
-        <button class="menu-icon">&#9776;</button>
-        <button class="notif-icon">🔔</button>
-      </div>
-
-      <div class="profile-section">
-        <img src="/images/profile.jpg" alt="Profile" class="profile-img"/>
-        <div class="profile-info">
-          <div class="name-edit">
-            <h2>Johnathan Tan</h2>
-            <img src="/images/edit-icon.svg" alt="Edit" class="edit-icon"/>
-          </div>
-          <p class="email">johnathantan@myrp.edu.sg</p>
-        </div>
-      </div>
-
-      <div class="report-summary">
-        <div class="report-box">
-          <img src="/images/ResultsIcon.svg" alt="Results" />
-          <p class="label">Total Faults Reported</p>
-          <p class="value">12</p>
-        </div>
-        <div class="report-box">
-          <img src="/images/UnresolvedIcon.svg" alt="Unresolved" />
-          <p class="label">Total Unresolved Reports</p>
-          <p class="value">3</p>
-        </div>
-        <div class="report-box">
-          <img src="/images/ResolvedIcon.svg" alt="Resolved" />
-          <p class="label">Total Resolved Reports</p>
-          <p class="value">9</p>
-        </div>
-      </div>
     </div>
-  </div>
+    <div class="dashboard">
+        <div class="mainBackground">
+            <div class="nav-bar">
+                <div class="bar-item">
+                    <img src="images/Menu Icon.svg" alt="RP Campus Care Logo" width="20px" height="20px">
+                </div>
+                <div class="bar-search">
+                    <img src="images/Search Icon.svg" alt="RP Campus Care Logo" width="20px" height="20px">
+                    <input type="text" placeholder="Search report...">
+                </div>
+                <div class="bar-item">
+                    <img src="images/Notification Icon.svg" alt="RP Campus Care Logo" width="20px" height="20px">
+                    <img src="images/Green Circle.svg" alt="RP Campus Care Logo" class="notification-circle">
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="dashboard-title">
+                   
+                </div>
+
+            </div>
+        </div>
+        <div class="dashboard-content">
+            <div class="dashboard-top-container">
+                <div>
+                   
+    </div>
+    <script>
+        const slider = document.querySelector('.report-horizontal');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active'); // Optional styling
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 1.5; // Scroll-fast multiplier
+            slider.scrollLeft = scrollLeft - walk;
+        });
+    </script>
 </body>
+
 </html>
