@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import ReportForm from './pages/ReportForm';
 import MyReports from './pages/MyReports';
 import Profile from './pages/Profile';
+import AdminDashboard from './pages/AdminDashboard';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -48,7 +49,7 @@ function AppContent() {
             path="/dashboard" 
             element={
               <ProtectedRoute>
-                <Dashboard />
+                {user && user.role === 'admin' ? <AdminDashboard /> : <Dashboard />}
               </ProtectedRoute>
             } 
           />
