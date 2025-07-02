@@ -112,19 +112,19 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/reports`, {
+        const res = await fetch(`${API_BASE_URL}/api/reports/user/me`, {
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         });
-        const data = await res.json();
-        setReports(data);
+        const result = await res.json();
+        setReports(result.data || []);
       } catch (err) {
         console.error('Failed to fetch reports:', err);
       }
     };
-
     fetchReports();
   }, []);
 
