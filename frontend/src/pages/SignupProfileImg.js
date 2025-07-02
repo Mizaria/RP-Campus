@@ -146,13 +146,13 @@ const SignupProfileImg = () => {
                     
                     <div className="profile-picture-holder">
                         <img 
-                            src={imagePreview} 
-                            alt="Profile Picture Placeholder" 
-                            className={`profile-placeholder ${selectedImage ? 'has-image' : ''}`}
+                            alt='Profile Picture Placeholder'
                             id="profilePreview"
+                            src={imagePreview} 
+                            className={`profile-placeholder ${selectedImage ? 'has-image' : ''}`}
                         />
                         <label htmlFor="profileImageInput" className="add-photo-btn">
-                            <img src="/images/Plus.svg" alt="Add Photo" className="plus-icon" />
+                            <img src="/images/Plus.svg"  className="plus-icon" />
                             <input 
                                 type="file" 
                                 id="profileImageInput" 

@@ -57,7 +57,7 @@ const Navbar = () => {
           <div className="nav-box">
             <div className="nav-container">
               <div className="nav-title">
-                <img src="images/Logo.png" alt="RP Campus Care Logo" className="nav-logo" />
+                <img src="/images/Logo.png" alt="RP Campus Care Logo" className="nav-logo" />
                 <p className="nav-text-title">Campus Care</p>
               </div>           
               <div className="nav-create" onClick={() => navigate('/reports/new')}>
@@ -70,7 +70,7 @@ const Navbar = () => {
                   `nav-items ${isActive ? "active" : ""}`
                 }
               >
-                <img src="images/Dashboard Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
+                <img src="/images/Dashboard Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
                   height="20px" />
                 <p className="nav-text">Dashboard</p>
               </NavLink>
@@ -80,7 +80,7 @@ const Navbar = () => {
                   `nav-items ${isActive ? "active" : ""}`
                 }
               >
-                <img src="images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
+                <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
                   height="20px"/>
                 <p className="nav-text">My Reports</p>
               </NavLink>
@@ -90,22 +90,22 @@ const Navbar = () => {
                   `nav-items ${isActive ? "active" : ""}`
                 }
               >
-                <img src="images/Account Icon.svg" className="nav-icon" alt='Profile' width="20px"
+                <img src="/images/Account Icon.svg" className="nav-icon" alt='Profile' width="20px"
                   height="20px" />
                 <p className="nav-text">Profile</p>
               </NavLink>
               <div className="nav-items" onClick={() => navigate('/notifications')}>
-                <img src="images/Notification Icon.svg" className="nav-icon" alt='Notifications' width="20px"
+                <img src="/images/Notification Icon.svg" className="nav-icon" alt='Notifications' width="20px"
                   height="20px"/>
                 <p className="nav-text">Notifications</p>
               </div>
               <div className="nav-items" onClick={() => navigate('/chat')}>
-                <img src="images/Chat Icon.svg" className="nav-icon" alt='Chat' width="20px"
+                <img src="/images/Chat Icon.svg" className="nav-icon" alt='Chat' width="20px"
                   height="20px"/>
                 <p className="nav-text">Chat</p>
               </div>
               <div className="nav-items" onClick={handleLogout}>
-                <img src="images/Log Out Icon.svg" className="nav-icon" alt='Logout' width="20px"
+                <img src="/images/Log Out Icon.svg" className="nav-icon" alt='Logout' width="20px"
                   height="20px"/>
                 <p className="nav-text">Logout</p>
               </div>
@@ -120,11 +120,11 @@ const Navbar = () => {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="nav-container">
               <div className="nav-title">
-                <img src="images/Logo.png" alt="RP Campus Care Logo" className="nav-logo" />
+                <img src="/images/Logo.png" alt="RP Campus Care Logo" className="nav-logo" />
                 <p className="nav-text-title">Campus Care</p>
               </div>           
               <div className="nav-create" onClick={() => { navigate('/reports/new'); closeModal(); }}>
-                <img src="images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
+                <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
                 <p className="nav-text">Create</p>
               </div>
               <NavLink
@@ -134,7 +134,7 @@ const Navbar = () => {
                 }
                 onClick={closeModal}
               >
-                <img src="images/Dashboard Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
+                <img src="/images/Dashboard Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
                   height="20px" />
                 <p className="nav-text">Dashboard</p>
               </NavLink>
@@ -145,7 +145,7 @@ const Navbar = () => {
                 }
                 onClick={closeModal}
               >
-                <img src="images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
+                <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
                   height="20px"/>
                 <p className="nav-text">My Reports</p>
               </NavLink>
@@ -156,22 +156,22 @@ const Navbar = () => {
                 }
                 onClick={closeModal}
               >
-                <img src="images/Account Icon.svg" className="nav-icon" alt='Profile' width="20px"
+                <img src="/images/Account Icon.svg" className="nav-icon" alt='Profile' width="20px"
                   height="20px" />
                 <p className="nav-text">Profile</p>
               </NavLink>
               <div className="nav-items" onClick={() => { navigate('/notifications'); closeModal(); }}>
-                <img src="images/Notification Icon.svg" className="nav-icon" alt='Notifications' width="20px"
+                <img src="/images/Notification Icon.svg" className="nav-icon" alt='Notifications' width="20px"
                   height="20px"/>
                 <p className="nav-text">Notifications</p>
               </div>
               <div className="nav-items" onClick={() => { navigate('/chat'); closeModal(); }}>
-                <img src="images/Chat Icon.svg" className="nav-icon" alt='Chat' width="20px"
+                <img src="/images/Chat Icon.svg" className="nav-icon" alt='Chat' width="20px"
                   height="20px"/>
                 <p className="nav-text">Chat</p>
               </div>
               <div className="nav-items" onClick={handleLogout}>
-                <img src="images/Log Out Icon.svg" className="nav-icon" alt='Logout' width="20px"
+                <img src="/images/Log Out Icon.svg" className="nav-icon" alt='Logout' width="20px"
                   height="20px"/>
                 <p className="nav-text">Logout</p>
               </div>

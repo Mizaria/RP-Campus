@@ -49,11 +49,6 @@ const reportSchema = new mongoose.Schema({
         trim: true,
         minlength: [10, 'Description must be at least 10 characters long']
     },
-    contactNumber: {
-        type: String,
-        required: [true, 'Contact number is required'],
-        trim: true
-    },
     email: {
         type: String,
         required: [true, 'Email is required'],
@@ -62,7 +57,7 @@ const reportSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'In Progress', 'Resolved'],
+        enum: ['Pending', 'In Progress', 'Resolved', 'Cancelled'],
         default: 'Pending'
     },
     location: {
