@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import backgroundImage from '../assets/images/mainBackground.svg'; // Adjust the path as necessary
 import '../assets/styles/Navbar.css'; // Import your custom CSS for the navbar
 import { NavLink } from "react-router-dom";
+import adminbackgroundImage from '../assets/images/adminmainbackground.svg'; // Adjust the path as necessary
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -53,7 +54,12 @@ const Navbar = () => {
   return (
     <>
       <div className={navbarClasses}>
-        <div className="navBackground" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div
+          className="navBackground"
+          style={{
+            backgroundImage: `url(${user?.role === 'admin' ? adminbackgroundImage : backgroundImage})`
+          }}
+        >
           <div className="nav-box">
             <div className="nav-container">
               <div className="nav-title">

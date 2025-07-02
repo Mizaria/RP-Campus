@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { ReportCard } from '../components/reports/ReportCard';
 import useDashboardReports from '../hooks/useDashboardReports';
 import '../assets/styles/AdminDashboard.css';
-import backgroundImage from '../assets/images/mainBackground.svg';
+import backgroundImage from '../assets/images/adminmainbackground.svg'; // Adjust the path as necessary 
 
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
