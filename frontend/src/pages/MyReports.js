@@ -106,7 +106,7 @@ const SecNav = ({ currentSort, handleSortChange }) => {
             </li>
           </div>
         </div>
-        <div className="create-button" onClick={() => navigate('/report-form')}>
+        <div className="create-button" onClick={() => navigate('/reports/new')}>
           <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px" />
           <span>Create</span>
         </div>
@@ -193,6 +193,11 @@ const MyReport = () => {
         alert('Failed to delete report: ' + result.error);
       }
     }
+  };
+
+  // Handle report card click to navigate to individual report
+  const handleReportClick = (report) => {
+    navigate(`/report/${report._id}`);
   };
 
   // Listen for navbar toggle events from other components
@@ -305,6 +310,7 @@ const MyReport = () => {
                 report={report}
                 onEdit={handleEditReport}
                 onDelete={handleDeleteReport}
+                onClick={handleReportClick}
               />
             ))
           )}

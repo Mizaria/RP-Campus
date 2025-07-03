@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import ReportForm from './pages/ReportForm';
 import MyReports from './pages/MyReports';
 import Profile from './pages/Profile';
+import IndiReport from './pages/IndiReport';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -65,6 +66,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <MyReports />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/report/:id" 
+            element={
+              <ProtectedRoute>
+                <IndiReport />
               </ProtectedRoute>
             } 
           />
