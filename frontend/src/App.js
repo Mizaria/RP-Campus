@@ -7,10 +7,13 @@ import Signup from './pages/Signup';
 import SignupProfileImg from './pages/SignupProfileImg';
 import Dashboard from './pages/Dashboard';
 import ReportForm from './pages/ReportForm';
+import ReportUpdate from './pages/ReportUpdate';
 import MyReports from './pages/MyReports';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import IndiReport from './pages/IndiReport';
+import AdminTask from './pages/MyTask'; // Assuming you have an AdminTask page
+import AdminHistory from './pages/History';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -67,6 +70,30 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <MyReports />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/mytasks" 
+            element={
+              <ProtectedRoute>
+                <AdminTask />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/history" 
+            element={
+              <ProtectedRoute>
+                <AdminHistory />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/reports/:id/edit" 
+            element={
+              <ProtectedRoute>
+                <ReportUpdate />
               </ProtectedRoute>
             } 
           />

@@ -208,11 +208,37 @@ exports.addComment = asyncHandler(async (req, res, next) => {
 // @route   PUT /api/reports/:id/status
 // @access  Private/Admin
 exports.updateReportStatus = asyncHandler(async (req, res, next) => {
-    const { status, taskDetails } = req.body;
-    const allowedStatuses = ['Pending', 'In Progress', 'Resolved', 'Cancelled'];
+    console.log('=== UPDATE REPORT STATUS CALLED ===');
+    console.log('Raw req.body:', JSON.stringify(req.body, null, 2));
+    console.log('Report ID:', req.params.id);
+    
+    const { status, priority, taskDetails, assignedTo } = req.body;
+    
+    console.log('Destructured values:', { 
+        status: status, 
+        priority: priority, 
+        taskDetails: taskDetails,
+        assignedTo: assignedTo 
+    });
+    
+    // Validate status if provided
+    if (status !== undefined) {
+        console.log('Status validation - received status:', status, typeof status);
+        const allowedStatuses = ['Pending', 'In Progress', 'Resolved', 'Cancelled'];
+        if (!allowedStatuses.includes(status)) {
+            console.log('INVALID STATUS - received:', status, 'expected one of:', allowedStatuses);
+            return next(new AppError('Invalid status value', 400));
+        }
+    }
 
-    if (!allowedStatuses.includes(status)) {
-        return next(new AppError('Invalid status value', 400));
+    // Validate priority if provided
+    if (priority !== undefined) {
+        console.log('Priority validation - received priority:', priority, typeof priority);
+        const allowedPriorities = ['Low', 'High'];
+        if (!allowedPriorities.includes(priority)) {
+            console.log('INVALID PRIORITY - received:', priority, 'expected one of:', allowedPriorities);
+            return next(new AppError('Invalid priority value', 400));
+        }
     }
 
     const report = await Report.findById(req.params.id);
@@ -221,8 +247,21 @@ exports.updateReportStatus = asyncHandler(async (req, res, next) => {
         return next(new AppError('Report not found', 404));
     }
 
-    // Update report status
-    report.status = status;
+    // Update report status if provided
+    if (status) {
+        report.status = status;
+    }
+
+    // Update report priority if provided
+    if (priority) {
+        report.priority = priority;
+    }
+
+    // Handle assignedTo update (can be null to unassign)
+    if (assignedTo !== undefined) {
+        report.assignedTo = assignedTo;
+        console.log('Updated assignedTo to:', assignedTo);
+    }
 
     // If status is 'In Progress' and task details are provided, create a task
     if (status === 'In Progress') {
@@ -252,16 +291,25 @@ exports.updateReportStatus = asyncHandler(async (req, res, next) => {
 
     try {
         // Format the notification message
-        const notificationMessage = `Your report status has been updated to: ${status}`;
+        let notificationMessage = '';
+        if (status && priority) {
+            notificationMessage = `Your report status has been updated to: ${status} and priority changed to: ${priority}`;
+        } else if (status) {
+            notificationMessage = `Your report status has been updated to: ${status}`;
+        } else if (priority) {
+            notificationMessage = `Your report priority has been updated to: ${priority}`;
+        }
         
-        // Create notification for reporter
-        const notification = await createNotification(
-            report.reporter,
-            report._id,
-            'status_change',
-            notificationMessage
-        );
-        console.log('Status notification created:', notification._id);
+        if (notificationMessage) {
+            // Create notification for reporter
+            const notification = await createNotification(
+                report.reporter,
+                report._id,
+                'status_change',
+                notificationMessage
+            );
+            console.log('Status notification created:', notification._id);
+        }
     } catch (error) {
         console.error('Failed to create status notification:', error);
         // Don't fail the status update if notification fails
@@ -308,4 +356,167 @@ exports.deleteReport = asyncHandler(async (req, res, next) => {
         success: true,
         data: {}
     });
-}); 
+});
+
+// @desc    Update a report (users can only update their own pending reports)
+// @route   PUT /api/reports/:id
+// @access  Private
+exports.updateReport = asyncHandler(async (req, res, next) => {
+    const report = await Report.findById(req.params.id);
+
+    if (!report) {
+        return next(new AppError('Report not found', 404));
+    }
+
+    // Check if user is authorized to update this report
+    if (report.reporter.toString() !== req.user._id.toString()) {
+        return next(new AppError('Not authorized to update this report', 403));
+    }
+
+    // Check if report can be updated (only pending reports)
+    if (report.status !== 'Pending') {
+        return next(new AppError('Can only update reports with Pending status', 400));
+    }
+
+    // Handle file upload if present
+    if (req.file) {
+        try {
+            console.log('Processing file upload for update:', req.file);
+            await fileService.validateFile(req.file);
+            const photoUrl = fileService.getFileUrl(req.file.filename);
+            console.log('Generated photo URL for update:', photoUrl);
+            req.body.photoUrl = photoUrl;
+        } catch (error) {
+            console.error('File upload error during update:', error);
+            return res.status(error.statusCode || 400).json({
+                status: 'error',
+                message: error.message || 'Invalid file upload.'
+            });
+        }
+    }
+
+    // Update only allowed fields
+    const allowedFields = ['category', 'description', 'location', 'building', 'room', 'photoUrl'];
+    const updateData = {};
+    
+    allowedFields.forEach(field => {
+        if (req.body[field] !== undefined) {
+            updateData[field] = req.body[field];
+        }
+    });
+
+    // Update the report
+    const updatedReport = await Report.findByIdAndUpdate(
+        req.params.id,
+        updateData,
+        {
+            new: true,
+            runValidators: true
+        }
+    ).populate('reporter', 'username name email')
+     .populate('assignedTo', 'username name email');
+
+    res.status(200).json({
+        success: true,
+        data: updatedReport
+    });
+});
+
+// @desc    Accept a report (admin only) - Creates task and updates status
+// @route   POST /api/reports/:id/accept
+// @access  Private/Admin
+exports.acceptReport = asyncHandler(async (req, res, next) => {
+    console.log('=== ACCEPT REPORT CALLED ===');
+    console.log('Report ID:', req.params.id);
+    console.log('Admin User ID:', req.user.id);
+    console.log('Admin Username:', req.user.username);
+    
+    const report = await Report.findById(req.params.id);
+
+    if (!report) {
+        return next(new AppError('Report not found', 404));
+    }
+
+    console.log('Current report status:', report.status);
+    console.log('Current report priority:', report.priority);
+    console.log('Current report assignedTo:', report.assignedTo);
+
+    // Check if report is still pending
+    if (report.status !== 'Pending') {
+        return next(new AppError('Only pending reports can be accepted', 400));
+    }
+
+    try {
+        // Map report priority to admin task priority
+        let taskPriority = 'Medium'; // Default
+        if (report.priority === 'High') {
+            taskPriority = 'High';
+        } else if (report.priority === 'Low') {
+            taskPriority = 'Low';
+        }
+
+        console.log('Creating admin task with:', {
+            reportId: report._id,
+            assignedTo: req.user.id,
+            createdBy: req.user.id,
+            priority: taskPriority,
+            status: 'To Do'
+        });
+
+        // Create admin task
+        const task = await AdminTask.create({
+            reportId: report._id,
+            assignedTo: req.user.id,
+            createdBy: req.user.id,
+            priority: taskPriority,
+            status: 'To Do'
+        });
+
+        console.log('Admin task created successfully:', task._id);
+
+        // Update report status and assign to admin
+        report.status = 'In Progress';
+        report.assignedTo = req.user.id;
+        await report.save();
+
+        console.log('Report updated - Status:', report.status, 'AssignedTo:', report.assignedTo);
+
+        // Create notification for reporter
+        try {
+            const notificationMessage = `Your report has been accepted and is now in progress. Assigned to: ${req.user.username || req.user.name}`;
+            await createNotification(
+                report.reporter,
+                report._id,
+                'status_change',
+                notificationMessage
+            );
+            console.log('Notification created for reporter');
+        } catch (error) {
+            console.error('Failed to create acceptance notification:', error);
+        }
+
+        // Populate the updated report
+        const updatedReport = await Report.findById(report._id)
+            .populate('reporter', 'username name email')
+            .populate('assignedTo', 'username name email');
+
+        console.log('Final updated report:', {
+            id: updatedReport._id,
+            status: updatedReport.status,
+            assignedTo: updatedReport.assignedTo
+        });
+
+        res.status(200).json({
+            success: true,
+            data: {
+                report: updatedReport,
+                task: task
+            },
+            message: 'Report accepted successfully'
+        });
+
+    } catch (error) {
+        console.error('Error in acceptReport:', error);
+        return next(new AppError('Failed to accept report: ' + error.message, 500));
+    }
+});

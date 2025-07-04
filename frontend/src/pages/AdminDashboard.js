@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { ReportCard } from '../components/reports/ReportCard';
-import useDashboardReports from '../hooks/useDashboardReports';
+import { ReportCardAdmin } from '../components/reports/ReportCardAdmin';
+import { ToastContainer } from '../components/common/Toast';
+import useAdminDashboard from '../hooks/useAdminDashboard';
+import useAdminReports from '../hooks/useAdminReports';
+import useToast from '../hooks/useToast';
 import '../assets/styles/AdminDashboard.css';
 import backgroundImage from '../assets/images/adminmainbackground.svg'; // Adjust the path as necessary 
 
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
-const SecNav = () => {
+const SecNav = ({ searchTerm, onSearchChange }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
@@ -73,7 +76,12 @@ const SecNav = () => {
         </div>
         <div className="bar-search">
           <img src="images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
-          <input type="text" placeholder="Search report..." />
+          <input 
+            type="text" 
+            placeholder="Search reports..." 
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
         </div>
         <div className="bar-item">
           <img src="images/Notification Icon.svg" alt="Notification Icon" width="20px" height="20px" />
@@ -110,39 +118,128 @@ const SecNav = () => {
   );
 };
 
-const Dashboard = () => {
+const  Dashboard = () => {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   
-  // Use the custom hook to fetch reports
+  // Use the admin dashboard hook to fetch all reports
   const { 
+    reports,
     loading, 
     error, 
-    deleteReport, 
-    getPendingAndInProgressReports,
-    getResolvedReports,
+    getHighPriorityReports,
+    getLowPriorityReports,
     getReportCounts,
-    fetchReports
-  } = useDashboardReports();
+    refreshReports,
+    updateReportInState,
+    removeReportFromState
+  } = useAdminDashboard();
+
+  // Use admin reports hook for admin actions
+  const {
+    acceptReport,
+    updateReportPriority,
+    deleteReport: deleteReportAPI,
+    isSubmitting
+  } = useAdminReports();
   
-  // Get report data
-  const pendingAndInProgressReports = getPendingAndInProgressReports();
-  const resolvedReports = getResolvedReports();
+  // Use toast notifications
+  const { toasts, removeToast, showSuccess, showError } = useToast();
+  
+  // Filter reports based on search term and assignment status
+  const filterReports = (reports) => {
+    // First filter out assigned reports (only show unassigned reports)
+    const unassignedReports = reports.filter(report => !report.assignedTo);
+    
+    // Then apply search filter if search term exists
+    if (!searchTerm.trim()) return unassignedReports;
+    
+    return unassignedReports.filter(report => 
+      (report.category && report.category.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report.description && report.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report.building && report.building.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report.location && report.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report.room && report.room.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report._id && report._id.toString().includes(searchTerm))
+    );
+  };
+  
+  // Get filtered report data
+  const allHighPriorityReports = getHighPriorityReports();
+  const allLowPriorityReports = getLowPriorityReports();
+  const highPriorityReports = filterReports(allHighPriorityReports);
+  const lowPriorityReports = filterReports(allLowPriorityReports);
   const reportCounts = getReportCounts();
 
-  // Handle edit report
-  const handleEditReport = (report) => {
-    navigate(`/edit-report/${report._id}`, { state: { report } });
+  // Handle navigate to individual report
+  const handleReportClick = (report) => {
+    navigate(`/report/${report._id}`);
+  };
+
+  // Handle accept report
+  const handleAcceptReport = async (report) => {
+    const result = await acceptReport(report._id);
+    if (result.success) {
+      // Update the report in state with the new data
+      if (result.data && result.data.report) {
+        updateReportInState(result.data.report);
+      } else if (result.data) {
+        updateReportInState(result.data);
+      } else {
+        // If no data returned, refresh all reports
+        refreshReports();
+      }
+      showSuccess(result.message || 'Report accepted successfully!');
+    } else {
+      showError('Failed to accept report: ' + result.error);
+    }
+  };
+
+  // Handle escalate (change priority to High)
+  const handleEscalateReport = async (report) => {
+    console.log('Escalating report:', report._id, 'from priority:', report.priority);
+    const result = await updateReportPriority(report._id, 'High');
+    if (result.success) {
+      // Update the report in state
+      if (result.data) {
+        updateReportInState(result.data);
+      } else {
+        refreshReports();
+      }
+      showSuccess(result.message || 'Report escalated successfully!');
+    } else {
+      showError('Failed to escalate report: ' + result.error);
+    }
+  };
+
+  // Handle de-escalate (change priority to Low)
+  const handleDeEscalateReport = async (report) => {
+    console.log('De-escalating report:', report._id, 'from priority:', report.priority);
+    const result = await updateReportPriority(report._id, 'Low');
+    if (result.success) {
+      // Update the report in state
+      if (result.data) {
+        updateReportInState(result.data);
+      } else {
+        refreshReports();
+      }
+      showSuccess(result.message || 'Report de-escalated successfully!');
+    } else {
+      showError('Failed to de-escalate report: ' + result.error);
+    }
   };
 
   // Handle delete report
   const handleDeleteReport = async (report) => {
     if (window.confirm('Are you sure you want to delete this report?')) {
-      const result = await deleteReport(report._id);
+      const result = await deleteReportAPI(report._id);
       if (result.success) {
-        console.log('Report deleted successfully');
+        // Remove the report from state
+        removeReportFromState(report._id);
+        showSuccess(result.message || 'Report deleted successfully!');
       } else {
-        alert('Failed to delete report: ' + result.error);
+        showError('Failed to delete report: ' + result.error);
       }
     }
   };
@@ -208,94 +305,81 @@ const Dashboard = () => {
   }, []);
   return (
     <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
-      <SecNav />
+      <SecNav searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
       <div className="dashboard-content">
         <div className="dashboard-top-container">
           <div>
-            <h2 className="page-title">Report Progress</h2>
+            <h2 className="page-title">Urgent Reports</h2>
             <div className="status-tab">
-              <div className="pending">
-                <p>Pending</p>
+              <div className="urgent">
+                <p>Urgent</p>
                 <div className="tab-count">
-                  <p>{reportCounts.pending}</p>
-                </div>
-              </div>
-              <div className="in-progress">
-                <p>In Progress</p>
-                <div className="tab-count">
-                  <p>{reportCounts.inProgress}</p>
+                  <p>{reportCounts.high}</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="create-button" onClick={() => navigate('/report-form')}>
-            <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px" />
-            <span>Create</span>
-          </div>
+          
         </div>
-        <div className="report-horizontal">
-          {loading ? (
-            <div className="loading-message">
-              <p>Loading reports...</p>
+        
+        {loading ? (
+          <div className="loading-message">Loading reports...</div>
+        ) : error ? (
+          <div className="error-message">Error: {error}</div>
+        ) : (
+          <>
+            <div className="report-horizontal">
+              {highPriorityReports.length === 0 ? (
+                <div className="no-reports-message">No urgent reports at the moment</div>
+              ) : (
+                highPriorityReports.map((report) => (
+                  <ReportCardAdmin
+                    key={report._id}
+                    report={report}
+                    onClick={handleReportClick}
+                    onAccept={handleAcceptReport}
+                    onEscalate={handleEscalateReport}
+                    onDeEscalate={handleDeEscalateReport}
+                    onDelete={handleDeleteReport}
+                    isSubmitting={isSubmitting}
+                  />
+                ))
+              )}
             </div>
-          ) : error ? (
-            <div className="error-message">
-              <p>Error loading reports: {error}</p>
-              <button onClick={fetchReports} className="retry-button">Retry</button>
+            
+            <h2 className="page-title">Reports</h2>
+            <div className="status-tab">
+              <div className="available">
+                <p>Available</p>
+                <div className="tab-count">
+                  <p>{reportCounts.low}</p>
+                </div>
+              </div>
             </div>
-          ) : pendingAndInProgressReports.length === 0 ? (
-            <div className="no-reports-message">
-              <p>No pending or in-progress reports.</p>
+            <div className="report-vertical">
+              {lowPriorityReports.length === 0 ? (
+                <div className="no-reports-message">No reports available</div>
+              ) : (
+                lowPriorityReports.map((report) => (
+                  <ReportCardAdmin
+                    key={report._id}
+                    report={report}
+                    onClick={handleReportClick}
+                    onAccept={handleAcceptReport}
+                    onEscalate={handleEscalateReport}
+                    onDeEscalate={handleDeEscalateReport}
+                    onDelete={handleDeleteReport}
+                    isSubmitting={isSubmitting}
+                  />
+                ))
+              )}
             </div>
-          ) : (
-            pendingAndInProgressReports.map((report) => (
-              <ReportCard
-                key={report._id}
-                report={report}
-                onEdit={handleEditReport}
-                onDelete={handleDeleteReport}
-              />
-            ))
-          )}
-        </div>
-        <h2 className="page-title">Report History</h2>
-        <div className="status-tab">
-          <div className="resolved">
-            <p>Resolved</p>
-            <div className="tab-count">
-              <p>{reportCounts.resolved}</p>
-            </div>
-          </div>
-        </div>
-        <div className="report-vertical">
-          {loading ? (
-            <div className="loading-message">
-              <p>Loading resolved reports...</p>
-            </div>
-          ) : error ? (
-            <div className="error-message">
-              <p>Error loading reports: {error}</p>
-              <button onClick={fetchReports} className="retry-button">Retry</button>
-            </div>
-          ) : resolvedReports.length === 0 ? (
-            <div className="no-reports-message">
-              <p>No resolved reports yet.</p>
-            </div>
-          ) : (
-            resolvedReports.map((report) => (
-              <ReportCard
-                key={report._id}
-                report={report}
-                onEdit={handleEditReport}
-                onDelete={handleDeleteReport}
-              />
-            ))
-          )}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
 };
 
 export default Dashboard;
-

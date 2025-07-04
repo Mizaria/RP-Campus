@@ -26,6 +26,12 @@ body {
   height: 100vh;
 }
 
+/* Loading spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Error styles */
 .error {
   color: #f44336;

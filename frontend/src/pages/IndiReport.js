@@ -112,7 +112,7 @@ const IndiReport = () => {
 
     // Handle edit report
     const handleEditReport = (report) => {
-        navigate(`/edit-report/${report._id}`, { state: { report } });
+        navigate(`/reports/${report._id}/edit`);
     };
 
     // Handle delete report

@@ -83,7 +83,7 @@ const Navbar = () => {
               {/* Show My Tasks for admin, My Reports for student/staff */}
               {user?.role === 'admin' ? (
                 <NavLink
-                  to="/reports"
+                  to="/mytasks"
                   className={({ isActive }) =>
                     `nav-items ${isActive ? "active" : ""}`
                   }

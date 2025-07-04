@@ -150,7 +150,7 @@ exports.updateTaskStatus = asyncHandler(async (req, res, next) => {
     }
 
     // Validate status
-    const validStatuses = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
+    const validStatuses = ['To Do', 'In Progress', 'Completed', 'Draft'];
     if (!validStatuses.includes(req.body.status)) {
         return next(new AppError(`Invalid status value. Must be one of: ${validStatuses.join(', ')}`, 400));
     }
