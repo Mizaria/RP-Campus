@@ -125,7 +125,8 @@ const AdminHistory = () => {
     error, 
     getTasksByStatus, 
     getTaskCounts,
-    completeTask
+    completeTask,
+    removeTask
   } = useAdminTasks();
 
   // Use toast notifications
@@ -186,8 +187,8 @@ const AdminHistory = () => {
 
   // Handle task click to view details
   const handleTaskClick = (task) => {
-    if (task.reportId?._id) {
-      navigate(`/report/${task.reportId._id}`);
+    if (task._id) {
+      navigate(`/task/${task._id}`);
     }
   };
 
@@ -204,6 +205,51 @@ const AdminHistory = () => {
         showSuccess(result.message);
       } else {
         showError('Failed to complete task: ' + result.error);
+      }
+    }
+  };
+
+  // Handle remove task with enhanced deletion of comments and images
+  const handleRemoveTask = async (task) => {
+    if (window.confirm('Are you sure you want to remove this task? This will delete all associated comments, images, and unassign the report making it available for other admins.')) {
+      try {
+        // First, clear comments from the report using the new endpoint
+        if (task.reportId && task.reportId._id) {
+          try {
+            console.log(`Attempting to clear comments for report ID: ${task.reportId._id}`);
+            const clearCommentsResponse = await fetch(`${API_BASE_URL}/api/reports/${task.reportId._id}/comments`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              }
+            });
+            
+            if (clearCommentsResponse.ok) {
+              const result = await clearCommentsResponse.json();
+              console.log('Comments cleared successfully:', result);
+            } else {
+              const errorText = await clearCommentsResponse.text();
+              console.error('Failed to clear comments:', clearCommentsResponse.status, errorText);
+              showError(`Failed to clear comments: ${clearCommentsResponse.status}`);
+            }
+          } catch (commentError) {
+            console.error('Error clearing comments:', commentError);
+            showError('Error clearing comments: ' + commentError.message);
+            // Continue with task removal even if comment clearing fails
+          }
+        }
+
+        // Then remove the task
+        const result = await removeTask(task._id);
+        if (result.success) {
+          showSuccess('Task, comments, and images removed successfully!');
+        } else {
+          showError('Failed to remove task: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Error in handleRemoveTask:', error);
+        showError('Failed to remove task and associated data');
       }
     }
   };
@@ -309,6 +355,7 @@ const AdminHistory = () => {
                 key={task._id}
                 task={task}
                 onTaskClick={handleTaskClick}
+                onRemoveTask={handleRemoveTask}
                 onCompleteTask={handleCompleteTask}
               />
             ))

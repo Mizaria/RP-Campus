@@ -204,6 +204,40 @@ exports.addComment = asyncHandler(async (req, res, next) => {
     });
 });
 
+// @desc    Clear all comments from a report (admin only)
+// @route   DELETE /api/reports/:id/comments
+// @access  Private/Admin
+exports.clearComments = asyncHandler(async (req, res, next) => {
+    console.log(`[DEBUG] Clear comments called for report ID: ${req.params.id} by user: ${req.user.email}`);
+    
+    const report = await Report.findById(req.params.id);
+
+    if (!report) {
+        console.log(`[DEBUG] Report not found: ${req.params.id}`);
+        return next(new AppError('Report not found', 404));
+    }
+
+    // Only admins can clear comments
+    if (req.user.role !== 'admin') {
+        console.log(`[DEBUG] Unauthorized user tried to clear comments: ${req.user.email}, role: ${req.user.role}`);
+        return next(new AppError('Not authorized to clear comments', 403));
+    }
+
+    console.log(`[DEBUG] Report before clearing comments - Total comments: ${report.comments.length}`);
+    
+    // Clear all comments
+    report.comments = [];
+    await report.save();
+
+    console.log(`[DEBUG] Report after clearing comments - Total comments: ${report.comments.length}`);
+
+    res.status(200).json({
+        success: true,
+        message: 'Comments cleared successfully',
+        data: report
+    });
+});
+
 // @desc    Update report status and create task (admin only)
 // @route   PUT /api/reports/:id/status
 // @access  Private/Admin

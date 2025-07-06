@@ -45,7 +45,13 @@ exports.getTasks = asyncHandler(async (req, res, next) => {
 // @access  Private/Admin
 exports.getTask = asyncHandler(async (req, res, next) => {
     const task = await AdminTask.findById(req.params.id)
-        .populate('reportId', 'description category')
+        .populate({
+            path: 'reportId',
+            populate: {
+                path: 'reporter',
+                select: 'username name email'
+            }
+        })
         .populate('assignedTo', 'username name email')
         .populate('createdBy', 'username name');
 
