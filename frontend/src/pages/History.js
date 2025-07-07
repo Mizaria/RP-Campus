@@ -317,20 +317,20 @@ const AdminHistory = () => {
     <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
       <SecNav currentSort={currentSort} handleSortChange={handleSortChange} />
       <ToastContainer toasts={toasts} removeToast={removeToast} />
-      <div class="dashboard-content">
+      <div className="dashboard-content">
 
-        <h2 class="page-title"></h2>
-        <div class="report-horizontal-my">
-          <div class="status-tab">
-            <div class="draft">
+        <h2 className="page-title"></h2>
+        <div className="report-horizontal-my">
+          <div className="status-tab">
+            <div className="draft">
               <p>Draft</p>
-              <div class="tab-count">
+              <div className="tab-count">
                 <p>{taskCounts.draft}</p>
               </div>
             </div>
-            <div class="completed">
+            <div className="completed">
               <p>Completed</p>
-              <div class="tab-count">
+              <div className="tab-count">
                 <p>{taskCounts.completed}</p>
               </div>
             </div>

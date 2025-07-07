@@ -16,6 +16,7 @@ import AdminTask from './pages/MyTask';
 import AdminHistory from './pages/History';
 import AdminIndiReport from './pages/AdmindiReport';
 import IndiTask from './pages/IndiTask';
+import Notification from './pages/AllNotification';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -120,6 +121,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <IndiTask />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/notifications" 
+            element={
+              <ProtectedRoute>
+                <Notification/>
               </ProtectedRoute>
             } 
           />
