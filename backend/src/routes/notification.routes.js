@@ -16,4 +16,6 @@ router.get('/unread', protect, getUnreadNotifications);
 // Mark notification as read
 router.patch('/:id/read', protect, markAsRead);
 
+module.exports = router;
+
 module.exports = router; 

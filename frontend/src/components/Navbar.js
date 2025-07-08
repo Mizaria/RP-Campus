@@ -127,11 +127,16 @@ const Navbar = () => {
                   height="20px" />
                 <p className="nav-text">Profile</p>
               </NavLink>
-              <div className="nav-items" onClick={() => navigate('/notifications')}>
-                <img src="/images/Notification Icon.svg" className="nav-icon" alt='Notifications' width="20px"
-                  height="20px"/>
-                <p className="nav-text">Notifications</p>
-              </div>
+              <NavLink
+                  to="/notifications"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/Notification Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
+                    height="20px" />
+                  <p className="nav-text">Notifications</p>
+                </NavLink>
               <div className="nav-items" onClick={() => navigate('/chat')}>
                 <img src="/images/Chat Icon.svg" className="nav-icon" alt='Chat' width="20px"
                   height="20px"/>

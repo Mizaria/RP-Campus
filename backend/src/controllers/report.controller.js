@@ -204,6 +204,40 @@ exports.addComment = asyncHandler(async (req, res, next) => {
     });
 });
 
+// @desc    Clear all comments from a report (admin only)
+// @route   DELETE /api/reports/:id/comments
+// @access  Private/Admin
+exports.clearComments = asyncHandler(async (req, res, next) => {
+    console.log(`[DEBUG] Clear comments called for report ID: ${req.params.id} by user: ${req.user.email}`);
+    
+    const report = await Report.findById(req.params.id);
+
+    if (!report) {
+        console.log(`[DEBUG] Report not found: ${req.params.id}`);
+        return next(new AppError('Report not found', 404));
+    }
+
+    // Only admins can clear comments
+    if (req.user.role !== 'admin') {
+        console.log(`[DEBUG] Unauthorized user tried to clear comments: ${req.user.email}, role: ${req.user.role}`);
+        return next(new AppError('Not authorized to clear comments', 403));
+    }
+
+    console.log(`[DEBUG] Report before clearing comments - Total comments: ${report.comments.length}`);
+    
+    // Clear all comments
+    report.comments = [];
+    await report.save();
+
+    console.log(`[DEBUG] Report after clearing comments - Total comments: ${report.comments.length}`);
+
+    res.status(200).json({
+        success: true,
+        message: 'Comments cleared successfully',
+        data: report
+    });
+});
+
 // @desc    Update report status and create task (admin only)
 // @route   PUT /api/reports/:id/status
 // @access  Private/Admin
@@ -246,6 +280,10 @@ exports.updateReportStatus = asyncHandler(async (req, res, next) => {
     if (!report) {
         return next(new AppError('Report not found', 404));
     }
+
+    // Store the previous status and priority BEFORE making changes
+    const previousStatus = report.status;
+    const previousPriority = report.priority;
 
     // Update report status if provided
     if (status) {
@@ -290,28 +328,76 @@ exports.updateReportStatus = asyncHandler(async (req, res, next) => {
     await report.save();
 
     try {
-        // Format the notification message
+        // Format the notification message with specific status information
         let notificationMessage = '';
+        let statusData = {};
+        
         if (status && priority) {
             notificationMessage = `Your report status has been updated to: ${status} and priority changed to: ${priority}`;
+            statusData = { 
+                newStatus: status, 
+                newPriority: priority,
+                previousStatus: previousStatus,
+                previousPriority: previousPriority,
+                reportId: report._id.toString(),
+                timestamp: new Date().toISOString()
+            };
         } else if (status) {
             notificationMessage = `Your report status has been updated to: ${status}`;
+            statusData = { 
+                newStatus: status,
+                previousStatus: previousStatus,
+                reportId: report._id.toString(),
+                timestamp: new Date().toISOString()
+            };
         } else if (priority) {
             notificationMessage = `Your report priority has been updated to: ${priority}`;
+            statusData = { 
+                newPriority: priority,
+                previousPriority: previousPriority,
+                reportId: report._id.toString(),
+                timestamp: new Date().toISOString()
+            };
         }
         
         if (notificationMessage) {
-            // Create notification for reporter
-            const notification = await createNotification(
-                report.reporter,
-                report._id,
-                'status_change',
-                notificationMessage
-            );
-            console.log('Status notification created:', notification._id);
+            console.log('[NOTIFICATION DEBUG] About to create notification for:', {
+                reporterId: report.reporter,
+                reportId: report._id,
+                message: notificationMessage,
+                statusData: statusData,
+                type: 'status_change'
+            });
+            
+            // Create notification for reporter with status data embedded
+            try {
+                const notification = await createNotification(
+                    report.reporter,
+                    report._id,
+                    'status_change',
+                    notificationMessage,
+                    statusData
+                );
+                console.log('[NOTIFICATION DEBUG] Status notification created successfully:', {
+                    notificationId: notification._id,
+                    userId: notification.userId,
+                    reportId: notification.reportId,
+                    message: notification.message,
+                    statusData: notification.statusData,
+                    type: notification.type
+                });
+            } catch (createNotifError) {
+                console.error('[NOTIFICATION ERROR] Failed in createNotification call:', createNotifError);
+                throw createNotifError;
+            }
+        } else {
+            console.log('[NOTIFICATION DEBUG] No notification message generated - status:', status, 'priority:', priority);
         }
     } catch (error) {
-        console.error('Failed to create status notification:', error);
+        console.error('[NOTIFICATION ERROR] Failed to create status notification:', error);
+        console.error('[NOTIFICATION ERROR] Error name:', error.name);
+        console.error('[NOTIFICATION ERROR] Error message:', error.message);
+        console.error('[NOTIFICATION ERROR] Stack trace:', error.stack);
         // Don't fail the status update if notification fails
     }
 

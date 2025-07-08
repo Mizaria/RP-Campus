@@ -11,6 +11,7 @@ const {
     updateReportStatus,
     acceptReport,
     addComment,
+    clearComments,
     deleteReport
 } = require('../controllers/report.controller');
 
@@ -23,6 +24,7 @@ router.get('/user/me', getUserReports);
 router.get('/:id', getReport);
 router.put('/:id', upload.single('photo'), updateReport);
 router.post('/:id/comments', upload.single('photo'), addComment);
+router.delete('/:id/comments', authorize('admin'), clearComments);
 router.delete('/:id', deleteReport); // Users can delete own pending reports
 
 // Admin only routes

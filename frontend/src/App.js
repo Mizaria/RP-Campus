@@ -12,8 +12,11 @@ import MyReports from './pages/MyReports';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import IndiReport from './pages/IndiReport';
-import AdminTask from './pages/MyTask'; // Assuming you have an AdminTask page
+import AdminTask from './pages/MyTask'; 
 import AdminHistory from './pages/History';
+import AdminIndiReport from './pages/AdmindiReport';
+import IndiTask from './pages/IndiTask';
+import Notification from './pages/AllNotification';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -102,6 +105,30 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <IndiReport />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard/report/:id" 
+            element={
+              <ProtectedRoute>
+                <AdminIndiReport />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/task/:id" 
+            element={
+              <ProtectedRoute>
+                <IndiTask />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/notifications" 
+            element={
+              <ProtectedRoute>
+                <Notification/>
               </ProtectedRoute>
             } 
           />

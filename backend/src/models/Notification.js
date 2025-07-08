@@ -13,13 +13,19 @@ const notificationSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['acknowledgment', 'status_change', 'resolution'],
+        enum: ['status_change'],
         required: [true, 'Notification type is required']
     },
     message: {
         type: String,
         required: [true, 'Message is required'],
         trim: true
+    },
+    statusData: {
+        newStatus: String,
+        newPriority: String,
+        previousStatus: String,
+        previousPriority: String
     },
     isRead: {
         type: Boolean,

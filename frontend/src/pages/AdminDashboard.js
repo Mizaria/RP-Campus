@@ -174,7 +174,7 @@ const  Dashboard = () => {
 
   // Handle navigate to individual report
   const handleReportClick = (report) => {
-    navigate(`/report/${report._id}`);
+    navigate(`/dashboard/report/${report._id}`);
   };
 
   // Handle accept report
@@ -320,7 +320,10 @@ const  Dashboard = () => {
               </div>
             </div>
           </div>
-          
+          <div className="create-button" onClick={() => navigate('/admin-report')}>
+            <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px" />
+            <span>Create</span>
+          </div>
         </div>
         
         {loading ? (

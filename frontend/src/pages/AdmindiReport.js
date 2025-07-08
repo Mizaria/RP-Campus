@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import useIndividualReport from '../hooks/useIndividualReport';
-import '../assets/styles/indiReport.css';
-import backgroundImage from '../assets/images/mainBackground.svg';
+import { ToastContainer } from '../components/common/Toast';
+import useAdminIndividualReport from '../hooks/useAdminIndividualReport';
+import useToast from '../hooks/useToast';
+import '../assets/styles/AdminindiReport.css';
+import backgroundImage from '../assets/images/adminmainbackground.svg';
 
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
-const SecNav = ({ report, onEdit, onDelete }) => {
+const SecNav = ({ 
+    report, 
+    shouldShowDropdown, 
+    setShouldShowDropdown, 
+    handleEscalateClick, 
+    handleDeEscalateClick, 
+    handleDeleteClick 
+}) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+    
     // Debug: Log user data to see if profileImage is included
     useEffect(() => {
         console.log('Dashboard user data:', user);
@@ -20,7 +30,6 @@ const SecNav = ({ report, onEdit, onDelete }) => {
             console.log('Constructed image URL:', `${API_BASE_URL}/uploads/${user.profileImage}`);
         }
     }, [user]);
-
 
     const toggleNavbar = () => {
         setIsNavbarVisible(!isNavbarVisible);
@@ -48,6 +57,24 @@ const SecNav = ({ report, onEdit, onDelete }) => {
             detail: { isOpen: true }
         }));
     };
+
+    const toggleDropdown = () => {
+        setShouldShowDropdown(!shouldShowDropdown);
+    };
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.main-right')) {
+                setShouldShowDropdown(false);
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [setShouldShowDropdown]);
     return (
         <div className="mainBackground" style={{ backgroundImage: `url(${backgroundImage})` }}>
             <div className="nav-bar">
@@ -68,24 +95,41 @@ const SecNav = ({ report, onEdit, onDelete }) => {
             </div>
             <div className="main-content">
                 <div className="Page-header">
-                    <h2>Report</h2>
+                    <h2>Report Details</h2>
                     <p style={{ paddingTop: 4 }}>{report ? `#${report._id.toString().slice(-4)}` : '#----'}</p>
                 </div>
-                {report && report.status === 'Pending' && (
-                    <div className="main-right">
+                {report && (
+                    <div className="main-right" onClick={(e) => e.stopPropagation()}>
                         <li>
-                            <img src="/images/more vertical.svg" alt="Menu Icon" className="menu-icon" width="22px"
-                                height="22px" />
-                            <ul className="dropdown">
-                                <li onClick={() => onEdit && onEdit(report)}>
-                                    <img src="/images/edit.svg" alt="Edit Icon" className="dropdown-icon" width="22px"
-                                        height="22px" />Edit
-                                </li>
-                                <li onClick={() => onDelete && onDelete(report)}>
-                                    <img src="/images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px"
-                                        height="22px" />Delete
-                                </li>
-                            </ul>
+                            <img 
+                                src="/images/more vertical.svg" 
+                                alt="Menu Icon" 
+                                className="menu-icon" 
+                                width="22px"
+                                height="22px" 
+                                onClick={toggleDropdown}
+                                style={{ cursor: 'pointer' }}
+                            />
+                           
+                                <ul className="dropdown">
+                                    {report.priority !== 'High' && (
+                                        <li onClick={handleEscalateClick}>
+                                            <img src="/images/Up.svg" alt="Escalate Icon" className="dropdown-icon" width="22px"
+                                                height="22px" />Escalate 
+                                        </li>
+                                    )}
+                                    {report.priority !== 'Low' && (
+                                        <li onClick={handleDeEscalateClick}>
+                                            <img src="/images/Down.svg" alt="De-escalate Icon" className="dropdown-icon" width="22px"
+                                                height="22px" />De-escalate 
+                                        </li>
+                                    )}
+                                    <li onClick={handleDeleteClick}>
+                                        <img src="/images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px"
+                                            height="22px" />Delete 
+                                    </li>
+                                </ul>
+                           
                         </li>
                     </div>
                 )}
@@ -93,8 +137,9 @@ const SecNav = ({ report, onEdit, onDelete }) => {
         </div>
     );
 };
-const IndiReport = () => {
+const AdminIndiReport = () => {
     const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+    const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -103,27 +148,76 @@ const IndiReport = () => {
         report,
         loading,
         error,
+        acceptReport,
+        escalateReport,
+        deEscalateReport,
         deleteReport,
+        canEscalate,
+        canDeEscalate,
         formatDate,
         getStatusColor,
+        getPriorityColor,
         getCategoryIcon,
         getReportIdDisplay
-    } = useIndividualReport(id);
+    } = useAdminIndividualReport(id);
 
-    // Handle edit report
-    const handleEditReport = (report) => {
-        navigate(`/reports/${report._id}/edit`);
+    // Use toast notifications
+    const { toasts, removeToast, showSuccess, showError } = useToast();
+
+    // Handle accept report
+    const handleAcceptReport = async () => {
+        if (window.confirm('Are you sure you want to accept this report? This will assign it to you as a task.')) {
+            const result = await acceptReport();
+            if (result.success) {
+                showSuccess(result.message);
+                // Navigate back to dashboard after accepting
+                setTimeout(() => {
+                    navigate('/dashboard');
+                }, 2000);
+            } else {
+                showError('Failed to accept report: ' + result.error);
+            }
+        }
+    };
+
+    // Handle escalate report
+    const handleEscalateClick = async () => {
+        if (window.confirm('Are you sure you want to escalate this report to High priority?')) {
+            const result = await escalateReport();
+            if (result.success) {
+                showSuccess(result.message);
+                setShouldShowDropdown(false);
+            } else {
+                showError('Failed to escalate report: ' + result.error);
+            }
+        }
+    };
+
+    // Handle de-escalate report
+    const handleDeEscalateClick = async () => {
+        if (window.confirm('Are you sure you want to de-escalate this report to Low priority?')) {
+            const result = await deEscalateReport();
+            if (result.success) {
+                showSuccess(result.message);
+                setShouldShowDropdown(false);
+            } else {
+                showError('Failed to de-escalate report: ' + result.error);
+            }
+        }
     };
 
     // Handle delete report
-    const handleDeleteReport = async (report) => {
-        if (window.confirm('Are you sure you want to delete this report?')) {
+    const handleDeleteClick = async () => {
+        if (window.confirm('Are you sure you want to delete this report? This action cannot be undone.')) {
             const result = await deleteReport();
             if (result.success) {
-                console.log('Report deleted successfully');
-                navigate('/my-reports'); // Navigate back to reports list
+                showSuccess(result.message);
+                // Navigate back to dashboard after deleting
+                setTimeout(() => {
+                    navigate('/dashboard');
+                }, 2000);
             } else {
-                alert('Failed to delete report: ' + result.error);
+                showError('Failed to delete report: ' + result.error);
             }
         }
     };
@@ -172,7 +266,15 @@ const IndiReport = () => {
 
     return (
         <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
-            <SecNav report={report} onEdit={handleEditReport} onDelete={handleDeleteReport} />
+            <SecNav 
+                report={report} 
+                shouldShowDropdown={shouldShowDropdown}
+                setShouldShowDropdown={setShouldShowDropdown}
+                handleEscalateClick={handleEscalateClick}
+                handleDeEscalateClick={handleDeEscalateClick}
+                handleDeleteClick={handleDeleteClick}
+            />
+            <ToastContainer toasts={toasts} removeToast={removeToast} />
             <div className="dashboard-content">
                 {loading ? (
                     <div className="loading-message">
@@ -219,17 +321,11 @@ const IndiReport = () => {
                                 <p>Created At:</p>
                                 <div>{formatDate(report.createdAt)}</div>
                             </div>
-                            {report.status === 'Resolved' && (
-                                <div className="report-info">
-                                    <p>Resolved In:</p>
-                                    <div>{formatDate(report.updatedAt)}</div>
-                                </div>
-                            )}
                             <div className="report-info">
-                                <p>Status:</p>
+                                <p>Priority:</p>
                                 <div className="status-info">
-                                    <div className="staus-circle-s" style={{ backgroundColor: getStatusColor(report.status) }} />
-                                    {report.status}
+                                    <div className="staus-circle-s" style={{ backgroundColor: getPriorityColor(report.priority) }} />
+                                    {report.priority}
                                 </div>
                             </div>
                             <div className="report-info-des">
@@ -268,62 +364,27 @@ const IndiReport = () => {
                                     </div>
                                 </div>
                             )}
-                            <div className="assigned-to">
-                                Assigned to: {
-                                    report.assignedTo && report.assignedTo.username
-                                        ? report.assignedTo.username
-                                        : '???'
-                                }
-                            </div>
-                        </div>
-                        {report.status === 'Resolved' && (
-                            <>
-                                <h2 className="page-title" style={{ width: "100%" }}>Additional Information</h2>
-                                <div className="additional-information">
-                                    <div className="remark">
-                                        <div className="report-info-des">
-                                            <p>Remark:</p>
-                                            <div className="des-textbox">
-                                                {report.comments && report.comments.length > 0
-                                                    ? report.comments[report.comments.length - 1].commentText
-                                                    : 'No remarks'
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="additional-img">
-                                        {report.comments && report.comments.length > 0 && report.comments[report.comments.length - 1].photoUrl ? (
-                                           
-                                                <img
-                                                    src={`${API_BASE_URL}${report.comments[report.comments.length - 1].photoUrl}`}
-                                                    alt="Additional"
-                                                    className="report-image"
-                                                    style={{ height: "100%" }}
-                                                    onError={(e) => {
-                                                        console.log('Additional image load error, URL:', e.target.src);
-                                                        e.target.style.display = 'none';
-                                                        e.target.parentElement.style.display = 'none';
-                                                        e.target.parentElement.nextElementSibling.style.display = 'block';
-                                                    }}
-                                                />
-                                            
-                                        ) : null}
-                                        {(!report.comments || report.comments.length === 0 || !report.comments[report.comments.length - 1].photoUrl) && (
-                                            <div className="no-img">
-                                                <img
-                                                    src="/images/noimg 1.svg"
-                                                    alt="No Image"
-                                                    className="no-image-icon"
-                                                    width={120}
-                                                    height={120}
-                                                />
-                                                <p>No Image Added</p>
-                                            </div>
-                                        )}
-                                    </div>
+                            {report.status === 'Pending' && (
+                                <div className="accept-btn-indi">
+                                    <button 
+                                        className="accept-report-btn-indi"
+                                        onClick={handleAcceptReport}
+                                    >
+                                        Accept
+                                    </button>
                                 </div>
-                            </>
-                        )}
+                            )}
+                            {report.status !== 'Pending' && (
+                                <div className="assigned-to">
+                                    Report Status: {report.status}
+                                    {report.assignedTo && (
+                                        <div style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+                                            Assigned to: {report.assignedTo.username || 'Unknown'}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                         <div className="spacer" />
                     </div>
                 )}
@@ -333,4 +394,5 @@ const IndiReport = () => {
 };
 
 
-export default IndiReport;
+export default AdminIndiReport;
+
