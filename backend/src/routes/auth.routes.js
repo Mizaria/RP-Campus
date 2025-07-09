@@ -172,6 +172,32 @@ router.get('/me', protect, async (req, res, next) => {
         next(new AppError(error.message, 400));
     }
 });
+// 
+// @desc    Get user profile
+// @route   GET /api/auth/profile
+// @access  Private
+router.get('/profile', protect, async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id).select('-passwordHash');
+        
+        if (!user) {
+            return next(new AppError('User not found', 404));
+        }
+
+        res.status(200).json({
+            success: true,
+            data: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                profileImage: user.profileImage
+            }
+        });
+    } catch (error) {
+        next(new AppError(error.message, 400));
+    }
+});
 
 // @desc    Delete user (for testing purposes)
 // @route   DELETE /api/auth/users/:email
