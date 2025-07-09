@@ -24,6 +24,7 @@
 .notification-des{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 14px;
     color: #5B5B5B;
 }
@@ -83,4 +84,9 @@
     transform: none !important;
     box-shadow: none !important;
     color: #9ca3af !important;
+}
+@media screen and (max-width: 404px) {
+    .notification-card{
+        height: 100px;
+    }
 }
