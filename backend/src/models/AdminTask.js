@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 
 const adminTaskSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: [true, 'Task title is required'],
-        trim: true
-    },
-    description: {
-        type: String,
-        required: [true, 'Task description is required'],
-        trim: true
-    },
+    // title: {
+    //     type: String,
+    //     required: [true, 'Task title is required'],
+    //     trim: true
+    // },
+    // description: {
+    //     type: String,
+    //     required: [true, 'Task description is required'],
+    //     trim: true
+    // },
     reportId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Report',
@@ -28,18 +28,18 @@ const adminTaskSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'In Progress', 'Completed', 'Cancelled'],
-        default: 'Pending'
+        enum: ['To Do', 'In Progress', 'Completed', 'Draft'],
+        default: 'To Do'
     },
     priority: {
         type: String,
         enum: ['Low', 'Medium', 'High'],
         default: 'Medium'
     },
-    dueDate: {
-        type: Date,
-        required: [true, 'Due date is required']
-    },
+    // dueDate: {
+    //     type: Date,
+    //     required: [true, 'Due date is required']
+    // },
     completedAt: {
         type: Date
     },
@@ -72,7 +72,11 @@ adminTaskSchema.statics.getTasksByStatus = async function(status) {
 
 // Static method to get tasks by assigned user
 adminTaskSchema.statics.getTasksByUser = async function(userId) {
-    return this.find({ assignedTo: userId }).populate('reportId', 'description category');
+    return this.find({ assignedTo: userId })
+        .populate('reportId', 'description category priority building location room status createdAt updatedAt reporter')
+        .populate('assignedTo', 'username name email')
+        .populate('createdBy', 'username name email')
+        .sort({ createdAt: -1 });
 };
 
 // Static method to get overdue tasks

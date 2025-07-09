@@ -45,7 +45,13 @@ exports.getTasks = asyncHandler(async (req, res, next) => {
 // @access  Private/Admin
 exports.getTask = asyncHandler(async (req, res, next) => {
     const task = await AdminTask.findById(req.params.id)
-        .populate('reportId', 'description category')
+        .populate({
+            path: 'reportId',
+            populate: {
+                path: 'reporter',
+                select: 'username name email'
+            }
+        })
         .populate('assignedTo', 'username name email')
         .populate('createdBy', 'username name');
 
@@ -150,7 +156,7 @@ exports.updateTaskStatus = asyncHandler(async (req, res, next) => {
     }
 
     // Validate status
-    const validStatuses = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
+    const validStatuses = ['To Do', 'In Progress', 'Completed', 'Draft'];
     if (!validStatuses.includes(req.body.status)) {
         return next(new AppError(`Invalid status value. Must be one of: ${validStatuses.join(', ')}`, 400));
     }

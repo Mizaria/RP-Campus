@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import backgroundImage from '../assets/images/mainBackground.svg'; // Adjust the path as necessary
 import '../assets/styles/Navbar.css'; // Import your custom CSS for the navbar
 import { NavLink } from "react-router-dom";
+import adminbackgroundImage from '../assets/images/adminmainbackground.svg'; // Adjust the path as necessary
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -48,12 +49,17 @@ const Navbar = () => {
   if (!user) {
     return null; // Don't show navbar if user is not logged in
   }
-  const navbarClasses = `nav-menu ${!isVisible ? 'nav-hidden' : ''}`;
+  const navbarClasses = `nav-menu${user?.role === 'admin' ? ' admin' : ''}${!isVisible ? ' nav-hidden' : ''}`;
 
   return (
     <>
       <div className={navbarClasses}>
-        <div className="navBackground" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div
+          className="navBackground"
+          style={{
+            backgroundImage: `url(${user?.role === 'admin' ? adminbackgroundImage : backgroundImage})`
+          }}
+        >
           <div className="nav-box">
             <div className="nav-container">
               <div className="nav-title">
@@ -74,16 +80,43 @@ const Navbar = () => {
                   height="20px" />
                 <p className="nav-text">Dashboard</p>
               </NavLink>
-              <NavLink
-                to="/reports"
-                className={({ isActive }) =>
-                  `nav-items ${isActive ? "active" : ""}`
-                }
-              >
-                <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
-                  height="20px"/>
-                <p className="nav-text">My Reports</p>
-              </NavLink>
+              {/* Show My Tasks for admin, My Reports for student/staff */}
+              {user?.role === 'admin' ? (
+                <NavLink
+                  to="/mytasks"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
+                    height="20px"/>
+                  <p className="nav-text">My Tasks</p>
+                </NavLink>
+              ) : (
+                <NavLink
+                  to="/reports"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
+                    height="20px"/>
+                  <p className="nav-text">My Reports</p>
+                </NavLink>
+              )}
+              {/* Show History only for admin */}
+              {user?.role === 'admin' && (
+                <NavLink
+                  to="/history"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/Timemachine.svg" className="nav-icon" alt='Dashboard' width="20px"
+                    height="20px" />
+                  <p className="nav-text">History</p>
+                </NavLink>
+              )}
               <NavLink
                 to="/profile"
                 className={({ isActive }) =>
@@ -94,11 +127,16 @@ const Navbar = () => {
                   height="20px" />
                 <p className="nav-text">Profile</p>
               </NavLink>
-              <div className="nav-items" onClick={() => navigate('/notifications')}>
-                <img src="/images/Notification Icon.svg" className="nav-icon" alt='Notifications' width="20px"
-                  height="20px"/>
-                <p className="nav-text">Notifications</p>
-              </div>
+              <NavLink
+                  to="/notifications"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/Notification Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
+                    height="20px" />
+                  <p className="nav-text">Notifications</p>
+                </NavLink>
               <div className="nav-items" onClick={() => navigate('/chat')}>
                 <img src="/images/Chat Icon.svg" className="nav-icon" alt='Chat' width="20px"
                   height="20px"/>

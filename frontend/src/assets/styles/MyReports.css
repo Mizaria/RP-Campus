@@ -11,6 +11,32 @@
 }
 
 
+/* Report containers */
+.report-horizontal {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px 0;
+  scroll-behavior: smooth;
+}
+
+.report-horizontal-my::-webkit-scrollbar {
+  height: 8px;
+}
+
+.report-horizontal-my::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.report-horizontal-my::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.report-horizontal-my::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
 .page-title {
     font-weight: 500;

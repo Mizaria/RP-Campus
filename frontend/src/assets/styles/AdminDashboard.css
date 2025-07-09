@@ -1,0 +1,296 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.urgent {
+    display: flex;
+    align-items: center;
+    background-color: #F5C4B8;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    margin-right: 12px;
+    white-space: nowrap;
+}
+
+.available {
+    display: flex;
+    align-items: center;
+    background-color: #D9F5B8;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 8px;
+}
+
+
+
+.dropdown li {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: #5B5B5B;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown a {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dropdown img {
+    margin-right: 10px;
+}
+
+.dropdown li:hover {
+    background-color: #F0F0F0;
+}
+
+.dropdown li:active {
+    background-color: #E0E0E0;
+}
+
+/* Show dropdown on hover and focus */
+.main-right>li:hover .dropdown,
+.main-right>li:focus-within .dropdown {
+    display: block;
+}
+/*-----------------------------*/
+@media screen and (max-width: 1000px) {
+    .bar-item-menu {
+        display: none;
+    }
+    .bar-item-modal{
+        display: flex;
+    }
+    .dashboard {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    .mainBackground {
+        padding-left: 20px;
+    }
+
+    .dashboard-content {
+        padding-left: 20px;
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    .report-vertical .report-card {
+        flex: 1 1 300px;
+    }
+}
+
+@media screen and (max-width: 404px) {
+    .mainBackground {
+        height: 27%;
+    }
+
+    .dashboard-content {
+        height: 75%;
+    }
+
+    .bar-search {
+        min-width: 190px;
+    }
+
+    .notification-circle {
+        transform: translate(6px, 8px)
+    }
+
+    .nav-bar {
+        height: 35%;
+    }
+
+    .create-button span {
+        display: none;
+
+    }
+    .create-button{
+        padding: 10px;
+        
+    }
+}
+@media screen and (max-width: 404px) {
+    .mainBackground {
+        height: 25%;
+    }
+
+    .dashboard-content {
+        height: 75%;
+    }
+
+    .bar-search {
+        min-width: 190px;
+    }
+
+    .notification-circle {
+        transform: translate(4px, 12px)
+    }
+
+    .nav-bar {
+        height: 35%;
+    }
+
+    .create-button span {
+        display: none;
+
+    }
+    .create-button{
+        padding: 10px;
+        
+    }
+}
+
+/* Loading and error messages */
+.loading-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 18px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.error-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 18px;
+  color: #e74c3c;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #e74c3c;
+  border-radius: 10px;
+  margin: 20px 0;
+  padding: 20px;
+  text-align: center;
+}
+
+.no-reports-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 150px;
+  font-size: 16px;
+  color: #999;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px dashed #ddd;
+  border-radius: 10px;
+  margin: 20px 0;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Accept button submitting state */
+.Accept-btn{
+    font-family: 'sen', sans-serif;
+    color: white;
+    background-color: black;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+}
+.Accept-btn.submitting {
+  opacity: 0.7;
+  cursor: not-allowed;
+ font-family: 'sen', sans-serif;
+    color: white;
+    background-color: black;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+}
+
+.Accept-btn.submitting:hover {
+  background-color: #ccc;
+}
+
+/* Report containers */
+.report-horizontal {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 20px 0;
+  scroll-behavior: smooth;
+}
+
+.report-horizontal::-webkit-scrollbar {
+  height: 8px;
+}
+
+.report-horizontal::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.report-horizontal::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.report-horizontal::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.report-vertical {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+
+/* Enhanced report card hover effects */
+.report-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.report-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Accept button disabled state */
+.Accept-btn:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.Accept-btn:disabled:hover {
+  background-color: #95a5a6;
+  transform: none;
+}
+
+/* Responsive design for report containers */
+@media (max-width: 768px) {
+  .report-horizontal {
+    gap: 15px;
+    padding: 15px 0;
+  }
+  
+  .report-vertical {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 15px 0;
+  }
+  
+  .no-reports-message {
+    min-height: 100px;
+    font-size: 14px;
+  }
+  
+  .loading-message, .error-message {
+    min-height: 150px;
+    font-size: 16px;
+  }
+}

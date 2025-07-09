@@ -64,7 +64,7 @@ app.use('/uploads', (req, res, next) => {
 // Mount routes
 app.use('/api/auth', authRoutes);
 app.use('/api/reports', reportRoutes);
-app.use('/api/admin/tasks', adminTaskRoutes);
+app.use('/api/admin-tasks', adminTaskRoutes);
 app.use('/api/notifications', notificationRoutes);
 
 // Health check endpoint
@@ -72,10 +72,25 @@ app.get('/api/health', (req, res) => {
     res.status(200).json({ status: 'ok' });
 });
 
-// Serve index.html for all routes (SPA support)
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
-});
+// Serve static files only in production
+if (process.env.NODE_ENV === 'production') {
+    // Serve static files from React app build
+    app.use(express.static(path.join(__dirname, '../public')));
+    
+    // Serve index.html for all non-API routes (SPA support)
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../public/index.html'));
+    });
+} else {
+    // In development, just return a simple message for non-API routes
+    app.get('*', (req, res) => {
+        res.json({ 
+            message: 'Backend API is running', 
+            environment: 'development',
+            timestamp: new Date().toISOString()
+        });
+    });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

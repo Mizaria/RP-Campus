@@ -7,8 +7,16 @@ import Signup from './pages/Signup';
 import SignupProfileImg from './pages/SignupProfileImg';
 import Dashboard from './pages/Dashboard';
 import ReportForm from './pages/ReportForm';
+import ReportUpdate from './pages/ReportUpdate';
 import MyReports from './pages/MyReports';
 import Profile from './pages/Profile';
+import AdminDashboard from './pages/AdminDashboard';
+import IndiReport from './pages/IndiReport';
+import AdminTask from './pages/MyTask'; 
+import AdminHistory from './pages/History';
+import AdminIndiReport from './pages/AdmindiReport';
+import IndiTask from './pages/IndiTask';
+import Notification from './pages/AllNotification';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -48,7 +56,7 @@ function AppContent() {
             path="/dashboard" 
             element={
               <ProtectedRoute>
-                <Dashboard />
+                {user && user.role === 'admin' ? <AdminDashboard /> : <Dashboard />}
               </ProtectedRoute>
             } 
           />
@@ -65,6 +73,62 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <MyReports />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/mytasks" 
+            element={
+              <ProtectedRoute>
+                <AdminTask />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/history" 
+            element={
+              <ProtectedRoute>
+                <AdminHistory />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/reports/:id/edit" 
+            element={
+              <ProtectedRoute>
+                <ReportUpdate />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/report/:id" 
+            element={
+              <ProtectedRoute>
+                <IndiReport />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard/report/:id" 
+            element={
+              <ProtectedRoute>
+                <AdminIndiReport />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/task/:id" 
+            element={
+              <ProtectedRoute>
+                <IndiTask />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/notifications" 
+            element={
+              <ProtectedRoute>
+                <Notification/>
               </ProtectedRoute>
             } 
           />

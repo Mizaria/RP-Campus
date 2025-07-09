@@ -78,8 +78,8 @@ const Signup = () => {
           <div className="input-group">
             <label htmlFor="role">Role</label>
             <select id="role" className="custom-select" value={formData.role} onChange={handleChange}>
-              <option value="student">Student</option>
-              <option value="staff">Staff</option>
+              <option value="student">Admin</option>
+             
             
             </select>
           </div>

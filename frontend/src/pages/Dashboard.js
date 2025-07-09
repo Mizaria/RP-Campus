@@ -66,18 +66,18 @@ const SecNav = () => {
     <div className="mainBackground" style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className="nav-bar">
         <div className="bar-item-menu" onClick={toggleNavbar}>
-          <img src="images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
+          <img src="/images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
         </div>
         <div className="bar-item-modal" onClick={toggleModel}>
-          <img src="images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
+          <img src="/images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
         </div>
         <div className="bar-search">
-          <img src="images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
+          <img src="/images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
           <input type="text" placeholder="Search report..." />
         </div>
         <div className="bar-item">
-          <img src="images/Notification Icon.svg" alt="Notification Icon" width="20px" height="20px" />
-          <img src="images/Green Circle.svg" alt="Notification Indicator" className="notification-circle" />
+          <img src="/images/Notification Icon.svg" alt="Notification Icon" width="20px" height="20px" />
+          <img src="/images/Green Circle.svg" alt="Notification Indicator" className="notification-circle" />
         </div>
       </div>
       <div className="main-content">
@@ -86,7 +86,7 @@ const SecNav = () => {
           <p style={{ paddingTop: 4 }}>{formattedDate}</p>
         </div>
         <div className="main-right">
-          <img src="images/Log Out Icon.svg" alt="Calendar Icon" className="calendar-icon" width="18px"
+          <img src="/images/Log Out Icon.svg" alt="Calendar Icon" className="calendar-icon" width="18px"
             height="18px" onClick={handleLogout}/>
           <div className="acc-frame">
             
@@ -132,7 +132,7 @@ const Dashboard = () => {
 
   // Handle edit report
   const handleEditReport = (report) => {
-    navigate(`/edit-report/${report._id}`, { state: { report } });
+    navigate(`/reports/${report._id}/edit`);
   };
 
   // Handle delete report
@@ -145,6 +145,11 @@ const Dashboard = () => {
         alert('Failed to delete report: ' + result.error);
       }
     }
+  };
+
+  // Handle report card click to navigate to individual report
+  const handleReportClick = (report) => {
+    navigate(`/report/${report._id}`);
   };
 
   // Listen for navbar toggle events from other components
@@ -228,7 +233,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="create-button" onClick={() => navigate('/report-form')}>
+          <div className="create-button" onClick={() => navigate('/report/individual')}>
             <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px" />
             <span>Create</span>
           </div>
@@ -254,6 +259,7 @@ const Dashboard = () => {
                 report={report}
                 onEdit={handleEditReport}
                 onDelete={handleDeleteReport}
+                onClick={handleReportClick}
               />
             ))
           )}
@@ -288,6 +294,7 @@ const Dashboard = () => {
                 report={report}
                 onEdit={handleEditReport}
                 onDelete={handleDeleteReport}
+                onClick={handleReportClick}
               />
             ))
           )}

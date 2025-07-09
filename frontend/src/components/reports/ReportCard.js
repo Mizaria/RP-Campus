@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ReportCard = ({ report, onEdit, onDelete }) => {
+export const ReportCard = ({ report, onEdit, onDelete, onClick }) => {
   // Status color mapping
   const getStatusColor = (status) => {
     switch (status) {
@@ -29,18 +29,63 @@ export const ReportCard = ({ report, onEdit, onDelete }) => {
     return `#${id.toString().slice(-4)}`;
   };
 
+  // Get building background color
+  const getBuildingColor = (building) => {
+    if (!building) return '#E0E0E0';
+    
+    const buildingCode = building.toUpperCase();
+    
+    switch (buildingCode) {
+      case 'E4':
+      case 'E5':
+        return '#E0F1EB';
+      case 'W2':
+      case 'W1':
+        return '#E6F3F5';
+      case 'W3':
+      case 'W5':
+        return '#F5E6F1';
+      case 'E2':
+        return '#EFE7F2';
+      case 'E1':
+        return '#EAF3DE';
+      case 'E6':
+        return '#F1EFCD';
+      case 'W4':
+        return '#EAE5CB';
+      case 'W6':
+        return '#EAE0D8';
+      default:
+        return '#E0E0E0';
+    }
+  };
+
+
+
   // Check if dropdown should be shown (only for pending status)
   const shouldShowDropdown = report.status === 'Pending';
 
+  // Handle card click
+  const handleCardClick = (e) => {
+    // Prevent click if clicking on dropdown or its children
+    if (e.target.closest('.main-right')) {
+      return;
+    }
+    // Call the onClick prop if provided
+    if (onClick) {
+      onClick(report);
+    }
+  };
+
   return (
-    <div className="report-card">
+    <div className="report-card" onClick={handleCardClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
       <div className="report-top-bot">
         <div className="report-top-left">
           <span className="status-circle" style={{ backgroundColor: getStatusColor(report.status) }}></span>
           <p className="report-id">{getReportIdDisplay(report._id)}</p>
         </div>
         {shouldShowDropdown && (
-          <div className="main-right">
+          <div className="main-right" onClick={(e) => e.stopPropagation()}>
             <li>
               <img src="images/more vertical.svg" alt="Menu Icon" className="menu-icon" width="22px"
                 height="22px" />
@@ -77,8 +122,8 @@ export const ReportCard = ({ report, onEdit, onDelete }) => {
         )}
       </div>
       <div className="report-top-bot">
-        <div className="report-location" style={{ backgroundColor: '#EAE0D8' }}>
-          <p className="report-sub-text">{report.building}{report.location}{report.room}</p>
+        <div className="report-location" style={{ backgroundColor: getBuildingColor(report.building) }}>
+          <p className="report-sub-text">{report.building}, {report.location}, {report.room}</p>
         </div>
         <p className="report-date">{formatDate(report.createdAt)}</p>
       </div>

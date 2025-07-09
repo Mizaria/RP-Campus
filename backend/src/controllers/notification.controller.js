@@ -6,7 +6,23 @@ const asyncHandler = require('../middleware/async');
 // @route   GET /api/notifications
 // @access  Private
 exports.getNotifications = asyncHandler(async (req, res, next) => {
+    console.log('[NOTIFICATIONS DEBUG] Getting notifications for user:', req.user.id);
+    
     const notifications = await Notification.getUserNotifications(req.user.id);
+    
+    console.log('[NOTIFICATIONS DEBUG] Found', notifications.length, 'notifications for user');
+    notifications.forEach((notif, index) => {
+        console.log(`[NOTIFICATIONS DEBUG] Notification ${index + 1}:`, {
+            id: notif._id,
+            type: notif.type,
+            message: notif.message,
+            isRead: notif.isRead,
+            createdAt: notif.createdAt,
+            reportId: notif.reportId?._id,
+            reportStatus: notif.reportId?.status,
+            statusData: notif.statusData
+        });
+    });
 
     res.status(200).json({
         success: true,
@@ -51,14 +67,15 @@ exports.markAsRead = asyncHandler(async (req, res, next) => {
     });
 });
 
-// @desc    Create a notification (internal use)
+// @desc    Create a notification (internal use - not an Express route handler)
 // @access  Private
-exports.createNotification = asyncHandler(async (userId, reportId, type, message) => {
-    console.log('createNotification called with:', { 
+exports.createNotification = async (userId, reportId, type, message, statusData = {}) => {
+    console.log('[NOTIFICATION DEBUG] createNotification called with:', { 
         userId: userId?.toString(), 
         reportId: reportId?.toString(), 
         type, 
-        message 
+        message,
+        statusData
     });
 
     // Validate all required fields
@@ -69,30 +86,97 @@ exports.createNotification = asyncHandler(async (userId, reportId, type, message
     if (!message) missingFields.push('message');
 
     if (missingFields.length > 0) {
-        console.error('Notification creation failed: missing required fields:', missingFields);
+        console.error('[NOTIFICATION ERROR] Notification creation failed: missing required fields:', missingFields);
         throw new AppError(`Missing required fields for notification: ${missingFields.join(', ')}`, 400);
     }
 
     // Ensure message is a non-empty string
     const messageStr = String(message).trim();
     if (!messageStr) {
-        console.error('Notification creation failed: message is empty after trimming');
+        console.error('[NOTIFICATION ERROR] Notification creation failed: message is empty after trimming');
         throw new AppError('Notification message cannot be empty', 400);
     }
 
-    const notification = await Notification.create({
+    console.log('[NOTIFICATION DEBUG] About to create notification in database...');
+    
+    const notificationData = {
         userId,
         reportId,
         type,
         message: messageStr
-    });
+    };
 
-    console.log('Notification created successfully:', {
+    // Add status data if provided (this will work even if schema doesn't have it yet)
+    if (statusData && Object.keys(statusData).length > 0) {
+        try {
+            notificationData.statusData = statusData;
+            console.log('[NOTIFICATION DEBUG] Added statusData to notification:', statusData);
+        } catch (statusDataError) {
+            console.warn('[NOTIFICATION WARNING] Could not add statusData, using message only:', statusDataError.message);
+            // Continue without statusData - message parsing will handle it
+        }
+    }
+    
+    let notification;
+    try {
+        notification = await Notification.create(notificationData);
+        console.log('[NOTIFICATION DEBUG] Notification created successfully in database with statusData');
+    } catch (createError) {
+        // If statusData field doesn't exist in schema, create without it
+        if (createError.message.includes('statusData') || createError.name === 'ValidationError') {
+            console.warn('[NOTIFICATION WARNING] Creating notification without statusData due to schema issue');
+            const fallbackData = {
+                userId,
+                reportId,
+                type,
+                message: messageStr
+            };
+            notification = await Notification.create(fallbackData);
+            console.log('[NOTIFICATION DEBUG] Notification created successfully without statusData - will use message parsing');
+        } else {
+            throw createError;
+        }
+    }
+
+    console.log('[NOTIFICATION DEBUG] Final notification created:', {
         id: notification._id,
         userId: notification.userId,
+        reportId: notification.reportId,
         type: notification.type,
-        messageLength: notification.message.length
+        messageLength: notification.message.length,
+        hasStatusData: !!notification.statusData,
+        statusData: notification.statusData,
+        createdAt: notification.createdAt
     });
     
     return notification;
+};
+
+// @desc    Mark all notifications as read for current user
+// @route   PATCH /api/notifications/mark-all-read
+// @access  Private
+exports.markAllAsRead = asyncHandler(async (req, res, next) => {
+    const result = await Notification.updateMany(
+        { userId: req.user.id, isRead: false },
+        { isRead: true }
+    );
+
+    res.status(200).json({
+        success: true,
+        message: `Marked ${result.modifiedCount} notifications as read`,
+        modifiedCount: result.modifiedCount
+    });
+});
+
+// @desc    Delete all notifications for current user
+// @route   DELETE /api/notifications/clear-all
+// @access  Private
+exports.clearAllNotifications = asyncHandler(async (req, res, next) => {
+    const result = await Notification.deleteMany({ userId: req.user.id });
+
+    res.status(200).json({
+        success: true,
+        message: `Deleted ${result.deletedCount} notifications`,
+        deletedCount: result.deletedCount
+    });
 }); 

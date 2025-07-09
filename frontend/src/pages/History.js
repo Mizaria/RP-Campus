@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { ReportCard } from '../components/reports/ReportCard';
-import useMyReport from '../hooks/useMyReport';
-import '../assets/styles/MyReports.css';
-import backgroundImage from '../assets/images/mainBackground.svg';
+import { TaskCardAdmin } from '../components/reports/AdminTaskCard';
+import { ToastContainer } from '../components/common/Toast';
+import useAdminTasks from '../hooks/useAdminTasks';
+import useToast from '../hooks/useToast';
+import '../assets/styles/History.css';
+import backgroundImage from '../assets/images/adminmainbackground.svg';
 
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
@@ -82,7 +84,7 @@ const SecNav = ({ currentSort, handleSortChange }) => {
       </div>
       <div className="main-content">
         <div className="Page-header">
-          <h2>My Reports</h2>
+          <h2>History</h2>
           <div className="main-right">
             <li>
               <img src="images/Descending Sorting.svg" alt="Arrow Icon" width="20px" height="20px" />
@@ -90,14 +92,14 @@ const SecNav = ({ currentSort, handleSortChange }) => {
                 <li onClick={() => handleSortChange('All')}>
                   <a>All{currentSort === 'All' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
                 </li>
-                <li onClick={() => handleSortChange('Location')}>
-                  <a>Location{currentSort === 'Location' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
-                </li>
-                <li onClick={() => handleSortChange('Problem')}>
-                  <a>Problem{currentSort === 'Problem' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
-                </li>
                 <li onClick={() => handleSortChange('Status')}>
                   <a>Status{currentSort === 'Status' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
+                </li>
+                <li onClick={() => handleSortChange('Priority')}>
+                  <a>Priority{currentSort === 'Priority' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
+                </li>
+                <li onClick={() => handleSortChange('Category')}>
+                  <a>Category{currentSort === 'Category' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
                 </li>
                 <li onClick={() => handleSortChange('Created')}>
                   <a>Created{currentSort === 'Created' && <img src="images/Done.svg" alt="Done Icon" className="dropdown-icon" width="22px" height="22px" />}</a>
@@ -106,68 +108,76 @@ const SecNav = ({ currentSort, handleSortChange }) => {
             </li>
           </div>
         </div>
-        <div className="create-button" onClick={() => navigate('/reports/new')}>
-          <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px" />
-          <span>Create</span>
-        </div>
       </div>
     </div>
   );
 };
 
-const MyReport = () => {
+const AdminHistory = () => {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [currentSort, setCurrentSort] = useState('All');
   const navigate = useNavigate();
   
-  // Use the custom hook to fetch reports
+  // Use the admin tasks hook to fetch tasks
   const { 
-    reports, 
+    tasks, 
     loading, 
     error, 
-    deleteReport, 
-    getReportCounts, 
-    fetchReports 
-  } = useMyReport();
-  
-  // Get report counts for the status tabs
-  const reportCounts = getReportCounts();
+    getTasksByStatus, 
+    getTaskCounts,
+    completeTask,
+    removeTask
+  } = useAdminTasks();
 
-  // Sort reports based on current sort option
-  const getSortedReports = () => {
-    let sortedReports = [...reports];
+  // Use toast notifications
+  const { toasts, removeToast, showSuccess, showError } = useToast();
+  
+  // Get only draft and completed tasks
+  const draftTasks = getTasksByStatus('Draft');
+  const completedTasks = getTasksByStatus('Completed');
+  const allHistoryTasks = [...draftTasks, ...completedTasks];
+  
+  // Get task counts for the status tabs
+  const taskCounts = getTaskCounts();
+
+  // Sort tasks based on current sort option
+  const getSortedTasks = () => {
+    let sortedTasks = [...allHistoryTasks];
     
     switch (currentSort) {
-      case 'Location':
-        sortedReports.sort((a, b) => {
-          const locationA = `${a.building}${a.location}${a.room}`.toLowerCase();
-          const locationB = `${b.building}${b.location}${b.room}`.toLowerCase();
-          return locationA.localeCompare(locationB);
-        });
-        break;
-      case 'Problem':
-        sortedReports.sort((a, b) => a.category.localeCompare(b.category));
-        break;
       case 'Status':
-        sortedReports.sort((a, b) => {
-          const statusOrder = { 'Pending': 0, 'In Progress': 1, 'Resolved': 2 };
+        sortedTasks.sort((a, b) => {
+          const statusOrder = { 'Draft': 0, 'Completed': 1 };
           return statusOrder[a.status] - statusOrder[b.status];
         });
         break;
+      case 'Priority':
+        sortedTasks.sort((a, b) => {
+          const priorityOrder = { 'High': 0, 'Medium': 1, 'Low': 2 };
+          return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+        break;
+      case 'Category':
+        sortedTasks.sort((a, b) => {
+          const categoryA = a.reportId?.category || '';
+          const categoryB = b.reportId?.category || '';
+          return categoryA.localeCompare(categoryB);
+        });
+        break;
       case 'Created':
-        sortedReports.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        sortedTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         break;
       case 'All':
       default:
-        // Default sorting by status (Pending -> In Progress -> Resolved)
-        sortedReports.sort((a, b) => {
-          const statusOrder = { 'Pending': 0, 'In Progress': 1, 'Resolved': 2 };
+        // Default sorting by status (Draft -> Completed)
+        sortedTasks.sort((a, b) => {
+          const statusOrder = { 'Draft': 0, 'Completed': 1 };
           return statusOrder[a.status] - statusOrder[b.status];
         });
         break;
     }
     
-    return sortedReports;
+    return sortedTasks;
   };
 
   // Handle sort option selection
@@ -175,29 +185,73 @@ const MyReport = () => {
     setCurrentSort(sortOption);
   };
 
-  // Handle edit report
-  const handleEditReport = (report) => {
-    // Navigate to edit page with report data
-    navigate(`/reports/${report._id}/edit`);
+  // Handle task click to view details
+  const handleTaskClick = (task) => {
+    if (task._id) {
+      navigate(`/task/${task._id}`);
+    }
   };
 
-  // Handle delete report
-  const handleDeleteReport = async (report) => {
-    if (window.confirm('Are you sure you want to delete this report?')) {
-      const result = await deleteReport(report._id);
+  // Handle complete task (mark as completed and resolve report)
+  const handleCompleteTask = async (task) => {
+    console.log('Complete task called for task:', task._id, 'status:', task.status);
+    
+    if (window.confirm('Are you sure you want to mark this task as completed? This will resolve the report.')) {
+      console.log('User confirmed completion, calling completeTask...');
+      const result = await completeTask(task._id);
+      console.log('Complete task result:', result);
+      
       if (result.success) {
-        // Optionally show success message
-        console.log('Report deleted successfully');
+        showSuccess(result.message);
       } else {
-        // Show error message
-        alert('Failed to delete report: ' + result.error);
+        showError('Failed to complete task: ' + result.error);
       }
     }
   };
 
-  // Handle report card click to navigate to individual report
-  const handleReportClick = (report) => {
-    navigate(`/report/${report._id}`);
+  // Handle remove task with enhanced deletion of comments and images
+  const handleRemoveTask = async (task) => {
+    if (window.confirm('Are you sure you want to remove this task? This will delete all associated comments, images, and unassign the report making it available for other admins.')) {
+      try {
+        // First, clear comments from the report using the new endpoint
+        if (task.reportId && task.reportId._id) {
+          try {
+            console.log(`Attempting to clear comments for report ID: ${task.reportId._id}`);
+            const clearCommentsResponse = await fetch(`${API_BASE_URL}/api/reports/${task.reportId._id}/comments`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              }
+            });
+            
+            if (clearCommentsResponse.ok) {
+              const result = await clearCommentsResponse.json();
+              console.log('Comments cleared successfully:', result);
+            } else {
+              const errorText = await clearCommentsResponse.text();
+              console.error('Failed to clear comments:', clearCommentsResponse.status, errorText);
+              showError(`Failed to clear comments: ${clearCommentsResponse.status}`);
+            }
+          } catch (commentError) {
+            console.error('Error clearing comments:', commentError);
+            showError('Error clearing comments: ' + commentError.message);
+            // Continue with task removal even if comment clearing fails
+          }
+        }
+
+        // Then remove the task
+        const result = await removeTask(task._id);
+        if (result.success) {
+          showSuccess('Task, comments, and images removed successfully!');
+        } else {
+          showError('Failed to remove task: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Error in handleRemoveTask:', error);
+        showError('Failed to remove task and associated data');
+      }
+    }
   };
 
   // Listen for navbar toggle events from other components
@@ -262,27 +316,22 @@ const MyReport = () => {
   return (
     <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
       <SecNav currentSort={currentSort} handleSortChange={handleSortChange} />
-      <div class="dashboard-content">
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
+      <div className="dashboard-content">
 
-        <h2 class="page-title">Report Progress</h2>
-        <div class="report-horizontal-my">
-          <div class="status-tab">
-            <div class="pending">
-              <p>Pending</p>
-              <div class="tab-count">
-                <p>{reportCounts.pending}</p>
+        <h2 className="page-title"></h2>
+        <div className="report-horizontal-my">
+          <div className="status-tab">
+            <div className="draft">
+              <p>Draft</p>
+              <div className="tab-count">
+                <p>{taskCounts.draft}</p>
               </div>
             </div>
-            <div class="in-progress">
-              <p>In Progress</p>
-              <div class="tab-count">
-                <p>{reportCounts.inProgress}</p>
-              </div>
-            </div>
-            <div class="resolved">
-              <p>Resolved</p>
-              <div class="tab-count">
-                <p>{reportCounts.resolved}</p>
+            <div className="completed">
+              <p>Completed</p>
+              <div className="tab-count">
+                <p>{taskCounts.completed}</p>
               </div>
             </div>
           </div>
@@ -290,27 +339,24 @@ const MyReport = () => {
         <div className="report-vertical">
           {loading ? (
             <div className="loading-message">
-              <p>Loading your reports...</p>
+              <p>Loading your task history...</p>
             </div>
           ) : error ? (
             <div className="error-message">
-              <p>Error loading reports: {error}</p>
-              <button onClick={fetchReports} className="retry-button">
-                Retry
-              </button>
+              <p>Error loading tasks: {error}</p>
             </div>
-          ) : reports.length === 0 ? (
+          ) : allHistoryTasks.length === 0 ? (
             <div className="no-reports-message">
-              <p>No reports found. Create your first report!</p>
+              <p>No completed or draft tasks found.</p>
             </div>
           ) : (
-            getSortedReports().map((report) => (
-              <ReportCard
-                key={report._id}
-                report={report}
-                onEdit={handleEditReport}
-                onDelete={handleDeleteReport}
-                onClick={handleReportClick}
+            getSortedTasks().map((task) => (
+              <TaskCardAdmin
+                key={task._id}
+                task={task}
+                onTaskClick={handleTaskClick}
+                onRemoveTask={handleRemoveTask}
+                onCompleteTask={handleCompleteTask}
               />
             ))
           )}
@@ -320,4 +366,4 @@ const MyReport = () => {
   );
 };
 
-export default MyReport;
+export default AdminHistory;
