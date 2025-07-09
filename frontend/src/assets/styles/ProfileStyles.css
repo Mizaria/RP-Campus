@@ -100,9 +100,7 @@
     display: flex;
     gap: 120px;
     transition: transform 0.2s;
-    
     width: 100%;
-   
 }
 
 .stats-card:hover {
@@ -152,82 +150,12 @@
     text-align: center;
 }
 
-.profile-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
-
-.btn-primary, .btn-secondary {
-    padding: 12px 30px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Sen', sans-serif;
-}
-
-.btn-primary {
-    background: #007bff;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #0056b3;
-    transform: translateY(-1px);
-}
-
-.btn-secondary {
-    background: #f8f9fa;
-    color: #333;
-    border: 1px solid #dee2e6;
-}
-
-.btn-secondary:hover {
-    background: #e9ecef;
-    transform: translateY(-1px);
-}
-
 /* Stats container positioning */
 .profile-stats-container {
     padding: 20px 40px;
     max-width: 1300px;
     margin: 0 auto;
     margin-top: 180px; /* Fixed positioning relative to page, not overlay */
-}
-
-/* Icon styling for emoji fallbacks */
-.nav-icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  text-align: center;
-  font-size: 16px;
-  line-height: 20px;
-}
-
-.notification-circle {
-  color: #28a745;
-  font-size: 8px;
-  position: absolute;
-  top: -2px;
-  right: -2px;
-}
-
-/* Calendar icon styling */
-.calendar-icon {
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-  display: inline-block;
-  text-align: center;
-  line-height: 18px;
-}
-
-.calendar-icon:hover {
-  opacity: 1;
 }
 
 /* Responsive Design */
