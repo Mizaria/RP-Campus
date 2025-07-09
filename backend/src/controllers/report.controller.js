@@ -328,7 +328,7 @@ exports.updateReportStatus = asyncHandler(async (req, res, next) => {
     await report.save();
 
     try {
-        // Format the notification message with specific status information
+        // Create notifications for reporter (existing functionality)
         let notificationMessage = '';
         let statusData = {};
         
@@ -392,6 +392,59 @@ exports.updateReportStatus = asyncHandler(async (req, res, next) => {
             }
         } else {
             console.log('[NOTIFICATION DEBUG] No notification message generated - status:', status, 'priority:', priority);
+        }
+        
+        // Create priority change notifications for all admins
+        if (priority && priority !== previousPriority) {
+            console.log('[ADMIN NOTIFICATION DEBUG] Priority changed from', previousPriority, 'to', priority);
+            
+            try {
+                // Find all admin users
+                const adminUsers = await User.find({ role: 'admin' });
+                console.log('[ADMIN NOTIFICATION DEBUG] Found', adminUsers.length, 'admin users');
+                
+                if (adminUsers.length > 0) {
+                    const shortReportId = report._id.toString().slice(-4);
+                    let adminNotificationMessage = '';
+                    
+                    if (priority === 'High') {
+                        adminNotificationMessage = `Report #${shortReportId} has been flagged as High Priority`;
+                    } else if (priority === 'Low') {
+                        adminNotificationMessage = `Report #${shortReportId} priority has been changed to Low`;
+                    }
+                    
+                    const priorityData = {
+                        newPriority: priority,
+                        previousPriority: previousPriority,
+                        reportId: report._id.toString(),
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    // Create notifications for all admin users
+                    const adminNotificationPromises = adminUsers.map(async (admin) => {
+                        try {
+                            const adminNotification = await createNotification(
+                                admin._id,
+                                report._id,
+                                'priority_change',
+                                adminNotificationMessage,
+                                priorityData
+                            );
+                            console.log('[ADMIN NOTIFICATION DEBUG] Priority notification created for admin:', admin._id);
+                            return adminNotification;
+                        } catch (error) {
+                            console.error('[ADMIN NOTIFICATION ERROR] Failed to create notification for admin:', admin._id, error);
+                            return null;
+                        }
+                    });
+                    
+                    await Promise.all(adminNotificationPromises);
+                    console.log('[ADMIN NOTIFICATION DEBUG] All admin priority notifications created');
+                }
+            } catch (error) {
+                console.error('[ADMIN NOTIFICATION ERROR] Failed to create admin priority notifications:', error);
+                // Don't fail the update if admin notifications fail
+            }
         }
     } catch (error) {
         console.error('[NOTIFICATION ERROR] Failed to create status notification:', error);

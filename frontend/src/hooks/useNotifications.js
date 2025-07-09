@@ -125,6 +125,56 @@ const useNotifications = () => {
         }
     }, []);
 
+    // Mark all notifications as read for the current user
+    const markAllAsRead = useCallback(async () => {
+        try {
+            const result = await makeAuthenticatedRequest(
+                `${API_BASE_URL}/api/notifications/mark-all-read`,
+                { method: 'PATCH' }
+            );
+            
+            if (result.success) {
+                // Update local state to mark all notifications as read
+                setNotifications(prev => 
+                    prev.map(notification => ({ ...notification, isRead: true }))
+                );
+                
+                // Clear unread notifications
+                setUnreadNotifications([]);
+                
+                return { success: true, message: result.message };
+            } else {
+                throw new Error(result.message || 'Failed to mark all notifications as read');
+            }
+        } catch (err) {
+            console.error('Error marking all notifications as read:', err);
+            return { success: false, error: err.message };
+        }
+    }, []);
+
+    // Clear all notifications for the current user
+    const clearAllNotifications = useCallback(async () => {
+        try {
+            const result = await makeAuthenticatedRequest(
+                `${API_BASE_URL}/api/notifications/clear-all`,
+                { method: 'DELETE' }
+            );
+            
+            if (result.success) {
+                // Clear local state
+                setNotifications([]);
+                setUnreadNotifications([]);
+                
+                return { success: true, message: result.message };
+            } else {
+                throw new Error(result.message || 'Failed to clear all notifications');
+            }
+        } catch (err) {
+            console.error('Error clearing all notifications:', err);
+            return { success: false, error: err.message };
+        }
+    }, []);
+
     // Get the status background color based on status
     const getStatusBackgroundColor = useCallback((status) => {
         switch (status?.toLowerCase()) {
@@ -178,6 +228,8 @@ const useNotifications = () => {
         fetchNotifications,
         fetchUnreadNotifications,
         markAsRead,
+        markAllAsRead,
+        clearAllNotifications,
         getStatusBackgroundColor,
         formatNotificationMessage,
         formatTime

@@ -9,6 +9,13 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 16px;
     padding: 16px 16px 16px 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.notification-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 .notification-title{
     font-size: 18px;
@@ -38,4 +45,42 @@
     gap: 20px;
     padding: 20px 20px 20px 5px;
     width: 100%;
+}
+.notification-controll{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: -10px;
+    margin-top: 20px;
+    margin-right: 20px;
+    gap: 20px;
+}
+.notification-controll p {
+    font-size: 14px;
+    cursor: pointer;
+    color: #5B5B5B;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.notification-controll p:hover {
+    color: #333333;
+    transform: translateY(-2px);
+   
+}
+
+.notification-controll p:active {
+    transform: translateY(0);
+}
+
+/* Disabled state for notification controls */
+.notification-controll p[style*="opacity: 0.6"] {
+    cursor: not-allowed !important;
+    color: #9ca3af !important;
+}
+
+.notification-controll p[style*="opacity: 0.6"]:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    color: #9ca3af !important;
 }

@@ -186,28 +186,80 @@ const StatusUpdateCard = ({ notification, onMarkAsRead, formatTime, getStatusBac
         </div>
     );
 };
-const UrgentCard = () => {
+const UrgentCard = ({ notification, onMarkAsRead, formatTime }) => {
+    const handleMarkAsRead = () => {
+        if (!notification.isRead && onMarkAsRead) {
+            onMarkAsRead(notification._id);
+        }
+    };
+
+    const reportId = notification.reportId._id;
+    const shortId = reportId ? reportId.toString().slice(-4) : '????';
+    
+    // Extract priority from notification message or statusData
+    let priority = 'Unknown';
+    let backgroundColor = '#F5C4B8'; // Default to high priority color
+    
+    // First try to get from statusData
+    if (notification.statusData?.newPriority) {
+        priority = notification.statusData.newPriority;
+    } 
+    // Fallback: extract from message
+    else if (notification.message) {
+        if (notification.message.toLowerCase().includes('high priority') || 
+            notification.message.toLowerCase().includes('flagged as high')) {
+            priority = 'High';
+        } else if (notification.message.toLowerCase().includes('low')) {
+            priority = 'Low';
+        }
+    }
+    
+    // Set background color based on priority
+    if (priority === 'High') {
+        backgroundColor = '#F5C4B8'; // High priority - light red
+    } else if (priority === 'Low') {
+        backgroundColor = '#D9F5B8'; // Low priority - light green
+    }
+
+    console.log('[URGENT NOTIFICATION DEBUG] UrgentCard render:', {
+        notificationId: notification._id,
+        reportId: reportId,
+        shortId: shortId,
+        priority: priority,
+        backgroundColor: backgroundColor,
+        message: notification.message,
+        statusData: notification.statusData
+    });
+
     return (
-        <div className="notification-card">
-            <p className="notification-title">Flagged Report</p>
+        <div className="notification-card" onClick={handleMarkAsRead}>
+            <p className="notification-title">
+                {priority === 'High' ? 'Flagged Report' : 'Priority Changed'}
+            </p>
             <div className="notification-des">
-                <p>Your Report #1234 has been flagged as <span style={{ backgroundColor: "#F5C4B8" }}>High Priority</span></p>
-                <p>7:23pm</p>
+                <p>
+                    Report #{shortId} has been {priority === 'High' ? 'flagged as' : 'changed to'} <span style={{ backgroundColor: backgroundColor }}>{priority}</span> Priority
+                </p>
+                <p>{formatTime(notification.createdAt)}</p>
             </div>
-            <div className="is-read"></div>
+            {!notification.isRead && <div className="is-read"></div>}
         </div>
     );
-}
+};
 
 
 
 const Notification = () => {
     const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+    const [isMarkingAllRead, setIsMarkingAllRead] = useState(false);
+    const [isClearingAll, setIsClearingAll] = useState(false);
     const { 
         notifications, 
         loading, 
         error, 
         markAsRead, 
+        markAllAsRead,
+        clearAllNotifications,
         getStatusBackgroundColor, 
         formatTime 
     } = useNotifications();
@@ -231,10 +283,74 @@ const Notification = () => {
         }
     };
 
+    const handleReadAll = async () => {
+        if (isMarkingAllRead) return; // Prevent multiple clicks
+        
+        setIsMarkingAllRead(true);
+        try {
+            const result = await markAllAsRead();
+            if (result.success) {
+                console.log('All notifications marked as read successfully');
+                // You could add a toast notification here
+            } else {
+                console.error('Failed to mark all notifications as read:', result.error);
+                alert('Failed to mark all notifications as read. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error marking all notifications as read:', error);
+            alert('An error occurred. Please try again.');
+        } finally {
+            setIsMarkingAllRead(false);
+        }
+    };
+
+    const handleClearAll = async () => {
+        if (isClearingAll) return; // Prevent multiple clicks
+        
+        if (window.confirm('Are you sure you want to clear all notifications? This action cannot be undone.')) {
+            setIsClearingAll(true);
+            try {
+                const result = await clearAllNotifications();
+                if (result.success) {
+                    console.log('All notifications cleared successfully');
+                    // You could add a toast notification here
+                } else {
+                    console.error('Failed to clear all notifications:', result.error);
+                    alert('Failed to clear all notifications. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error clearing all notifications:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                setIsClearingAll(false);
+            }
+        }
+    };
+
     return (
         <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
             <SecNav />
             <div className="dashboard-content">
+                <div className='notification-controll'>
+                    <p 
+                        onClick={handleReadAll} 
+                        style={{ 
+                            cursor: isMarkingAllRead ? 'not-allowed' : 'pointer',
+                            opacity: isMarkingAllRead ? 0.6 : 1
+                        }}
+                    >
+                        {isMarkingAllRead ? 'Reading...' : 'Read All'}
+                    </p>
+                    <p 
+                        onClick={handleClearAll} 
+                        style={{ 
+                            cursor: isClearingAll ? 'not-allowed' : 'pointer',
+                            opacity: isClearingAll ? 0.6 : 1
+                        }}
+                    >
+                        {isClearingAll ? 'Clearing...' : 'Clear All'}
+                    </p>
+                </div>
                 <div className="report-vertical-notification">
                     {loading ? (
                         <div className="loading-message">
@@ -258,6 +374,15 @@ const Notification = () => {
                                         onMarkAsRead={handleMarkAsRead}
                                         formatTime={formatTime}
                                         getStatusBackgroundColor={getStatusBackgroundColor}
+                                    />
+                                );
+                            } else if (notification.type === 'priority_change') {
+                                return (
+                                    <UrgentCard
+                                        key={notification._id}
+                                        notification={notification}
+                                        onMarkAsRead={handleMarkAsRead}
+                                        formatTime={formatTime}
                                     />
                                 );
                             }

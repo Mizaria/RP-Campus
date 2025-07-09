@@ -150,4 +150,33 @@ exports.createNotification = async (userId, reportId, type, message, statusData 
     });
     
     return notification;
-}; 
+};
+
+// @desc    Mark all notifications as read for current user
+// @route   PATCH /api/notifications/mark-all-read
+// @access  Private
+exports.markAllAsRead = asyncHandler(async (req, res, next) => {
+    const result = await Notification.updateMany(
+        { userId: req.user.id, isRead: false },
+        { isRead: true }
+    );
+
+    res.status(200).json({
+        success: true,
+        message: `Marked ${result.modifiedCount} notifications as read`,
+        modifiedCount: result.modifiedCount
+    });
+});
+
+// @desc    Delete all notifications for current user
+// @route   DELETE /api/notifications/clear-all
+// @access  Private
+exports.clearAllNotifications = asyncHandler(async (req, res, next) => {
+    const result = await Notification.deleteMany({ userId: req.user.id });
+
+    res.status(200).json({
+        success: true,
+        message: `Deleted ${result.deletedCount} notifications`,
+        deletedCount: result.deletedCount
+    });
+}); 

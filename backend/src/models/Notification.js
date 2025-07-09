@@ -13,7 +13,7 @@ const notificationSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['status_change'],
+        enum: ['status_change','priority_change'],
         required: [true, 'Notification type is required']
     },
     message: {
