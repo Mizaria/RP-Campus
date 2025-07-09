@@ -6,7 +6,7 @@ const useAdminReports = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Base URL for API calls
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
   // Accept a report
   const acceptReport = async (reportId) => {
