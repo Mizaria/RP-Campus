@@ -1,0 +1,265 @@
+/* Profile Page Specific Styles Only */
+
+/* Main Profile Avatar (Big image at top) */
+.profile-main-avatar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.main-profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid #f0f0f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Profile overlay text styling without container */
+.profile-overlay .profile-name-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.profile-overlay .profile-name {
+    font-size: 32px;
+    font-weight: 600;
+    color: black;
+    margin: 0;
+    text-align: center;
+    text-shadow: none;
+}
+
+.profile-overlay .profile-email {
+    font-size: 18px;
+    color: black;
+    margin: 0 0 8px 0;
+    text-align: center;
+    text-shadow: none;
+}
+
+.profile-overlay .profile-role {
+    font-size: 16px;
+    color: black;
+    margin: 0 0 40px 0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: none;
+}
+
+.profile-overlay .edit-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    display: inline-block;
+    text-align: center;
+    line-height: 24px;
+}
+
+.profile-overlay .edit-icon:hover {
+    opacity: 1;
+}
+
+/* Profile Overlay on Green Background */
+.profile-overlay {
+    position: absolute;
+    top: 120px; /* Position lower below the nav-bar */
+    left: 0;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+    pointer-events: none; /* Prevent overlay from blocking content below */
+}
+
+.profile-overlay > * {
+    pointer-events: auto; /* Re-enable pointer events for direct children */
+}
+
+/* Profile Stats - Single Large Card */
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.stats-card {
+    background: white;
+    padding: 15px 30px;
+    border-radius: 20px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    gap: 120px;
+    transition: transform 0.2s;
+    
+    width: 100%;
+   
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 25px;
+    border-radius: 12px;
+    transition: background-color 0.2s;
+    min-width: 200px;
+    text-align: center;
+}
+
+.stat-item:hover {
+    background-color: #f8f9fa;
+}
+
+.stat-icon {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    flex-shrink: 0;
+}
+
+.stat-info h4 {
+    font-size: 16px;
+    color: #666;
+    margin: 0 0 8px 0;
+    font-weight: 500;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    text-align: center;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Sen', sans-serif;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #f8f9fa;
+    color: #333;
+    border: 1px solid #dee2e6;
+}
+
+.btn-secondary:hover {
+    background: #e9ecef;
+    transform: translateY(-1px);
+}
+
+/* Stats container positioning */
+.profile-stats-container {
+    padding: 20px 40px;
+    max-width: 1300px;
+    margin: 0 auto;
+    margin-top: 180px; /* Fixed positioning relative to page, not overlay */
+}
+
+/* Icon styling for emoji fallbacks */
+.nav-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.notification-circle {
+  color: #28a745;
+  font-size: 8px;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+}
+
+/* Calendar icon styling */
+.calendar-icon {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  display: inline-block;
+  text-align: center;
+  line-height: 18px;
+}
+
+.calendar-icon:hover {
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stats-card {
+        flex-direction: column;
+        gap: 30px;
+        padding: 35px 25px;
+        min-height: auto;
+    }
+    
+    .stat-item {
+        justify-content: center;
+        padding: 20px 15px;
+        gap: 12px;
+    }
+    
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .stat-number {
+        font-size: 28px;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100%;
+    }
+}
+

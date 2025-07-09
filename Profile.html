@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RP Campus Care - Login </title>
+    <title>RP Campus Care - Profile</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Dashboard.css">
+    <link rel="stylesheet" href="ProfileStyles.css">
 </head>
 
 <body>
@@ -76,44 +77,71 @@
                 <div class="dashboard-title">
                    
                 </div>
-
+                <div class="main-right">
+                    <img src="images/Log Out Icon.svg" alt="Calendar Icon" class="calendar-icon" width="18px"
+                        height="18px">
+                    <div class="acc-frame">
+                        <img src="images/Frame 47.svg" alt="Avatar" class="acc-img">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile content overlaid on green background -->
+            <div class="profile-overlay">
+                <!-- Big profile image at the top -->
+                <div class="profile-main-avatar">
+                    <img src="images/Frame 47.svg" alt="Profile Avatar" class="main-profile-img">
+                </div>
+                
+                <!-- Name section below image without container -->
+                <div class="profile-name-section">
+                    <h3 class="profile-name">John Doe</h3>
+                    <img src="images/edit.svg" alt="Edit" class="edit-icon">
+                </div>
+                <p class="profile-email">john.doe@example.com</p>
+               
             </div>
         </div>
         <div class="dashboard-content">
-            <div class="dashboard-top-container">
-                <div>
+            <div class="profile-stats-container">
+                <!-- Single large stats card -->
+                <div class="profile-stats">
+                    <div class="stats-card">
+                        <div class="stat-item">
+                            <img src="images/ResultsIcon.svg" alt="Total Reports" class="stat-icon">
+                            <div class="stat-info">
+                                <h4>Total Reports</h4>
+                                <p class="stat-number">15</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <img src="images/UnresolvedIcon.svg" alt="Pending Reports" class="stat-icon">
+                            <div class="stat-info">
+                                <h4>Pending Reports</h4>
+                                <p class="stat-number">3</p>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <img src="images/ResolvedIcon.svg" alt="Resolved Reports" class="stat-icon">
+                            <div class="stat-info">
+                                <h4>Resolved Reports</h4>
+                                <p class="stat-number">12</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+               
+            </div>
                    
     </div>
     <script>
-        const slider = document.querySelector('.report-horizontal');
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-
-        slider.addEventListener('mousedown', (e) => {
-            isDown = true;
-            slider.classList.add('active'); // Optional styling
-            startX = e.pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
+        // Profile page specific JavaScript can be added here
+        document.querySelector('.edit-icon').addEventListener('click', function() {
+            alert('Edit profile functionality would go here');
         });
-
-        slider.addEventListener('mouseleave', () => {
-            isDown = false;
-            slider.classList.remove('active');
-        });
-
-        slider.addEventListener('mouseup', () => {
-            isDown = false;
-            slider.classList.remove('active');
-        });
-
-        slider.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = (x - startX) * 1.5; // Scroll-fast multiplier
-            slider.scrollLeft = scrollLeft - walk;
-        });
+        
+       
     </script>
 </body>
 
