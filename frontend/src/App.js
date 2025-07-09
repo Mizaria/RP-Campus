@@ -17,6 +17,7 @@ import AdminHistory from './pages/History';
 import AdminIndiReport from './pages/AdmindiReport';
 import IndiTask from './pages/IndiTask';
 import Notification from './pages/AllNotification';
+import AdminSignup from './pages/SignupAdmin';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -49,6 +50,10 @@ function AppContent() {
           <Route 
             path="/signup-profile" 
             element={user ? <Navigate to="/dashboard" /> : <SignupProfileImg />} 
+          />
+           <Route 
+            path="/signup-admin" 
+            element={user ? <Navigate to="/dashboard" /> : <AdminSignup />} 
           />
           
           {/* Protected routes */}

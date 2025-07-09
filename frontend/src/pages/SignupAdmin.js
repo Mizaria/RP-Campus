@@ -5,7 +5,7 @@ import Logo from '../assets/images/Logo.png';
 import backgroundImage from '../assets/images/background.png';
 import './Signup.css';
 
-const Signup = () => {
+const AdminSignup = () => {
   const navigate = useNavigate();
   const { handleSignup, loading, error, success, clearError } = useSignup();  const [formData, setFormData] = useState({
     username: '',
@@ -90,4 +90,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default AdminSignup;
