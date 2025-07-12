@@ -38,7 +38,7 @@ if (!fs.existsSync(uploadsDir)) {
 // Middleware
 app.use(helmet());
 app.use(cors({
-    origin: ['http://localhost:3001', 'http://localhost:3000'], // Allow both frontend and any other origins
+    origin: ['http://localhost:4000'], // Allow both frontend and any other origins
     credentials: true
 }));
 app.use(morgan('dev'));

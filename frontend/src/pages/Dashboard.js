@@ -7,7 +7,7 @@ import '../assets/styles/Dashboard.css';
 import backgroundImage from '../assets/images/mainBackground.svg';
 
 // Base URL for API calls from environment variables
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 const SecNav = () => {
   const { user, logout } = useAuth();

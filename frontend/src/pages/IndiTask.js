@@ -9,7 +9,7 @@ import '../assets/styles/IndiTask.css';
 import backgroundImage from '../assets/images/adminmainbackground.svg';
 
 // Base URL for API calls from environment variables
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 // Image Upload Modal Component
 const ImageUploadModal = ({ isOpen, onClose, onImageUpload }) => {

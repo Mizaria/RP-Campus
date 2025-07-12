@@ -5,7 +5,7 @@ const useAdminIndividualReport = (reportId) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
   // Fetch individual report data
   const fetchReport = async () => {

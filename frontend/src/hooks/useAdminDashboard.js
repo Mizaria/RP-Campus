@@ -8,7 +8,7 @@ const useAdminDashboard = () => {
   const [error, setError] = useState(null);
 
   // Base URL for API calls
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
   // Fetch all reports
   const fetchAllReports = async () => {
