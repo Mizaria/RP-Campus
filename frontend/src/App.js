@@ -25,6 +25,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 // Import AuthProvider and useAuth
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -166,7 +167,9 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <NotificationProvider>
+        <AppContent />
+      </NotificationProvider>
     </AuthProvider>
   );
 }

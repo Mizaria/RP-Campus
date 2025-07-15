@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import NotificationIcon from '../components/NotificationIcon';
 import useReportForm from '../hooks/useReportForm';
 import '../assets/styles/ReportForm.css';
 import backgroundImage from '../assets/images/mainBackground.svg';
@@ -124,10 +125,7 @@ const SecNav = () => {
           <img src="/images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
           <input type="text" placeholder="Search report..." />
         </div>
-        <div className="bar-item">
-          <img src="/images/Notification Icon.svg" alt="Notification Icon" width="20px" height="20px" />
-          <img src="/images/Green Circle.svg" alt="Notification Indicator" className="notification-circle" />
-        </div>
+        <NotificationIcon onClick={() => navigate('/notifications')} />
       </div>
       <div className="main-content">
         <div className="Page-header">

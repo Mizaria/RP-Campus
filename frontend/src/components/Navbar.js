@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import NotificationIcon from './NotificationIcon';
 import backgroundImage from '../assets/images/mainBackground.svg'; // Adjust the path as necessary
 import '../assets/styles/Navbar.css'; // Import your custom CSS for the navbar
 import { NavLink } from "react-router-dom";
