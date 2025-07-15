@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import useProfile from '../hooks/useProfile';
 import '../assets/styles/Dashboard.css';
 import '../assets/styles/ProfileStyles.css';
+import backgroundImage from '../assets/images/mainBackground.svg';
+import adminBackgroundImage from '../assets/images/adminmainbackground.svg';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
@@ -60,26 +62,46 @@ const Profile = () => {
   return (
     <div className="profile-page">
       {/* Navigation Menu */}
-      <div className={`nav-menu ${isNavbarVisible ? 'visible' : 'hidden'}`}>
-        <div className="navBackground">
+      <div className={`nav-menu${user?.role === 'admin' ? ' admin' : ''} ${isNavbarVisible ? 'visible' : 'hidden'}`}>
+        <div 
+          className="navBackground"
+          style={{
+            backgroundImage: `url(${user?.role === 'admin' ? adminBackgroundImage : backgroundImage})`
+          }}
+        >
           <div className="nav-box">
             <div className="nav-container">
               <div className="nav-title">
                 <img src="/images/Logo.png" alt="RP Campus Care Logo" className="nav-logo" />
                 <p className="nav-text-title">Campus Care</p>
               </div>
-              <div className="nav-create" onClick={() => handleNavigation('/report-form')}>
+              <div className="nav-create" onClick={() => handleNavigation('/reports/new')}>
                 <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" width="20px" height="20px" />
-                <p className="nav-text">create</p>
+                <p className="nav-text">Create</p>
               </div>
               <div className="nav-items" onClick={() => handleNavigation('/dashboard')}>
                 <img src="/images/Dashboard Icon.svg" alt="Dashboard Icon" className="nav-icon" width="20px" height="20px" />
                 <p className="nav-text">Dashboard</p>
               </div>
-              <div className="nav-items" onClick={() => handleNavigation('/my-reports')}>
-                <img src="/images/My Reports Icon.svg" alt="My Reports Icon" className="nav-icon" width="20px" height="20px" />
-                <p className="nav-text">My Report</p>
-              </div>
+              {/* Show My Tasks for admin, My Reports for student/staff */}
+              {user?.role === 'admin' ? (
+                <div className="nav-items" onClick={() => handleNavigation('/mytasks')}>
+                  <img src="/images/My Reports Icon.svg" alt="My Tasks Icon" className="nav-icon" width="20px" height="20px" />
+                  <p className="nav-text">My Tasks</p>
+                </div>
+              ) : (
+                <div className="nav-items" onClick={() => handleNavigation('/reports')}>
+                  <img src="/images/My Reports Icon.svg" alt="My Reports Icon" className="nav-icon" width="20px" height="20px" />
+                  <p className="nav-text">My Reports</p>
+                </div>
+              )}
+              {/* Show History only for admin */}
+              {user?.role === 'admin' && (
+                <div className="nav-items" onClick={() => handleNavigation('/history')}>
+                  <img src="/images/Timemachine.svg" alt="History Icon" className="nav-icon" width="20px" height="20px" />
+                  <p className="nav-text">History</p>
+                </div>
+              )}
               <div className="nav-items active" onClick={() => handleNavigation('/profile')}>
                 <img src="/images/Account Icon.svg" alt="Account Icon" className="nav-icon" width="20px" height="20px" />
                 <p className="nav-text">Account</p>
@@ -92,6 +114,10 @@ const Profile = () => {
                 <img src="/images/Chat Icon.svg" alt="Chat Icon" className="nav-icon" width="20px" height="20px" />
                 <p className="nav-text">Chat</p>
               </div>
+              <div className="nav-items" onClick={handleLogout}>
+                <img src="/images/Log Out Icon.svg" alt="Logout Icon" className="nav-icon" width="20px" height="20px" />
+                <p className="nav-text">Logout</p>
+              </div>
             </div>
           </div>
           <div className="nav-box-holder"></div>
@@ -100,7 +126,12 @@ const Profile = () => {
 
       {/* Main Content */}
       <div className="dashboard">
-        <div className="mainBackground" style={{ backgroundImage: 'url(/images/mainBackground.svg)' }}>
+        <div 
+          className="mainBackground" 
+          style={{ 
+            backgroundImage: `url(${user?.role === 'admin' ? adminBackgroundImage : backgroundImage})` 
+          }}
+        >
           {/* Top Navigation Bar */}
           <div className="nav-bar">
             <div className="bar-item" onClick={toggleNavbar}>
