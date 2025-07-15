@@ -10,6 +10,7 @@ import ReportForm from './pages/ReportForm';
 import ReportUpdate from './pages/ReportUpdate';
 import MyReports from './pages/MyReports';
 import Profile from './pages/Profile';
+import ProfileEdit from './pages/ProfileEdit';
 import AdminDashboard from './pages/AdminDashboard';
 import IndiReport from './pages/IndiReport';
 import AdminTask from './pages/MyTask'; 
@@ -143,6 +144,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/profile/edit" 
+            element={
+              <ProtectedRoute>
+                <ProfileEdit />
               </ProtectedRoute>
             } 
           />

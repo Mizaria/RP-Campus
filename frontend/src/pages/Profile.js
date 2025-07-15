@@ -40,8 +40,7 @@ const Profile = () => {
   };
 
   const handleEditProfile = () => {
-    // Navigate to edit profile page or show edit modal
-    alert('Edit profile functionality would go here');
+    navigate('/profile/edit');
   };
 
   const handleNavigation = (path) => {
