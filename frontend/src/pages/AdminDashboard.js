@@ -320,8 +320,8 @@ const  Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="create-button" onClick={() => navigate('/admin-report')}>
-            <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px" />
+          <div className="create-button" onClick={() => navigate('/chatMessage')}>
+            <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px"  />
             <span>Create</span>
           </div>
         </div>

@@ -19,9 +19,13 @@ const authRoutes = require('./routes/auth.routes');
 const reportRoutes = require('./routes/report.routes');
 const adminTaskRoutes = require('./routes/adminTask.routes');
 const notificationRoutes = require('./routes/notification.routes');
+const messageRoutes = require('./routes/message.routes');
 
 // Import middleware
 const { errorHandler } = require('./middleware/error.middleware');
+
+// Import ChatServer for real-time messaging
+const ChatServer = require('./socket/chat.server');
 
 // Create Express app
 const app = express();
@@ -66,6 +70,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/admin-tasks', adminTaskRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/messages', messageRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -107,6 +112,13 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+// Initialize ChatServer for real-time messaging
+const chatServer = new ChatServer(server);
+console.log('✅ Chat Server initialized');
+
+// Make chatServer globally accessible for other modules
+global.chatServer = chatServer;
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {

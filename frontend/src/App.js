@@ -18,6 +18,8 @@ import AdminIndiReport from './pages/AdmindiReport';
 import IndiTask from './pages/IndiTask';
 import Notification from './pages/AllNotification';
 import AdminSignup from './pages/SignupAdmin';
+import Chat from './pages/Chat';
+import ChatMessage from './pages/ChatMessage';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -25,6 +27,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 // Import AuthProvider and useAuth
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { SocketProvider } from './contexts/SocketContext';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -138,6 +141,22 @@ function AppContent() {
             } 
           />
           <Route 
+            path="/chat" 
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/chat/:userId" 
+            element={
+              <ProtectedRoute>
+                <ChatMessage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/profile" 
             element={
               <ProtectedRoute>
@@ -166,7 +185,9 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <SocketProvider>
+        <AppContent />
+      </SocketProvider>
     </AuthProvider>
   );
 }
