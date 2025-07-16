@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import NotificationIcon from './NotificationIcon';
 import backgroundImage from '../assets/images/mainBackground.svg'; // Adjust the path as necessary
 import '../assets/styles/Navbar.css'; // Import your custom CSS for the navbar
 import { NavLink } from "react-router-dom";
@@ -67,7 +68,7 @@ const Navbar = () => {
                 <p className="nav-text-title">Campus Care</p>
               </div>
               <div className="nav-create" onClick={() => navigate('/reports/new')}>
-                <img src="images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
+                <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
                 <p className="nav-text">Create</p>
               </div>
               <NavLink

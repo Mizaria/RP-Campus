@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Role is required'],
         default: 'student'
     },
+    phone: {
+        type: String,
+        trim: true,
+        default: null
+    },
     profileImage: {
         type: String,
         default: null
@@ -83,4 +88,4 @@ userSchema.methods.getProfile = function() {
     return user;
 };
 
-module.exports = mongoose.model('User', userSchema); 
+module.exports = mongoose.model('User', userSchema);

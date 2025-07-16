@@ -11,7 +11,7 @@ const AdminSignup = () => {
     username: '',
     email: '',
     password: '',
-    role: 'student' // Default role 
+    role: 'admin' // Default role for admin signup
   });
 
   const handleChange = (e) => {
@@ -78,9 +78,7 @@ const AdminSignup = () => {
           <div className="input-group">
             <label htmlFor="role">Role</label>
             <select id="role" className="custom-select" value={formData.role} onChange={handleChange}>
-              <option value="student">Admin</option>
-             
-            
+              <option value="admin">Admin</option>
             </select>
           </div>
           <button type="submit" className="login-button" disabled={loading}>{loading ? 'Signing Up...' : 'Sign Up'}</button>

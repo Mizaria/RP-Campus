@@ -71,7 +71,8 @@ const useProfile = () => {
   const updateProfileImage = async (imageFile) => {
     try {
       const response = await authAPI.updateProfileImage(imageFile);
-      const updatedUser = response.data;
+      // Backend returns { success: true, user: {...} }
+      const updatedUser = response.user;
       
       setProfileData(prev => ({
         ...prev,

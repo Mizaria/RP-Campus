@@ -1,5 +1,16 @@
 /* Profile Page Specific Styles Only */
 
+/* Fix for profile page - override dashboard scrolling behavior */
+.profile-page .dashboard-content {
+    overflow: visible !important;
+    height: auto !important;
+}
+
+.profile-page .profile-stats-container {
+    overflow: visible !important;
+    position: relative;
+}
+
 /* Main Profile Avatar (Big image at top) */
 .profile-main-avatar {
     display: flex;
@@ -90,6 +101,7 @@
     display: flex;
     justify-content: center;
     margin-bottom: 40px;
+    overflow: visible;
 }
 
 .stats-card {
@@ -101,6 +113,8 @@
     gap: 120px;
     transition: transform 0.2s;
     width: 100%;
+    overflow: visible;
+    position: relative;
 }
 
 .stats-card:hover {
@@ -156,6 +170,9 @@
     max-width: 1300px;
     margin: 0 auto;
     margin-top: 180px; /* Fixed positioning relative to page, not overlay */
+    position: relative;
+    overflow: visible;
+    height: auto;
 }
 
 /* Responsive Design */

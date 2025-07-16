@@ -343,4 +343,59 @@ router.post('/complete-signup', upload.single('profileImage'), async (req, res, 
     }
 });
 
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+router.put('/profile', protect, async (req, res, next) => {
+    try {
+        const { username, email, phone, password } = req.body;
+        
+        // Build update object with only provided fields
+        const updateData = {};
+        if (username) updateData.username = username;
+        if (email) updateData.email = email;
+        if (phone) updateData.phone = phone;
+        
+        // If password is provided, hash it
+        if (password && password.trim()) {
+            const bcrypt = require('bcryptjs');
+            const salt = await bcrypt.genSalt(10);
+            updateData.passwordHash = await bcrypt.hash(password, salt);
+        }
+        
+        // Check if email is being changed and is unique
+        if (email && email !== req.user.email) {
+            const existingUser = await User.findOne({ email });
+            if (existingUser) {
+                return next(new AppError('Email already in use', 400));
+            }
+        }
+        
+        const user = await User.findByIdAndUpdate(
+            req.user.id,
+            updateData,
+            { new: true, runValidators: true }
+        ).select('-passwordHash');
+
+        if (!user) {
+            return next(new AppError('User not found', 404));
+        }
+
+        res.status(200).json({
+            success: true,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                phone: user.phone,
+                profileImage: user.profileImage
+            }
+        });
+    } catch (error) {
+        console.error('Profile update error:', error);
+        next(new AppError(error.message, 400));
+    }
+});
+
 module.exports = router;

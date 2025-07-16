@@ -10,6 +10,7 @@ import ReportForm from './pages/ReportForm';
 import ReportUpdate from './pages/ReportUpdate';
 import MyReports from './pages/MyReports';
 import Profile from './pages/Profile';
+import ProfileEdit from './pages/ProfileEdit';
 import AdminDashboard from './pages/AdminDashboard';
 import IndiReport from './pages/IndiReport';
 import AdminTask from './pages/MyTask'; 
@@ -27,6 +28,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 // Import AuthProvider and useAuth
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import { SocketProvider } from './contexts/SocketContext';
 
 function AppContent() {
@@ -164,6 +166,14 @@ function AppContent() {
               </ProtectedRoute>
             } 
           />
+          <Route 
+            path="/profile/edit" 
+            element={
+              <ProtectedRoute>
+                <ProfileEdit />
+              </ProtectedRoute>
+            } 
+          />
           
           {/* Default redirect */}
           <Route 
@@ -185,9 +195,11 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <SocketProvider>
-        <AppContent />
-      </SocketProvider>
+      <NotificationProvider>
+        <SocketProvider>
+          <AppContent />
+        </SocketProvider>
+      </NotificationProvider>
     </AuthProvider>
   );
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { TaskCardAdmin } from '../components/reports/AdminTaskCard';
 import { ToastContainer } from '../components/common/Toast';
+import NotificationIcon from '../components/NotificationIcon';
 import useAdminTasks from '../hooks/useAdminTasks';
 import useToast from '../hooks/useToast';
 import '../assets/styles/History.css';
@@ -77,10 +78,7 @@ const SecNav = ({ currentSort, handleSortChange }) => {
           <img src="images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
           <input type="text" placeholder="Search report..." />
         </div>
-        <div className="bar-item">
-          <img src="images/Notification Icon.svg" alt="Notification Icon" width="20px" height="20px" />
-          <img src="images/Green Circle.svg" alt="Notification Indicator" className="notification-circle" />
-        </div>
+        <NotificationIcon onClick={() => navigate('/notifications')} />
       </div>
       <div className="main-content">
         <div className="Page-header">

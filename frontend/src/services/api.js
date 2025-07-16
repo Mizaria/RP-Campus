@@ -29,6 +29,16 @@ export const authAPI = {
     return handleResponse(response);
   },
 
+  // Update profile information
+  updateProfile: async (updateData) => {
+    const response = await fetch(`${API_BASE_URL}/api/auth/profile`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(updateData)
+    });
+    return handleResponse(response);
+  },
+
   // Update profile image
   updateProfileImage: async (imageFile) => {
     const formData = new FormData();
