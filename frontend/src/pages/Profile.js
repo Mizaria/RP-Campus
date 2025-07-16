@@ -76,7 +76,7 @@ const Profile = () => {
                 <p className="nav-text-title">Campus Care</p>
               </div>
               <div className="nav-create" onClick={() => handleNavigation('/reports/new')}>
-                <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" width="20px" height="20px" />
+                <img src="images/Plus.svg" alt="Create Icon" className="nav-icon" width="20px" height="20px" />
                 <p className="nav-text">Create</p>
               </div>
               <div className="nav-items" onClick={() => handleNavigation('/dashboard')}>

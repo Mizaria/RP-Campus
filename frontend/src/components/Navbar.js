@@ -68,7 +68,7 @@ const Navbar = () => {
                 <p className="nav-text-title">Campus Care</p>
               </div>
               <div className="nav-create" onClick={() => navigate('/reports/new')}>
-                <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
+                <img src="images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
                 <p className="nav-text">Create</p>
               </div>
               <NavLink
@@ -168,7 +168,7 @@ const Navbar = () => {
                 <p className="nav-text-title">Campus Care</p>
               </div>
               <div className="nav-create" onClick={() => { navigate('/reports/new'); closeModal(); }}>
-                <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
+                <img src="images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
                 <p className="nav-text">Create</p>
               </div>
               <NavLink

@@ -231,7 +231,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="create-button" onClick={() => navigate('/report/individual')}>
+          <div className="create-button" onClick={() => navigate('/reports/new')}>
             <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px" />
             <span>Create</span>
           </div>

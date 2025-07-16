@@ -10,6 +10,8 @@
   padding: 0;
   overflow-y: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .login-page * {
@@ -67,15 +69,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 80px);
-  padding: 20px;
+  justify-content: flex-start;
+  flex: 1;
+  padding: 40px 20px 60px;
   width: 100%;
+  min-height: calc(100vh - 80px);
+  overflow-y: auto;
 }
 
 .logo-container {
   text-align: center;
   margin-bottom: 40px;
+  margin-top: 20px;
 }
 
 .logo {
@@ -165,9 +170,15 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+  .main-container {
+    padding: 20px 15px 40px;
+    min-height: calc(100vh - 60px);
+  }
+  
   .form-container {
     padding: 30px 20px;
-    margin: 0 20px;
+    margin: 0 10px;
+    width: calc(100% - 20px);
   }
   
   .title {
@@ -176,5 +187,51 @@
   
   .logo {
     width: 120px;
+  }
+  
+  .logo-container {
+    margin-bottom: 30px;
+    margin-top: 10px;
+  }
+}
+
+@media (max-height: 700px) {
+  .main-container {
+    justify-content: flex-start;
+    padding: 20px 20px 40px;
+  }
+  
+  .logo-container {
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  
+  .logo {
+    width: 100px;
+  }
+  
+  .title {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-height: 600px) {
+  .logo-container {
+    margin-bottom: 15px;
+    margin-top: 5px;
+  }
+  
+  .logo {
+    width: 80px;
+  }
+  
+  .title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .form-container {
+    padding: 20px;
   }
 }
