@@ -13,7 +13,8 @@
     min-height: 100vh;
     font-family: 'Sen', sans-serif;
     width: 100vw;
-    overflow-y: auto;
+    overflow-y: auto !important;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
 }
