@@ -8,7 +8,8 @@ const {
     getMessagesForUser, 
     sendMessage,
     markMessageAsRead,
-    getUnreadMessageCount
+    getUnreadMessageCount,
+    getConversations
 } = require('../controllers/message.controller');
 
 // Configure multer for message image uploads
@@ -41,6 +42,9 @@ const upload = multer({
 
 // Get unread message count for current user (must be before /:id route)
 router.get('/unread/count', protect, getUnreadMessageCount);
+
+// Get conversations for current user
+router.get('/conversations', protect, getConversations);
 
 // Get all users available for messaging (excluding current user)
 router.get('/users', protect, getUsersForMessages);

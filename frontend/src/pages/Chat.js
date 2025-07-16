@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSocket } from '../contexts/SocketContext';
 import useUserSearch from '../hooks/useUserSearch';
+import useChatList from '../hooks/useChatList';
+import ChatConversationCard from '../components/ChatConversationCard';
 import '../assets/styles/Chat.css';
 import '../assets/styles/UserSearch.css';
+import '../assets/styles/ChatConversations.css';
 import backgroundImage from '../assets/images/mainBackground.svg';
 import adminbackgroundImage from '../assets/images/adminmainbackground.svg';
 
@@ -261,9 +264,19 @@ const SecNav = () => {
         </div>
     );
 };
+
 const Chat = () => {
     const [isNavbarVisible, setIsNavbarVisible] = useState(true);
     const { isConnected } = useSocket();
+    const { conversations, loading, error, getProfileImageUrl } = useChatList();
+    
+    // Debug logging
+    useEffect(() => {
+        console.log('Chat component - conversations:', conversations);
+        console.log('Chat component - loading:', loading);
+        console.log('Chat component - error:', error);
+        console.log('Chat component - isConnected:', isConnected);
+    }, [conversations, loading, error, isConnected]);
     
     // Listen for navbar toggle events from other components
     useEffect(() => {
@@ -277,24 +290,62 @@ const Chat = () => {
         };
     }, []);
 
+    const renderConversations = () => {
+        if (loading) {
+            return (
+                <div className="conversations-loading">
+                    <p>Loading conversations...</p>
+                </div>
+            );
+        }
+
+        if (error) {
+            return (
+                <div className="conversations-error">
+                    <p>Error loading conversations: {error}</p>
+                </div>
+            );
+        }
+
+        if (conversations.length === 0) {
+            return (
+                <div className="chat-placeholder">
+                    <h3>No conversations yet</h3>
+                    <p>Search for users above to start a conversation</p>
+                    <small>Type a username, email, or role to find people to chat with</small>
+                </div>
+            );
+        }
+
+        return (
+            <div className="conversations-container">
+                <div className="conversations-list">
+                    {conversations.map((conversation) => (
+                        <ChatConversationCard
+                            key={conversation.user._id}
+                            conversation={conversation}
+                            getProfileImageUrl={getProfileImageUrl}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
             <SecNav />
             <div className="dashboard-content">
-                <div className="chat-container">
-                    <div className="chat-placeholder">
-                        <h3>Welcome to Chat</h3>
-                        <p>Search for users above to start a conversation</p>
-                        <small>Type a username, email, or role to find people to chat with</small>
-                        
-                        {/* Connection status indicator */}
-                        <div className="connection-status" style={{ marginTop: '20px' }}>
-                            <div className={`status-indicator ${isConnected ? 'status-online' : 'status-offline'}`} 
-                                 style={{ display: 'inline-block', marginRight: '8px' }}></div>
-                            <span style={{ fontSize: '14px', color: isConnected ? '#28a745' : '#6c757d' }}>
-                                {isConnected ? 'Connected to chat server' : 'Disconnected from chat server'}
-                            </span>
-                        </div>
+                <div className="chat-container" style={{ padding: '20px 20px 0px 0px' }}>
+                    {renderConversations()}
+                    
+                    {/* Connection status indicator */}
+                    <div className="connection-status" style={{ marginTop: '20px', textAlign: 'center' }}>
+                        <div className={`status-indicator ${isConnected ? 'status-online' : 'status-offline'}`} 
+                             style={{ display: 'inline-block', marginRight: '8px' }}></div>
+                        <span style={{ fontSize: '14px', color: isConnected ? '#28a745' : '#6c757d' }}>
+                            {isConnected ? 'Connected to chat server' : 'Disconnected from chat server'}
+                        </span>
                     </div>
                 </div>
             </div>

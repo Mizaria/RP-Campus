@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('../models/User');
 const Message = require('../models/Message');
 
@@ -141,10 +142,84 @@ const getUnreadMessageCount = async (req, res) => {
     }
 };
 
+const getConversations = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        // Find all messages where the user is either sender or receiver
+        const messages = await Message.find({
+            $or: [
+                { senderId: userId },
+                { receiverId: userId }
+            ]
+        })
+        .populate('senderId', 'username email role profileImage')
+        .populate('receiverId', 'username email role profileImage')
+        .sort({ createdAt: -1 });
+
+        // Group messages by the other user and get the latest message for each conversation
+        const conversationsMap = new Map();
+
+        messages.forEach(message => {
+            const otherUser = message.senderId._id.toString() === userId 
+                ? message.receiverId 
+                : message.senderId;
+            
+            const otherUserId = otherUser._id.toString();
+
+            if (!conversationsMap.has(otherUserId)) {
+                // Count unread messages for this conversation
+                const unreadCount = messages.filter(msg => 
+                    msg.receiverId._id.toString() === userId &&
+                    msg.senderId._id.toString() === otherUserId &&
+                    !msg.readBy.includes(userId)
+                ).length;
+
+                conversationsMap.set(otherUserId, {
+                    user: {
+                        _id: otherUser._id,
+                        username: otherUser.username,
+                        email: otherUser.email,
+                        role: otherUser.role,
+                        profileImage: otherUser.profileImage
+                    },
+                    lastMessage: message,
+                    unreadCount: unreadCount
+                });
+            }
+        });
+
+        // Convert map to array and sort by last message date
+        const conversations = Array.from(conversationsMap.values())
+            .sort((a, b) => new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt));
+
+        // Add online status to each user
+        const conversationsWithStatus = conversations.map(conversation => {
+            const conversationObj = { ...conversation };
+            // Check if user is online using the global chatServer instance
+            if (global.chatServer) {
+                conversationObj.user.isOnline = global.chatServer.isUserOnline(conversation.user._id.toString());
+                conversationObj.user.status = conversationObj.user.isOnline ? 'online' : 'offline';
+            } else {
+                conversationObj.user.isOnline = false;
+                conversationObj.user.status = 'offline';
+            }
+            return conversationObj;
+        });
+
+        res.status(200).json(conversationsWithStatus);
+    } catch (error) {
+        console.error('Error getting conversations:', error.message);
+        console.error('Error stack:', error.stack);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 module.exports = {
     getUsersForMessages,
     getMessagesForUser,
     sendMessage,
     markMessageAsRead,
-    getUnreadMessageCount
+    getUnreadMessageCount,
+    getConversations
 };
