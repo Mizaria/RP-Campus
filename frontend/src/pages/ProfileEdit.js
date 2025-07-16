@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/ProfileEdit.css';
+import '../assets/styles/ProfileEdit.css';
 import '../assets/styles/Dashboard.css';
 import '../assets/styles/ProfileStyles.css';
 import Navbar from '../components/Navbar';
@@ -17,10 +17,8 @@ const ProfileEdit = () => {
   const { profileData, updateProfileImage } = useProfile();
   
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    username: '',
     email: '',
-    phone: '',
     password: ''
   });
   
@@ -33,13 +31,9 @@ const ProfileEdit = () => {
   // Initialize form data with existing profile data
   useEffect(() => {
     if (profileData) {
-      // Split username into first and last name if it exists
-      const nameParts = profileData.username ? profileData.username.split(' ') : ['', ''];
       setFormData({
-        firstName: nameParts[0] || '',
-        lastName: nameParts.slice(1).join(' ') || '',
+        username: profileData.username || '',
         email: profileData.email || '',
-        phone: user?.phone || '',
         password: ''
       });
       
@@ -82,9 +76,8 @@ const ProfileEdit = () => {
     try {
       // Prepare update data
       const updateData = {
-        username: `${formData.firstName} ${formData.lastName}`.trim(),
-        email: formData.email,
-        phone: formData.phone
+        username: formData.username,
+        email: formData.email
       };
 
       // Only include password if it's provided
@@ -194,7 +187,11 @@ const ProfileEdit = () => {
                 className="image-upload-overlay"
                 onClick={() => document.getElementById('profile-image-input').click()}
               >
-                <img src="/images/imageupload 1.svg" alt="Upload" />
+                <img 
+                  src="/images/update.svg" 
+                  alt="Update Profile Picture" 
+                  style={{ width: '30px', height: '30px' }}
+                />
               </div>
             </div>
           </div>
@@ -233,32 +230,17 @@ const ProfileEdit = () => {
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="firstName">First Name</label>
+                <label htmlFor="username">Username</label>
                 <input
                   type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
+                  id="username"
+                  name="username"
+                  value={formData.username}
                   onChange={handleInputChange}
-                  placeholder="Enter your first name"
+                  placeholder="Enter your username"
                   required
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  placeholder="Enter your last name"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
               <div className="form-group">
                 <label htmlFor="email">Email</label>
                 <input
@@ -269,17 +251,6 @@ const ProfileEdit = () => {
                   onChange={handleInputChange}
                   placeholder="Enter your email"
                   required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="phone">Phone</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="Enter your phone number"
                 />
               </div>
             </div>
