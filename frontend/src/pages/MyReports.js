@@ -287,26 +287,29 @@ const MyReport = () => {
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
       />
-      <div class="dashboard-content">
+      <div className="dashboard-content">
 
-        <h2 class="page-title">Report Progress</h2>
-        <div class="report-horizontal-my">
-          <div class="status-tab">
-            <div class="pending">
+        <h2 className="page-title">
+          Report Progress
+          {searchTerm && <span className="search-indicator"> - Search: "{searchTerm}"</span>}
+        </h2>
+        <div className="report-horizontal-my">
+          <div className="status-tab">
+            <div className="pending">
               <p>Pending</p>
-              <div class="tab-count">
+              <div className="tab-count">
                 <p>{reportCounts.pending}</p>
               </div>
             </div>
-            <div class="in-progress">
+            <div className="in-progress">
               <p>In Progress</p>
-              <div class="tab-count">
+              <div className="tab-count">
                 <p>{reportCounts.inProgress}</p>
               </div>
             </div>
-            <div class="resolved">
+            <div className="resolved">
               <p>Resolved</p>
-              <div class="tab-count">
+              <div className="tab-count">
                 <p>{reportCounts.resolved}</p>
               </div>
             </div>

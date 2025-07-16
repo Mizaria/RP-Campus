@@ -240,7 +240,10 @@ const Dashboard = () => {
       <div className="dashboard-content">
         <div className="dashboard-top-container">
           <div>
-            <h2 className="page-title">Report Progress</h2>
+            <h2 className="page-title">
+              Report Progress
+              {searchTerm && <span className="search-indicator"> - Search: "{searchTerm}"</span>}
+            </h2>
             <div className="status-tab">
               <div className="pending">
                 <p>Pending</p>
@@ -287,7 +290,10 @@ const Dashboard = () => {
             ))
           )}
         </div>
-        <h2 className="page-title">Report History</h2>
+        <h2 className="page-title">
+          Report History
+          {searchTerm && <span className="search-indicator"> - Search: "{searchTerm}"</span>}
+        </h2>
         <div className="status-tab">
           <div className="resolved">
             <p>Resolved</p>

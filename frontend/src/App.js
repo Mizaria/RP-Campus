@@ -11,6 +11,7 @@ import ReportUpdate from './pages/ReportUpdate';
 import MyReports from './pages/MyReports';
 import Profile from './pages/Profile';
 import ProfileEdit from './pages/ProfileEdit';
+import AdminProfile from './pages/AdminProfile';
 import AdminDashboard from './pages/AdminDashboard';
 import IndiReport from './pages/IndiReport';
 import AdminTask from './pages/MyTask'; 
@@ -163,6 +164,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/profile" 
+            element={
+              <ProtectedRoute>
+                <AdminProfile />
               </ProtectedRoute>
             } 
           />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotificationContext } from '../contexts/NotificationContext';
@@ -12,7 +12,7 @@ import adminbackgroundImage from '../assets/images/adminmainbackground.svg';
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
-const SecNav = () => {
+const SecNav = ({ searchTerm, onSearchChange }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [isNavbarVisible, setIsNavbarVisible] = useState(true);
@@ -63,13 +63,24 @@ const SecNav = () => {
                 </div>
                 <div className="bar-search">
                     <img src="/images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
-                    <input type="text" placeholder="Search report..." />
+                    <input 
+                        type="text" 
+                        placeholder="Search notifications..." 
+                        value={searchTerm}
+                        onChange={(e) => {
+                            console.log('[INPUT DEBUG] Search input changed:', e.target.value);
+                            onSearchChange(e.target.value);
+                        }}
+                    />
                 </div>
                 <NotificationIcon />
             </div>
             <div className="main-content">
                 <div className="Page-header">
-                    <h2>Notifications</h2>
+                    <h2>
+                        Notifications
+                        {searchTerm && <span className="search-indicator"> - Search: "{searchTerm}"</span>}
+                    </h2>
                 </div>
             </div>
         </div>
@@ -250,6 +261,7 @@ const UrgentCard = ({ notification, onMarkAsRead, formatTime }) => {
 
 const Notification = () => {
     const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
     const [isMarkingAllRead, setIsMarkingAllRead] = useState(false);
     const [isClearingAll, setIsClearingAll] = useState(false);
     const { refreshUnreadCount } = useNotificationContext();
@@ -263,6 +275,110 @@ const Notification = () => {
         getStatusBackgroundColor, 
         formatTime 
     } = useNotifications();
+    
+    // Filter notifications based on search term
+    const filterNotifications = (notifications) => {
+        console.log('[SEARCH DEBUG] Search term:', searchTerm);
+        console.log('[SEARCH DEBUG] Total notifications:', notifications.length);
+        
+        if (!searchTerm.trim()) {
+            console.log('[SEARCH DEBUG] No search term, returning all notifications');
+            return notifications;
+        }
+        
+        // Simple test first - just search the message
+        const simpleFiltered = notifications.filter(notification => {
+            const message = notification.message || '';
+            const simpleMatch = message.toLowerCase().includes(searchTerm.toLowerCase());
+            
+            if (simpleMatch) {
+                console.log('[SEARCH DEBUG] Simple match found in message:', message.substring(0, 100));
+            }
+            
+            return simpleMatch;
+        });
+        
+        console.log('[SEARCH DEBUG] Simple filtered results:', simpleFiltered.length);
+        
+        // If simple search doesn't work, there's a basic issue
+        if (simpleFiltered.length === 0 && searchTerm === 'report') {
+            console.log('[SEARCH DEBUG] WARNING: No matches for "report" - checking notification structure');
+            notifications.forEach((notif, index) => {
+                console.log(`[SEARCH DEBUG] Notification ${index}:`, {
+                    id: notif._id,
+                    type: notif.type,
+                    message: notif.message,
+                    hasMessage: !!notif.message,
+                    messageType: typeof notif.message
+                });
+            });
+        }
+        
+        const filtered = notifications.filter(notification => {
+            const reportId = notification.reportId?._id || '';
+            const shortId = reportId ? reportId.toString().slice(-4) : '';
+            const message = notification.message || '';
+            
+            // Get notification title based on type
+            let title = '';
+            if (notification.type === 'status_change') {
+                title = 'Report Status Update';
+            } else if (notification.type === 'priority_change') {
+                title = 'Flagged Report';
+            }
+            
+            // Extract status and priority for enhanced search
+            let status = '';
+            let priority = '';
+            
+            if (notification.type === 'status_change') {
+                if (notification.statusData?.newStatus) {
+                    status = notification.statusData.newStatus;
+                } else if (notification.message) {
+                    const statusMatch = notification.message.match(/updated to:\s*(.+?)(?:\s+and\s|$)/i) ||
+                                      notification.message.match(/is now\s+(.+?)(?:\.\s|$)/i);
+                    if (statusMatch) status = statusMatch[1].trim();
+                }
+            }
+            
+            if (notification.type === 'priority_change') {
+                if (notification.statusData?.newPriority) {
+                    priority = notification.statusData.newPriority;
+                } else if (notification.message) {
+                    if (notification.message.toLowerCase().includes('high')) priority = 'High';
+                    if (notification.message.toLowerCase().includes('low')) priority = 'Low';
+                }
+            }
+            
+            // Search across multiple fields
+            const matches = (
+                title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                reportId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                shortId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                priority.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (notification.type && notification.type.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+            
+            return matches;
+        });
+        
+        console.log('[SEARCH DEBUG] Full filtered results:', filtered.length);
+        return filtered;
+    };
+    
+    // Get filtered notifications using useMemo to ensure proper re-rendering
+    const filteredNotifications = useMemo(() => {
+        return filterNotifications(notifications);
+    }, [notifications, searchTerm]);
+    
+    // Debug log to track state changes
+    useEffect(() => {
+        console.log('[COMPONENT DEBUG] Search term changed:', searchTerm);
+        console.log('[COMPONENT DEBUG] Total notifications:', notifications.length);
+        console.log('[COMPONENT DEBUG] Filtered notifications:', filteredNotifications.length);
+    }, [searchTerm, notifications.length, filteredNotifications.length]);
     
     // Listen for navbar toggle events from other components
     useEffect(() => {
@@ -334,7 +450,7 @@ const Notification = () => {
 
     return (
         <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
-            <SecNav />
+            <SecNav searchTerm={searchTerm} onSearchChange={setSearchTerm} />
             <div className="dashboard-content">
                 <div className='notification-controll'>
                     <p 
@@ -365,12 +481,12 @@ const Notification = () => {
                         <div className="error-message">
                             <p>Error loading notifications: {error}</p>
                         </div>
-                    ) : notifications.length === 0 ? (
+                    ) : filteredNotifications.length === 0 ? (
                         <div className="no-notifications-message">
-                            <p>No notifications found.</p>
+                            <p>{searchTerm ? `No notifications found matching "${searchTerm}".` : 'No notifications found.'}</p>
                         </div>
                     ) : (
-                        notifications.map((notification) => {
+                        filteredNotifications.map((notification) => {
                             if (notification.type === 'status_change') {
                                 return (
                                     <StatusUpdateCard

@@ -1,4 +1,3 @@
-
 /* .dashboard content */
 
 .dashboard-content {
@@ -234,6 +233,14 @@
 .no-reports-container img {
     max-width: 100%;
     height: auto;
+}
+
+/* Search indicator styling */
+.search-indicator {
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
+    font-style: italic;
 }
 
 @media screen and (max-width: 1000px) {

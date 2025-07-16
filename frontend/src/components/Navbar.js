@@ -119,7 +119,7 @@ const Navbar = () => {
                 </NavLink>
               )}
               <NavLink
-                to="/profile"
+                to={user?.role === 'admin' ? "/admin/profile" : "/profile"}
                 className={({ isActive }) =>
                   `nav-items ${isActive ? "active" : ""}`
                 }
