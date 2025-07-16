@@ -659,3 +659,41 @@ exports.acceptReport = asyncHandler(async (req, res, next) => {
         return next(new AppError('Failed to accept report: ' + error.message, 500));
     }
 });
+
+// @desc    Get user report statistics
+// @route   GET /api/reports/user-stats
+// @access  Private
+exports.getUserStats = asyncHandler(async (req, res, next) => {
+    const userId = req.user.id;
+    
+    console.log('Getting user stats for user ID:', userId);
+
+    // Get user's report statistics
+    const totalReports = await Report.countDocuments({ reporter: userId });
+    console.log('Total reports count:', totalReports);
+    
+    const pendingReports = await Report.countDocuments({ 
+        reporter: userId, 
+        status: { $in: ['Pending', 'In Progress'] } 
+    });
+    console.log('Pending reports count:', pendingReports);
+    
+    const resolvedReports = await Report.countDocuments({ 
+        reporter: userId, 
+        status: 'Resolved' 
+    });
+    console.log('Resolved reports count:', resolvedReports);
+
+    const stats = {
+        totalReports,
+        pendingReports,
+        resolvedReports
+    };
+
+    console.log('Final stats object:', stats);
+
+    res.status(200).json({
+        success: true,
+        data: stats
+    });
+});

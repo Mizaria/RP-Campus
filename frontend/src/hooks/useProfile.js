@@ -32,8 +32,11 @@ const useProfile = () => {
       const profile = profileResponse.data;
 
       // Fetch user stats
+      console.log('Fetching user stats...');
       const statsResponse = await reportsAPI.getUserStats();
+      console.log('Stats API Response:', statsResponse);
       const stats = statsResponse.data;
+      console.log('Extracted stats:', stats);
 
       setProfileData({
         username: profile.username || 'User',
@@ -88,8 +91,11 @@ const useProfile = () => {
 
   const refreshStats = async () => {
     try {
+      console.log('Refreshing user stats...');
       const statsResponse = await reportsAPI.getUserStats();
+      console.log('Refresh Stats API Response:', statsResponse);
       const stats = statsResponse.data;
+      console.log('Refresh Extracted stats:', stats);
       
       setProfileData(prev => ({
         ...prev,

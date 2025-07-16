@@ -59,6 +59,10 @@ const AdminProfile = () => {
     );
   }
 
+  // Debug: Log profile data
+  console.log('Admin Profile Data:', profileData);
+  console.log('Admin Profile Stats:', profileData.stats);
+
   return (
     <div className="profile-page">
       {/* Navigation Menu */}
@@ -194,21 +198,21 @@ const AdminProfile = () => {
                   <img src="/images/ResultsIcon.svg" alt="Total Reports" className="stat-icon" />
                   <div className="stat-info">
                     <h4>Total Reports</h4>
-                    <p className="stat-number">{profileData.stats.totalReports}</p>
+                    <p className="stat-number">{profileData.stats.totalReports || 0}</p>
                   </div>
                 </div>
                 <div className="stat-item">
                   <img src="/images/UnresolvedIcon.svg" alt="Pending Reports" className="stat-icon" />
                   <div className="stat-info">
                     <h4>Total Accepted Reports</h4>
-                    <p className="stat-number">{profileData.stats.pendingReports}</p>
+                    <p className="stat-number">{profileData.stats.pendingReports || 0}</p>
                   </div>
                 </div>
                 <div className="stat-item">
                   <img src="/images/ResolvedIcon.svg" alt="Resolved Reports" className="stat-icon" />
                   <div className="stat-info">
                     <h4>Total Fixed Reports</h4>
-                    <p className="stat-number">{profileData.stats.resolvedReports}</p>
+                    <p className="stat-number">{profileData.stats.resolvedReports || 0}</p>
                   </div>
                 </div>
               </div>

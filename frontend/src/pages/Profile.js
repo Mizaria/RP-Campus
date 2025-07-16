@@ -59,6 +59,10 @@ const Profile = () => {
     );
   }
 
+  // Debug: Log profile data
+  console.log('Profile Data:', profileData);
+  console.log('Profile Stats:', profileData.stats);
+
   return (
     <div className="profile-page">
       {/* Navigation Menu */}
@@ -194,21 +198,21 @@ const Profile = () => {
                   <img src="/images/ResultsIcon.svg" alt="Total Reports" className="stat-icon" />
                   <div className="stat-info">
                     <h4>Total Reports</h4>
-                    <p className="stat-number">{profileData.stats.totalReports}</p>
+                    <p className="stat-number">{profileData.stats.totalReports || 0}</p>
                   </div>
                 </div>
                 <div className="stat-item">
                   <img src="/images/UnresolvedIcon.svg" alt="Pending Reports" className="stat-icon" />
                   <div className="stat-info">
-                    <h4>Pending Reports</h4>
-                    <p className="stat-number">{profileData.stats.pendingReports}</p>
+                    <h4> Total Pending Reports</h4>
+                    <p className="stat-number">{profileData.stats.pendingReports || 0}</p>
                   </div>
                 </div>
                 <div className="stat-item">
                   <img src="/images/ResolvedIcon.svg" alt="Resolved Reports" className="stat-icon" />
                   <div className="stat-info">
-                    <h4>Resolved Reports</h4>
-                    <p className="stat-number">{profileData.stats.resolvedReports}</p>
+                    <h4>Total Resolved Reports</h4>
+                    <p className="stat-number">{profileData.stats.resolvedReports || 0}</p>
                   </div>
                 </div>
               </div>

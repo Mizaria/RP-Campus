@@ -7,6 +7,7 @@ const {
     getReports,
     getReport,
     getUserReports,
+    getUserStats,
     updateReport,
     updateReportStatus,
     acceptReport,
@@ -21,38 +22,7 @@ router.use(protect);
 // Routes for all authenticated users
 router.post('/', upload.single('photo'), createReport);
 router.get('/user/me', getUserReports);
-router.get('/user-stats', async (req, res, next) => {
-    try {
-        const Report = require('../models/Report');
-        const userId = req.user.id;
-
-        // Get user's report statistics
-        const totalReports = await Report.countDocuments({ reportedBy: userId });
-        const pendingReports = await Report.countDocuments({ 
-            reportedBy: userId, 
-            status: { $in: ['pending', 'in-progress'] } 
-        });
-        const resolvedReports = await Report.countDocuments({ 
-            reportedBy: userId, 
-            status: 'resolved' 
-        });
-
-        res.status(200).json({
-            success: true,
-            data: {
-                totalReports,
-                pendingReports,
-                resolvedReports
-            }
-        });
-    } catch (error) {
-        console.error('User stats error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching user statistics'
-        });
-    }
-});
+router.get('/user-stats', getUserStats);
 router.get('/:id', getReport);
 router.put('/:id', upload.single('photo'), updateReport);
 router.post('/:id/comments', upload.single('photo'), addComment);
