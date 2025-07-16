@@ -88,7 +88,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 30px;
+    padding-top: 10px;
     pointer-events: none; /* Prevent overlay from blocking content below */
 }
 
@@ -106,7 +106,7 @@
 
 .stats-card {
     background: white;
-    padding: 15px 30px;
+    padding: 10px 30px;
     border-radius: 20px;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
     display: flex;
