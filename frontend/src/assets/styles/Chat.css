@@ -1,0 +1,63 @@
+/* Chat page specific styles */
+
+/* Override bar-search to accommodate dropdown */
+.bar-search {
+    position: relative !important;
+}
+
+/* Ensure the user search container works within bar-search */
+.bar-search .user-search-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Make sure the input takes available space */
+.bar-search .user-search-container input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    color: #000000;
+    margin-left: 20px;
+    font-family: 'Sen', sans-serif;
+}
+
+.bar-search .user-search-container input:focus {
+    outline: none;
+    border: none;
+}
+
+/* Adjust user search results for chat context */
+.bar-search .user-search-results {
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+}
+
+/* Chat specific styling adjustments */
+.chat-container {
+    padding: 20px;
+}
+
+.chat-placeholder {
+    text-align: center;
+    color: #666;
+    font-size: 18px;
+    margin-top: 50px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .bar-search .user-search-results {
+        left: -10px;
+        right: -10px;
+        max-width: calc(100vw - 40px);
+    }
+}
+
+/* Improve dropdown z-index to ensure it appears above other elements */
+.bar-search .user-search-results {
+    z-index: 1001;
+}

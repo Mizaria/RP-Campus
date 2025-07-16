@@ -10,7 +10,7 @@ import adminbackgroundImage from '../assets/images/adminmainbackground.svg'; // 
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth(); 
+  const { user, logout } = useAuth();
   const [isVisible, setIsVisible] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -66,7 +66,7 @@ const Navbar = () => {
               <div className="nav-title">
                 <img src="/images/Logo.png" alt="RP Campus Care Logo" className="nav-logo" />
                 <p className="nav-text-title">Campus Care</p>
-              </div>           
+              </div>
               <div className="nav-create" onClick={() => navigate('/reports/new')}>
                 <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
                 <p className="nav-text">Create</p>
@@ -90,7 +90,7 @@ const Navbar = () => {
                   }
                 >
                   <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
-                    height="20px"/>
+                    height="20px" />
                   <p className="nav-text">My Tasks</p>
                 </NavLink>
               ) : (
@@ -101,7 +101,7 @@ const Navbar = () => {
                   }
                 >
                   <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
-                    height="20px"/>
+                    height="20px" />
                   <p className="nav-text">My Reports</p>
                 </NavLink>
               )}
@@ -129,30 +129,35 @@ const Navbar = () => {
                 <p className="nav-text">Profile</p>
               </NavLink>
               <NavLink
-                  to="/notifications"
-                  className={({ isActive }) =>
-                    `nav-items ${isActive ? "active" : ""}`
-                  }
-                >
-                  <img src="/images/Notification Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
-                    height="20px" />
-                  <p className="nav-text">Notifications</p>
-                </NavLink>
-              <div className="nav-items" onClick={() => navigate('/chat')}>
+                to="/notifications"
+                className={({ isActive }) =>
+                  `nav-items ${isActive ? "active" : ""}`
+                }
+              >
+                <img src="/images/Notification Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
+                  height="20px" />
+                <p className="nav-text">Notifications</p>
+              </NavLink>
+              <NavLink
+                to="/chat"
+                className={({ isActive }) =>
+                  `nav-items ${isActive ? "active" : ""}`
+                }
+              >
                 <img src="/images/Chat Icon.svg" className="nav-icon" alt='Chat' width="20px"
-                  height="20px"/>
+                  height="20px" />
                 <p className="nav-text">Chat</p>
-              </div>
+              </NavLink>
               <div className="nav-items" onClick={handleLogout}>
                 <img src="/images/Log Out Icon.svg" className="nav-icon" alt='Logout' width="20px"
-                  height="20px"/>
+                  height="20px" />
                 <p className="nav-text">Logout</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
+
       {/* Modal */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={closeModal}>
@@ -161,7 +166,7 @@ const Navbar = () => {
               <div className="nav-title">
                 <img src="/images/Logo.png" alt="RP Campus Care Logo" className="nav-logo" />
                 <p className="nav-text-title">Campus Care</p>
-              </div>           
+              </div>
               <div className="nav-create" onClick={() => { navigate('/reports/new'); closeModal(); }}>
                 <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
                 <p className="nav-text">Create</p>
@@ -185,7 +190,7 @@ const Navbar = () => {
                 onClick={closeModal}
               >
                 <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
-                  height="20px"/>
+                  height="20px" />
                 <p className="nav-text">My Reports</p>
               </NavLink>
               <NavLink
@@ -199,19 +204,31 @@ const Navbar = () => {
                   height="20px" />
                 <p className="nav-text">Profile</p>
               </NavLink>
-              <div className="nav-items" onClick={() => { navigate('/notifications'); closeModal(); }}>
-                <img src="/images/Notification Icon.svg" className="nav-icon" alt='Notifications' width="20px"
-                  height="20px"/>
+              <NavLink
+                to="/notifications"
+                className={({ isActive }) =>
+                  `nav-items ${isActive ? "active" : ""}`
+                }
+                onClick={closeModal}
+              >
+                <img src="/images/Notification Icon.svg" className="nav-icon" alt='Profile' width="20px"
+                  height="20px" />
                 <p className="nav-text">Notifications</p>
-              </div>
-              <div className="nav-items" onClick={() => { navigate('/chat'); closeModal(); }}>
-                <img src="/images/Chat Icon.svg" className="nav-icon" alt='Chat' width="20px"
-                  height="20px"/>
+              </NavLink>
+              <NavLink
+                to="/chat"
+                className={({ isActive }) =>
+                  `nav-items ${isActive ? "active" : ""}`
+                }
+                onClick={closeModal}
+              >
+                <img src="/images/Chat Icon.svg" className="nav-icon" alt='Profile' width="20px"
+                  height="20px" />
                 <p className="nav-text">Chat</p>
-              </div>
+              </NavLink>
               <div className="nav-items" onClick={handleLogout}>
                 <img src="/images/Log Out Icon.svg" className="nav-icon" alt='Logout' width="20px"
-                  height="20px"/>
+                  height="20px" />
                 <p className="nav-text">Logout</p>
               </div>
             </div>
