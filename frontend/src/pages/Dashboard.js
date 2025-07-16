@@ -10,7 +10,7 @@ import backgroundImage from '../assets/images/mainBackground.svg';
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
-const SecNav = () => {
+const SecNav = ({ searchTerm, onSearchChange }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
@@ -74,7 +74,12 @@ const SecNav = () => {
         </div>
         <div className="bar-search">
           <img src="/images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
-          <input type="text" placeholder="Search report..." />
+          <input 
+            type="text" 
+            placeholder="Search report..." 
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
         </div>
         <NotificationIcon onClick={() => navigate('/notifications')} />
       </div>
@@ -110,6 +115,7 @@ const SecNav = () => {
 
 const Dashboard = () => {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   
   // Use the custom hook to fetch reports
@@ -124,9 +130,28 @@ const Dashboard = () => {
   } = useDashboardReports();
   
   // Get report data
-  const pendingAndInProgressReports = getPendingAndInProgressReports();
-  const resolvedReports = getResolvedReports();
+  const allPendingAndInProgressReports = getPendingAndInProgressReports();
+  const allResolvedReports = getResolvedReports();
   const reportCounts = getReportCounts();
+
+  // Filter reports based on search term
+  const filterReports = (reports) => {
+    if (!searchTerm.trim()) return reports;
+    
+    return reports.filter(report => 
+      (report.category && report.category.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report.description && report.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report.building && report.building.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report.location && report.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report.room && report.room.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (report._id && report._id.toString().includes(searchTerm)) ||
+      (report.status && report.status.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+  };
+
+  // Get filtered report data
+  const pendingAndInProgressReports = filterReports(allPendingAndInProgressReports);
+  const resolvedReports = filterReports(allResolvedReports);
 
   // Handle edit report
   const handleEditReport = (report) => {
@@ -211,7 +236,7 @@ const Dashboard = () => {
   }, []);
   return (
     <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
-      <SecNav />
+      <SecNav searchTerm={searchTerm} onSearchChange={setSearchTerm} />
       <div className="dashboard-content">
         <div className="dashboard-top-container">
           <div>
