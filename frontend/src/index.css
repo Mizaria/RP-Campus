@@ -1,9 +1,14 @@
 body {
     font-family: 'Sen', sans-serif;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* Prevent horizontal scroll during animations */
+    overflow-y: auto; /* Ensure vertical scrolling is enabled */
+}
+
+html {
+    overflow-y: auto; /* Ensure HTML element allows scrolling */
 }
 
 * {
@@ -23,7 +28,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /* Loading spinner animation */
