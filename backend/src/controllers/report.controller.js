@@ -697,3 +697,37 @@ exports.getUserStats = asyncHandler(async (req, res, next) => {
         data: stats
     });
 });
+
+// @desc    Get admin report statistics (all reports in system)
+// @route   GET /api/reports/admin-stats
+// @access  Private (Admin only)
+exports.getAdminStats = asyncHandler(async (req, res, next) => {
+    console.log('Getting admin stats for user ID:', req.user.id);
+
+    // Get all reports statistics for admin
+    const totalReports = await Report.countDocuments({});
+    console.log('Total reports count (admin):', totalReports);
+    
+    const pendingReports = await Report.countDocuments({ 
+        status: { $in: ['Pending', 'In Progress'] } 
+    });
+    console.log('Pending reports count (admin):', pendingReports);
+    
+    const resolvedReports = await Report.countDocuments({ 
+        status: 'Resolved' 
+    });
+    console.log('Resolved reports count (admin):', resolvedReports);
+
+    const stats = {
+        totalReports,
+        pendingReports,
+        resolvedReports
+    };
+
+    console.log('Final admin stats object:', stats);
+
+    res.status(200).json({
+        success: true,
+        data: stats
+    });
+});

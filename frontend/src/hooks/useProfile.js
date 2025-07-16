@@ -31,9 +31,16 @@ const useProfile = () => {
       const profileResponse = await authAPI.getProfile();
       const profile = profileResponse.data;
 
-      // Fetch user stats
-      console.log('Fetching user stats...');
-      const statsResponse = await reportsAPI.getUserStats();
+      // Fetch user stats based on role
+      console.log('Fetching user stats for role:', profile.role);
+      let statsResponse;
+      if (profile.role === 'admin') {
+        console.log('Fetching admin stats...');
+        statsResponse = await reportsAPI.getAdminStats();
+      } else {
+        console.log('Fetching user stats...');
+        statsResponse = await reportsAPI.getUserStats();
+      }
       console.log('Stats API Response:', statsResponse);
       const stats = statsResponse.data;
       console.log('Extracted stats:', stats);
@@ -91,8 +98,15 @@ const useProfile = () => {
 
   const refreshStats = async () => {
     try {
-      console.log('Refreshing user stats...');
-      const statsResponse = await reportsAPI.getUserStats();
+      console.log('Refreshing user stats for role:', user?.role);
+      let statsResponse;
+      if (user?.role === 'admin') {
+        console.log('Refreshing admin stats...');
+        statsResponse = await reportsAPI.getAdminStats();
+      } else {
+        console.log('Refreshing user stats...');
+        statsResponse = await reportsAPI.getUserStats();
+      }
       console.log('Refresh Stats API Response:', statsResponse);
       const stats = statsResponse.data;
       console.log('Refresh Extracted stats:', stats);

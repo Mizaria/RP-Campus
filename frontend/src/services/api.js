@@ -91,6 +91,15 @@ export const reportsAPI = {
     return handleResponse(response);
   },
 
+  // Get admin statistics (admin only)
+  getAdminStats: async () => {
+    const response = await fetch(`${API_BASE_URL}/api/reports/admin-stats`, {
+      method: 'GET',
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
   // Get user reports
   getUserReports: async () => {
     const response = await fetch(`${API_BASE_URL}/api/reports/user/me`, {

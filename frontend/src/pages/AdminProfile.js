@@ -13,7 +13,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 const AdminProfile = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { profileData, loading, error, refreshProfile, updateProfileImage } = useProfile();
+  const { profileData, loading, error, refreshProfile, updateProfileImage, refreshStats } = useProfile();
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 
   // Redirect if not authenticated
@@ -62,6 +62,8 @@ const AdminProfile = () => {
   // Debug: Log profile data
   console.log('Admin Profile Data:', profileData);
   console.log('Admin Profile Stats:', profileData.stats);
+  console.log('Current User Role:', user?.role);
+  console.log('User object:', user);
 
   return (
     <div className="profile-page">
@@ -80,7 +82,7 @@ const AdminProfile = () => {
                 <p className="nav-text-title">Campus Care</p>
               </div>
               <div className="nav-create" onClick={() => handleNavigation('/reports/new')}>
-                <img src="images/Plus.svg" alt="Create Icon" className="nav-icon" width="20px" height="20px" />
+                <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" width="20px" height="20px" />
                 <p className="nav-text">Create</p>
               </div>
               <div className="nav-items" onClick={() => handleNavigation('/dashboard')}>
@@ -204,14 +206,14 @@ const AdminProfile = () => {
                 <div className="stat-item">
                   <img src="/images/UnresolvedIcon.svg" alt="Pending Reports" className="stat-icon" />
                   <div className="stat-info">
-                    <h4>Total Accepted Reports</h4>
+                    <h4>Pending Reports</h4>
                     <p className="stat-number">{profileData.stats.pendingReports || 0}</p>
                   </div>
                 </div>
                 <div className="stat-item">
                   <img src="/images/ResolvedIcon.svg" alt="Resolved Reports" className="stat-icon" />
                   <div className="stat-info">
-                    <h4>Total Fixed Reports</h4>
+                    <h4>Resolved Reports</h4>
                     <p className="stat-number">{profileData.stats.resolvedReports || 0}</p>
                   </div>
                 </div>
