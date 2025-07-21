@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import NotificationIcon from '../components/NotificationIcon';
+import AIChatBot from '../components/AIChatBot';
 import useIndividualTask from '../hooks/useIndividualTask';
 import useAdminTasks from '../hooks/useAdminTasks';
 import useToast from '../hooks/useToast';
@@ -157,6 +158,7 @@ const IndiTask = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [commentText, setCommentText] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAIChatOpen, setIsAIChatOpen] = useState(false);
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -694,6 +696,39 @@ const IndiTask = () => {
                 onClose={closeModal} 
                 onImageUpload={handleImageUploadWithModal}
             />
+            
+            {/* AI Chat Bot */}
+            <AIChatBot 
+                isOpen={isAIChatOpen}
+                onClose={() => setIsAIChatOpen(false)}
+                reportData={{
+                    ...report,
+                    // Add task-specific information
+                    taskId: task?._id,
+                    taskStatus: task?.status,
+                    assignedAdmin: task?.assignedTo?.username || 'Current Admin',
+                    taskCreatedAt: task?.createdAt,
+                    taskNotes: task?.notes,
+                    // Include comments from report
+                    comments: report?.comments,
+                    // Context indicator
+                    contextType: 'admin-task-management'
+                }}
+            />
+            
+            {/* Floating AI Chat Button */}
+            <button 
+                className="ai-chat-icon-button"
+                onClick={() => setIsAIChatOpen(true)}
+                title="Open AI Assistant"
+            >
+                <img 
+                    src="/images/Chat Icon.svg" 
+                    alt="AI Chat" 
+                    width="24" 
+                    height="24" 
+                />
+            </button>
         </div>
     );
 };

@@ -39,3 +39,24 @@
 button:active{
     opacity: 0.8;
 }
+
+/* AI Chat Icon Styles */
+.title-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ai-chat-icon {
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    padding: 4px;
+    background-color: #007bff;
+    filter: brightness(0) invert(1);
+}
+
+.ai-chat-icon:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
