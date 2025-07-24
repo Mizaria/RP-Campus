@@ -43,11 +43,36 @@ if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+// CORS Configuration
+const getAllowedOrigins = () => {
+    const origins = [
+        'http://localhost:4000', // Development frontend
+        'http://localhost:3000', // Alternative development port
+    ];
+    
+    // Add production URLs if they exist
+    if (process.env.FRONTEND_URL) {
+        origins.push(process.env.FRONTEND_URL);
+    }
+    if (process.env.CLIENT_URL) {
+        origins.push(process.env.CLIENT_URL);
+    }
+    if (process.env.ALLOWED_ORIGINS) {
+        origins.push(...process.env.ALLOWED_ORIGINS.split(','));
+    }
+    
+    return origins;
+};
+
 // Middleware
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(cors({
-    origin: ['http://localhost:4000'], // Allow both frontend and any other origins
-    credentials: true
+    origin: getAllowedOrigins(),
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
 }));
 app.use(morgan('dev'));
 app.use(express.json());

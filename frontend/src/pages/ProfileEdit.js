@@ -11,6 +11,8 @@ import { authAPI } from '../services/api';
 import backgroundImage from '../assets/images/mainBackground.svg';
 import adminBackgroundImage from '../assets/images/adminmainbackground.svg';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const ProfileEdit = () => {
   const navigate = useNavigate();
   const { user, updateUser } = useAuth();
@@ -38,7 +40,7 @@ const ProfileEdit = () => {
       });
       
       if (profileData.profileImage) {
-        setImagePreview(`http://localhost:3000/uploads/${profileData.profileImage}`);
+        setImagePreview(`${API_BASE_URL}/uploads/${profileData.profileImage}`);
       }
     }
   }, [profileData, user]);
