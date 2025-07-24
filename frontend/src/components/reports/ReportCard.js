@@ -123,7 +123,7 @@ export const ReportCard = ({ report, onEdit, onDelete, onClick }) => {
       </div>
       <div className="report-top-bot">
         <div className="report-location" style={{ backgroundColor: getBuildingColor(report.building) }}>
-          <p className="report-sub-text">{report.building}, {report.location}, {report.room}</p>
+          <p className="report-sub-text">{report.building}{report.location}{report.room}</p>
         </div>
         <p className="report-date">{formatDate(report.createdAt)}</p>
       </div>

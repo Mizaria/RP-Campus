@@ -449,7 +449,7 @@ const IndiTask = () => {
                             <div className="report-info">
                                 <p>Location:</p>
                                 <div className="report-location-s" style={{ backgroundColor: getBuildingColor(report?.building) }}>
-                                    {report?.building || 'N/A'}, {report?.location || 'N/A'}, {report?.room || 'N/A'}
+                                    {report?.building || 'N/A'}{report?.location || 'N/A'}{report?.room || 'N/A'}
                                 </div>
                             </div>
                             <div className="report-info">

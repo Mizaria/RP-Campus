@@ -185,7 +185,7 @@ export const ReportCardAdmin = ({
       <div className="report-top-bot">
         <div className="report-location" style={{ backgroundColor: getBuildingColor(report.building) }}>
           <p className="report-sub-text">
-            {report.building || 'N/A'}, {report.location || 'N/A'}, {report.room || 'N/A'}
+            {report.building || 'N/A'}{report.location || 'N/A'}{report.room || 'N/A'}
           </p>
         </div>
         <button 

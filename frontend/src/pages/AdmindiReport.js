@@ -308,7 +308,7 @@ const AdminIndiReport = () => {
                             <div className="report-info">
                                 <p>Location:</p>
                                 <div className="report-location-s" style={{ backgroundColor: getBuildingColor(report.building) }}>
-                                    {report.building}, {report.location}, {report.room}
+                                    {report.building}{report.location}{report.room}
                                 </div>
                             </div>
                             <div className="report-info">
