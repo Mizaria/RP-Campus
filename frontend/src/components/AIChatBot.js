@@ -160,8 +160,30 @@ User Question: ${inputMessage}
                 <div className="ai-chat-messages">
                     {messages.map((message) => (
                         <div key={message.id} className={`message ${message.isBot ? 'bot-message' : 'user-message'}`}>
-                            <div className="message-content">
-                                <div className="message-text">{message.text}</div>
+                            <div className="message-content" style={{
+                                overflow: 'visible',
+                                textOverflow: 'initial',
+                                maxHeight: 'none',
+                                height: 'auto'
+                            }}>
+                                <div 
+                                    className="message-text" 
+                                    style={{ 
+                                        whiteSpace: 'pre-wrap', 
+                                        wordWrap: 'break-word', 
+                                        overflowWrap: 'break-word',
+                                        textOverflow: 'initial',
+                                        overflow: 'visible',
+                                        width: '100%',
+                                        maxWidth: 'none',
+                                        height: 'auto',
+                                        maxHeight: 'none',
+                                        display: 'block'
+                                    }}
+                                    title={message.text} // Add title for debugging
+                                >
+                                    {message.text}
+                                </div>
                                 <div className="message-time">
                                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </div>

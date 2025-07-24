@@ -69,16 +69,21 @@
 .ai-chat-messages {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 12px;
     background: #f9fafb;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .message {
     display: flex;
     margin-bottom: 8px;
+    width: 100%;
+    align-items: flex-start;
 }
 
 .bot-message {
@@ -89,12 +94,41 @@
     justify-content: flex-end;
 }
 
+/* Ensure message containers don't truncate content */
+.ai-chat-popup .message-content,
+.ai-chat-popup .ai-chat-messages .message-content,
+.ai-chat-popup .ai-chat-messages .message .message-content {
+    max-width: 85% !important;
+    padding: 12px 16px !important;
+    border-radius: 18px !important;
+    position: relative !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    width: fit-content !important;
+    min-width: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-height: none !important;
+    min-height: auto !important;
+}
+
 .message-content {
-    max-width: 90%;
+    max-width: 85%;
     padding: 12px 16px;
     border-radius: 18px;
     position: relative;
-    word-wrap: break-word;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    width: fit-content;
+    min-width: 0;
+    height: auto !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-height: none !important;
+    min-height: auto !important;
 }
 
 .bot-message .message-content {
@@ -110,14 +144,46 @@
     border-bottom-right-radius: 4px;
 }
 
+/* Ensure full text display - override any inherited styles */
+.ai-chat-popup .message-text,
+.ai-chat-popup .ai-chat-messages .message-text,
+.ai-chat-popup .ai-chat-messages .message .message-content .message-text {
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    word-wrap: break-word !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    width: 100% !important;
+    display: block !important;
+    hyphens: auto !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    text-align: left !important;
+}
+
 .message-text {
     margin: 0;
     font-size: 14px;
-    line-height: 1.4;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-    max-width: 100%;
+    line-height: 1.5;
+    word-wrap: break-word !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    width: 100% !important;
+    display: block !important;
+    hyphens: auto;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
 }
 
 .message-time {
@@ -317,8 +383,19 @@
     }
     
     .message-content {
-        max-width: 85%;
+        max-width: 80%;
         padding: 10px 14px;
+        min-width: 0;
+        width: fit-content;
+        height: auto;
+        overflow: visible;
+    }
+    
+    .message-text {
+        font-size: 13px;
+        line-height: 1.4;
+        overflow: visible;
+        text-overflow: clip;
     }
     
     .ai-chat-icon-button {

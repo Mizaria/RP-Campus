@@ -697,38 +697,42 @@ const IndiTask = () => {
                 onImageUpload={handleImageUploadWithModal}
             />
 
-            {/* AI Chat Bot */}
-            <AIChatBot
-                isOpen={isAIChatOpen}
-                onClose={() => setIsAIChatOpen(false)}
-                reportData={{
-                    ...report,
-                    // Add task-specific information
-                    taskId: task?._id,
-                    taskStatus: task?.status,
-                    assignedAdmin: task?.assignedTo?.username || 'Current Admin',
-                    taskCreatedAt: task?.createdAt,
-                    taskNotes: task?.notes,
-                    // Include comments from report
-                    comments: report?.comments,
-                    // Context indicator
-                    contextType: 'admin-task-management'
-                }}
-            />
-
-            {/* Floating AI Chat Button */}
-            <button
-                className="ai-chat-icon-button"
-                onClick={() => setIsAIChatOpen(true)}
-                title="Open AI Assistant"
-            >
-                <img
-                    src="/images/Chat Icon.svg"
-                    alt="AI Chat"
-                    width="24"
-                    height="24"
+            {/* AI Chat Bot - Only show when task is not completed */}
+            {task?.status !== 'Completed' && (
+                <AIChatBot
+                    isOpen={isAIChatOpen}
+                    onClose={() => setIsAIChatOpen(false)}
+                    reportData={{
+                        ...report,
+                        // Add task-specific information
+                        taskId: task?._id,
+                        taskStatus: task?.status,
+                        assignedAdmin: task?.assignedTo?.username || 'Current Admin',
+                        taskCreatedAt: task?.createdAt,
+                        taskNotes: task?.notes,
+                        // Include comments from report
+                        comments: report?.comments,
+                        // Context indicator
+                        contextType: 'admin-task-management'
+                    }}
                 />
-            </button>
+            )}
+
+            {/* Floating AI Chat Button - Only show when task is not completed */}
+            {task?.status !== 'Completed' && (
+                <button
+                    className="ai-chat-icon-button"
+                    onClick={() => setIsAIChatOpen(true)}
+                    title="Open AI Assistant"
+                >
+                    <img
+                        src="/images/Chat Icon.svg"
+                        alt="AI Chat"
+                        width="24"
+                        height="24"
+                    />
+                </button>
+            )}
         </div>
     );
 };
