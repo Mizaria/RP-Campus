@@ -256,51 +256,82 @@ const  Dashboard = () => {
 
   useEffect(() => {
     // Initialize horizontal scroll functionality
-    const slider = document.querySelector('.report-horizontal');
-    if (!slider) return;
+    const initializeHorizontalScroll = () => {
+      const slider = document.querySelector('.report-horizontal');
+      if (!slider) {
+        console.log('Slider not found, retrying...');
+        return;
+      }
 
-    let isDown = false;
-    let startX;
-    let scrollLeft;
+      console.log('Initializing horizontal scroll for:', slider);
 
-    const handleMouseDown = (e) => {
-      isDown = true;
-      slider.classList.add('active');
-      startX = e.pageX - slider.offsetLeft;
-      scrollLeft = slider.scrollLeft;
-    };
+      let isDown = false;
+      let startX;
+      let scrollLeft;
 
-    const handleMouseLeave = () => {
-      isDown = false;
-      slider.classList.remove('active');
-    };
+      const handleMouseDown = (e) => {
+        isDown = true;
+        slider.classList.add('active');
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+        slider.style.cursor = 'grabbing';
+      };
 
-    const handleMouseUp = () => {
-      isDown = false;
-      slider.classList.remove('active');
-    };
+      const handleMouseLeave = () => {
+        isDown = false;
+        slider.classList.remove('active');
+        slider.style.cursor = 'grab';
+      };
 
-    const handleMouseMove = (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      slider.scrollLeft = scrollLeft - walk;
-    };
+      const handleMouseUp = () => {
+        isDown = false;
+        slider.classList.remove('active');
+        slider.style.cursor = 'grab';
+      };
 
-    slider.addEventListener('mousedown', handleMouseDown);
-    slider.addEventListener('mouseleave', handleMouseLeave);
-    slider.addEventListener('mouseup', handleMouseUp);
-    slider.addEventListener('mousemove', handleMouseMove);
+      const handleMouseMove = (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 2; // Increase scroll speed
+        slider.scrollLeft = scrollLeft - walk;
+      };
 
-    // Cleanup event listeners
-    return () => {
+      // Remove any existing listeners first
       slider.removeEventListener('mousedown', handleMouseDown);
       slider.removeEventListener('mouseleave', handleMouseLeave);
       slider.removeEventListener('mouseup', handleMouseUp);
       slider.removeEventListener('mousemove', handleMouseMove);
+
+      // Add new listeners
+      slider.addEventListener('mousedown', handleMouseDown);
+      slider.addEventListener('mouseleave', handleMouseLeave);
+      slider.addEventListener('mouseup', handleMouseUp);
+      slider.addEventListener('mousemove', handleMouseMove);
+
+      // Cleanup function
+      return () => {
+        slider.removeEventListener('mousedown', handleMouseDown);
+        slider.removeEventListener('mouseleave', handleMouseLeave);
+        slider.removeEventListener('mouseup', handleMouseUp);
+        slider.removeEventListener('mousemove', handleMouseMove);
+      };
     };
-  }, []);
+
+    // Try to initialize immediately
+    const cleanup = initializeHorizontalScroll();
+    
+    // If slider wasn't found, try again after a short delay
+    if (!cleanup) {
+      const timer = setTimeout(() => {
+        initializeHorizontalScroll();
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+
+    return cleanup;
+  }, [highPriorityReports]); // Re-run when reports change
   return (
     <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
       <SecNav searchTerm={searchTerm} onSearchChange={setSearchTerm} />
