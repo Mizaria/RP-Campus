@@ -32,6 +32,40 @@ const AIChatBot = ({ isOpen, onClose, reportData }) => {
         scrollToBottom();
     }, [messages]);
 
+    // Test connection to Flowise API on component mount
+    useEffect(() => {
+        if (isOpen) {
+            testFlowiseConnection();
+        }
+    }, [isOpen]);
+
+    // Test Flowise API connection
+    const testFlowiseConnection = async () => {
+        try {
+            console.log('Testing Flowise API connection...');
+            const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/eacdb077-6f74-45da-82e1-9ae6f0441734', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    question: "Test connection",
+                    overrideConfig: {
+                        returnSourceDocuments: false
+                    }
+                })
+            });
+            
+            if (response.ok) {
+                console.log('✅ Flowise API connection successful');
+            } else {
+                console.warn('⚠️ Flowise API connection test failed:', response.status);
+            }
+        } catch (error) {
+            console.error('❌ Flowise API connection test error:', error);
+        }
+    };
+
     // Handle sending message to Flowise API
     const sendMessage = async () => {
         if (!inputMessage.trim() || isLoading) return;
@@ -74,7 +108,9 @@ Task Management Context:
 User Question: ${inputMessage}
 ` : inputMessage;
 
-            const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/eacdb077-6f74-45da-82e1-9ae6f0441734%22', {
+            console.log('Sending to Flowise API:', reportContext);
+
+            const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/eacdb077-6f74-45da-82e1-9ae6f0441734', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,8 +123,13 @@ User Question: ${inputMessage}
                 })
             });
 
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorText = await response.text();
+                console.error('API Error Response:', errorText);
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
             }
 
             const data = await response.json();
@@ -97,9 +138,21 @@ User Question: ${inputMessage}
             console.log('Response text length:', data.text?.length || data.answer?.length || 0);
             console.log('Full response text:', data.text || data.answer);
             
+            // Handle different response formats from Flowise
+            let responseText = '';
+            if (data.text) {
+                responseText = data.text;
+            } else if (data.answer) {
+                responseText = data.answer;
+            } else if (typeof data === 'string') {
+                responseText = data;
+            } else {
+                responseText = JSON.stringify(data);
+            }
+            
             const botMessage = {
                 id: Date.now() + 1,
-                text: data.text || data.answer || "I'm sorry, I couldn't process your request at the moment.",
+                text: responseText || "I'm sorry, I couldn't process your request at the moment.",
                 isBot: true,
                 timestamp: new Date()
             };
@@ -107,9 +160,26 @@ User Question: ${inputMessage}
             setMessages(prev => [...prev, botMessage]);
         } catch (error) {
             console.error('Error sending message to AI:', error);
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack,
+                name: error.name
+            });
+            
+            let errorText = "I'm sorry, I'm experiencing technical difficulties. Please try again later.";
+            
+            // Provide more specific error messages based on error type
+            if (error.message.includes('Failed to fetch')) {
+                errorText = "I'm unable to connect to the AI service. Please check your internet connection and try again.";
+            } else if (error.message.includes('HTTP error! status: 4')) {
+                errorText = "I'm having trouble processing your request. Please try rephrasing your question.";
+            } else if (error.message.includes('HTTP error! status: 5')) {
+                errorText = "The AI service is temporarily unavailable. Please try again in a few moments.";
+            }
+            
             const errorMessage = {
                 id: Date.now() + 1,
-                text: "I'm sorry, I'm experiencing technical difficulties. Please try again later.",
+                text: errorText,
                 isBot: true,
                 timestamp: new Date()
             };
