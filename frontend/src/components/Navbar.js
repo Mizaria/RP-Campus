@@ -51,7 +51,7 @@ const Navbar = () => {
     return null; // Don't show navbar if user is not logged in
   }
   const navbarClasses = `nav-menu${user?.role === 'admin' ? ' admin' : ''}${!isVisible ? ' nav-hidden' : ''}`;
-
+  const modalClasses = `modal-overlay${user?.role === 'admin' ? ' admin' : ''}${!isVisible ? ' nav-hidden' : ''}`;
   return (
     <>
       <div className={navbarClasses}>
@@ -67,10 +67,17 @@ const Navbar = () => {
                 <img src="/images/Logo.png" alt="RP Campus Care Logo" className="nav-logo" />
                 <p className="nav-text-title">Campus Care</p>
               </div>
-              <div className="nav-create" onClick={() => navigate('/reports/new')}>
+               {user?.role === 'admin' ? (
+              <div className="nav-create" onClick={() => navigate('/announcement-form')}>
+                  <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
+                  <p className="nav-text">Announce</p>
+                </div>
+              ) : (
+                <div className="nav-create" onClick={() => navigate('/reports/new')}>
                 <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
                 <p className="nav-text">Create</p>
               </div>
+              )}
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
@@ -157,48 +164,78 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
       {/* Modal */}
       {isModalOpen && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="nav-container">
+        <div className={modalClasses} onClick={closeModal}>
+          <div className="modal-content " onClick={(e) => e.stopPropagation()}>
+            <div className="nav-container ">
               <div className="nav-title">
                 <img src="/images/Logo.png" alt="RP Campus Care Logo" className="nav-logo" />
                 <p className="nav-text-title">Campus Care</p>
               </div>
-              <div className="nav-create" onClick={() => { navigate('/reports/new'); closeModal(); }}>
+               {user?.role === 'admin' ? (
+              <div className="nav-create" onClick={() => navigate('/announcement-form')}>
+                  <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
+                  <p className="nav-text">Announce</p>
+                </div>
+              ) : (
+                <div className="nav-create" onClick={() => navigate('/reports/new')}>
                 <img src="/images/Plus.svg" alt="Create Icon" className="nav-icon" style={{ height: 20, width: 20 }} />
                 <p className="nav-text">Create</p>
               </div>
+              )}
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
                   `nav-items ${isActive ? "active" : ""}`
                 }
-                onClick={closeModal}
               >
                 <img src="/images/Dashboard Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
                   height="20px" />
                 <p className="nav-text">Dashboard</p>
               </NavLink>
+              {/* Show My Tasks for admin, My Reports for student/staff */}
+              {user?.role === 'admin' ? (
+                <NavLink
+                  to="/mytasks"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
+                    height="20px" />
+                  <p className="nav-text">My Tasks</p>
+                </NavLink>
+              ) : (
+                <NavLink
+                  to="/reports"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
+                    height="20px" />
+                  <p className="nav-text">My Reports</p>
+                </NavLink>
+              )}
+              {/* Show History only for admin */}
+              {user?.role === 'admin' && (
+                <NavLink
+                  to="/history"
+                  className={({ isActive }) =>
+                    `nav-items ${isActive ? "active" : ""}`
+                  }
+                >
+                  <img src="/images/Timemachine.svg" className="nav-icon" alt='Dashboard' width="20px"
+                    height="20px" />
+                  <p className="nav-text">History</p>
+                </NavLink>
+              )}
               <NavLink
-                to="/reports"
+                to={user?.role === 'admin' ? "/admin/profile" : "/profile"}
                 className={({ isActive }) =>
                   `nav-items ${isActive ? "active" : ""}`
                 }
-                onClick={closeModal}
-              >
-                <img src="/images/My Reports Icon.svg" className="nav-icon" alt='Reports' width="20px"
-                  height="20px" />
-                <p className="nav-text">My Reports</p>
-              </NavLink>
-              <NavLink
-                to="/profile"
-                className={({ isActive }) =>
-                  `nav-items ${isActive ? "active" : ""}`
-                }
-                onClick={closeModal}
               >
                 <img src="/images/Account Icon.svg" className="nav-icon" alt='Profile' width="20px"
                   height="20px" />
@@ -209,9 +246,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `nav-items ${isActive ? "active" : ""}`
                 }
-                onClick={closeModal}
               >
-                <img src="/images/Notification Icon.svg" className="nav-icon" alt='Profile' width="20px"
+                <img src="/images/Notification Icon.svg" className="nav-icon" alt='Dashboard' width="20px"
                   height="20px" />
                 <p className="nav-text">Notifications</p>
               </NavLink>
@@ -220,9 +256,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `nav-items ${isActive ? "active" : ""}`
                 }
-                onClick={closeModal}
               >
-                <img src="/images/Chat Icon.svg" className="nav-icon" alt='Profile' width="20px"
+                <img src="/images/Chat Icon.svg" className="nav-icon" alt='Chat' width="20px"
                   height="20px" />
                 <p className="nav-text">Chat</p>
               </NavLink>

@@ -219,8 +219,29 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 20px 0;
   scroll-behavior: smooth;
+  white-space: nowrap;
+  cursor: grab;
+  user-select: none;
+  width: 100%;
+}
+
+.report-horizontal:active {
+  cursor: grabbing;
+}
+
+.report-horizontal.active {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.report-horizontal .report-card {
+  flex: 0 0 auto;
+  min-width: 300px;
+  white-space: normal;
+  pointer-events: auto;
 }
 
 .report-horizontal::-webkit-scrollbar {

@@ -22,6 +22,7 @@ import Notification from './pages/AllNotification';
 import AdminSignup from './pages/SignupAdmin';
 import Chat from './pages/Chat';
 import ChatMessage from './pages/ChatMessage';
+import AnnouncementForm from './pages/AnnouncementForm';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -156,6 +157,22 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <ChatMessage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/announcement-form" 
+            element={
+              <ProtectedRoute>
+                <AnnouncementForm />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/announcement-form" 
+            element={
+              <ProtectedRoute>
+                <AnnouncementForm />
               </ProtectedRoute>
             } 
           />

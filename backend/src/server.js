@@ -20,12 +20,16 @@ const reportRoutes = require('./routes/report.routes');
 const adminTaskRoutes = require('./routes/adminTask.routes');
 const notificationRoutes = require('./routes/notification.routes');
 const messageRoutes = require('./routes/message.routes');
+const announcementRoutes = require('./routes/announcement.routes');
 
 // Import middleware
 const { errorHandler } = require('./middleware/error.middleware');
 
 // Import ChatServer for real-time messaging
 const ChatServer = require('./socket/chat.server');
+
+// Import announcement scheduler
+const { scheduleAnnouncementCleanup } = require('./services/announcementScheduler');
 
 // Create Express app
 const app = express();
@@ -71,6 +75,7 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/admin-tasks', adminTaskRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/announcements', announcementRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -119,6 +124,13 @@ console.log('✅ Chat Server initialized');
 
 // Make chatServer globally accessible for other modules
 global.chatServer = chatServer;
+
+// Initialize announcement cleanup scheduler
+try {
+    scheduleAnnouncementCleanup();
+} catch (error) {
+    console.log('⚠️ Announcement scheduler not available (node-cron not installed). TTL index will handle cleanup.');
+}
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
