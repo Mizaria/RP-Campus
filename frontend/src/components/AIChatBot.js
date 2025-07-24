@@ -74,7 +74,7 @@ Task Management Context:
 User Question: ${inputMessage}
 ` : inputMessage;
 
-            const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/d95c336b-08c9-4b02-905c-52779802baeb', {
+            const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/eacdb077-6f74-45da-82e1-9ae6f0441734%22', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
