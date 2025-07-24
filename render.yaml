@@ -2,8 +2,11 @@ services:
   - type: web
     name: rp-campus-care-frontend
     env: static
-    buildCommand: npm run build
+    buildCommand: npm install && npm run build
     staticPublishPath: ./build
+    buildFilter:
+      paths:
+        - frontend/**
     routes:
       - type: rewrite
         source: /*
