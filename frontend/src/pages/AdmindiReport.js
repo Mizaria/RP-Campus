@@ -11,18 +11,18 @@ import backgroundImage from '../assets/images/adminmainbackground.svg';
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
-const SecNav = ({ 
-    report, 
-    shouldShowDropdown, 
-    setShouldShowDropdown, 
-    handleEscalateClick, 
-    handleDeEscalateClick, 
-    handleDeleteClick 
+const SecNav = ({
+    report,
+    shouldShowDropdown,
+    setShouldShowDropdown,
+    handleEscalateClick,
+    handleDeEscalateClick,
+    handleDeleteClick
 }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [isNavbarVisible, setIsNavbarVisible] = useState(true);
-    
+
     // Debug: Log user data to see if profileImage is included
     useEffect(() => {
         console.log('Dashboard user data:', user);
@@ -99,35 +99,35 @@ const SecNav = ({
                 {report && (
                     <div className="main-right" onClick={(e) => e.stopPropagation()}>
                         <li>
-                            <img 
-                                src="/images/more vertical.svg" 
-                                alt="Menu Icon" 
-                                className="menu-icon" 
+                            <img
+                                src="/images/more vertical.svg"
+                                alt="Menu Icon"
+                                className="menu-icon"
                                 width="22px"
-                                height="22px" 
+                                height="22px"
                                 onClick={toggleDropdown}
                                 style={{ cursor: 'pointer' }}
                             />
-                           
-                                <ul className="dropdown">
-                                    {report.priority !== 'High' && (
-                                        <li onClick={handleEscalateClick}>
-                                            <img src="/images/Up.svg" alt="Escalate Icon" className="dropdown-icon" width="22px"
-                                                height="22px" />Escalate 
-                                        </li>
-                                    )}
-                                    {report.priority !== 'Low' && (
-                                        <li onClick={handleDeEscalateClick}>
-                                            <img src="/images/Down.svg" alt="De-escalate Icon" className="dropdown-icon" width="22px"
-                                                height="22px" />De-escalate 
-                                        </li>
-                                    )}
-                                    <li onClick={handleDeleteClick}>
-                                        <img src="/images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px"
-                                            height="22px" />Delete 
+
+                            <ul className="dropdown">
+                                {report.priority !== 'High' && (
+                                    <li onClick={handleEscalateClick}>
+                                        <img src="/images/Up.svg" alt="Escalate Icon" className="dropdown-icon" width="22px"
+                                            height="22px" />Escalate
                                     </li>
-                                </ul>
-                           
+                                )}
+                                {report.priority !== 'Low' && (
+                                    <li onClick={handleDeEscalateClick}>
+                                        <img src="/images/Down.svg" alt="De-escalate Icon" className="dropdown-icon" width="22px"
+                                            height="22px" />De-escalate
+                                    </li>
+                                )}
+                                <li onClick={handleDeleteClick}>
+                                    <img src="/images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px"
+                                        height="22px" />Delete
+                                </li>
+                            </ul>
+
                         </li>
                     </div>
                 )}
@@ -252,7 +252,7 @@ const AdminIndiReport = () => {
             case 'E1':
                 return '#EAF3DE';
             case 'E6':
-                return '#F1EFCD';
+                return '#EAE0D8';
             case 'W4':
                 return '#EAE5CB';
             case 'W6':
@@ -264,8 +264,8 @@ const AdminIndiReport = () => {
 
     return (
         <div className={`dashboard ${isNavbarVisible ? '' : 'navbar-hidden'}`}>
-            <SecNav 
-                report={report} 
+            <SecNav
+                report={report}
                 shouldShowDropdown={shouldShowDropdown}
                 setShouldShowDropdown={setShouldShowDropdown}
                 handleEscalateClick={handleEscalateClick}
@@ -364,7 +364,7 @@ const AdminIndiReport = () => {
                             )}
                             {report.status === 'Pending' && (
                                 <div className="accept-btn-indi">
-                                    <button 
+                                    <button
                                         className="accept-report-btn-indi"
                                         onClick={handleAcceptReport}
                                     >

@@ -158,7 +158,7 @@ const IndiReport = () => {
             case 'E1':
                 return '#EAF3DE';
             case 'E6':
-                return '#F1EFCD';
+                return '#EAE0D8';
             case 'W4':
                 return '#EAE5CB';
             case 'W6':
@@ -291,20 +291,20 @@ const IndiReport = () => {
                                     </div>
                                     <div className="additional-img">
                                         {report.comments && report.comments.length > 0 && report.comments[report.comments.length - 1].photoUrl ? (
-                                           
-                                                <img
-                                                    src={`${API_BASE_URL}${report.comments[report.comments.length - 1].photoUrl}`}
-                                                    alt="Additional"
-                                                    className="report-image"
-                                                    style={{ height: "100%" }}
-                                                    onError={(e) => {
-                                                        console.log('Additional image load error, URL:', e.target.src);
-                                                        e.target.style.display = 'none';
-                                                        e.target.parentElement.style.display = 'none';
-                                                        e.target.parentElement.nextElementSibling.style.display = 'block';
-                                                    }}
-                                                />
-                                            
+
+                                            <img
+                                                src={`${API_BASE_URL}${report.comments[report.comments.length - 1].photoUrl}`}
+                                                alt="Additional"
+                                                className="report-image"
+                                                style={{ height: "100%" }}
+                                                onError={(e) => {
+                                                    console.log('Additional image load error, URL:', e.target.src);
+                                                    e.target.style.display = 'none';
+                                                    e.target.parentElement.style.display = 'none';
+                                                    e.target.parentElement.nextElementSibling.style.display = 'block';
+                                                }}
+                                            />
+
                                         ) : null}
                                         {(!report.comments || report.comments.length === 0 || !report.comments[report.comments.length - 1].photoUrl) && (
                                             <div className="no-img">

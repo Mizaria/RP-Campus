@@ -87,7 +87,7 @@ export const TaskCardAdmin = ({
       case 'E1':
         return '#EAF3DE';
       case 'E6':
-        return '#F1EFCD';
+        return '#EAE0D8';
       case 'W4':
         return '#EAE5CB';
       case 'W6':

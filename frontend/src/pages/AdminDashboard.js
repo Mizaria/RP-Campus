@@ -88,7 +88,7 @@ const SecNav = ({ searchTerm, onSearchChange }) => {
       </div>
       <div className="main-content">
         <div className="dashboard-title">
-          <h2>Welcome back, <span>{user?.username || 'User'}</span></h2>
+          <h2>Welcome back, <span style={{ color: '#E4BB1A' }}>{user?.username || 'User'}</span></h2>
           <p style={{ paddingTop: 4 }}>{formattedDate}</p>
         </div>
         <div className="main-right">
@@ -348,10 +348,6 @@ const  Dashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="create-button" onClick={() => navigate('/chatMessage')}>
-            <img src="images/White Create Icon.svg" alt="Create Icon" width="20px" height="20px"  />
-            <span>Create</span>
           </div>
         </div>
         

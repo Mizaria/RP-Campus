@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useSocket } from '../contexts/SocketContext';
 import useChat from '../hooks/useChat';
 import useUserSearch from '../hooks/useUserSearch';
+import NotificationIcon from '../components/NotificationIcon';
+import UserSearchDropdown from '../components/UserSearchDropdown';
 import '../assets/styles/ChatMessage.css';
 import '../assets/styles/UserSearch.css';
 import backgroundImage from '../assets/images/mainBackground.svg';
@@ -152,10 +154,7 @@ const SecNav = ({ otherUser, isOnline }) => {
                         </div>
                     </div>
                 </div>
-                <div className="bar-item">
-                    <img src="/images/Notification Icon.svg" alt="Notification Icon" width="20px" height="20px" />
-                    <img src="/images/Green Circle.svg" alt="Notification Indicator" className="notification-circle" />
-                </div>
+                <NotificationIcon onClick={() => navigate('/notifications')} />
             </div>
             <div className="main-content">
                 <div className="Page-header">
@@ -250,107 +249,6 @@ const MessageItem = ({ message, isOwn, otherUser, currentUser, getImageUrl }) =>
                     </div>
                 )}
             </div>
-        </div>
-    );
-};
-
-// UserSearchDropdown component
-const UserSearchDropdown = ({ 
-    filteredUsers, 
-    loading, 
-    error, 
-    isVisible, 
-    onUserSelect, 
-    getUserProfileImageUrl, 
-    formatUserRole,
-    getUserStatus,
-    onlineUsers
-}) => {
-    if (!isVisible) return null;
-
-    if (loading) {
-        return (
-            <div className="user-search-results">
-                <div className="search-loading">
-                    <span>Searching users...</span>
-                </div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="user-search-results">
-                <div className="search-error">
-                    <span>Error: {error}</span>
-                </div>
-            </div>
-        );
-    }
-
-    if (filteredUsers.length === 0) {
-        return (
-            <div className="user-search-results">
-                <div className="search-no-results">
-                    {loading ? (
-                        <span>Loading users...</span>
-                    ) : error ? (
-                        <span>Error loading users</span>
-                    ) : (
-                        <>
-                            <span>No users found</span>
-                            <small>Try searching with a different term</small>
-                        </>
-                    )}
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="user-search-results" key={onlineUsers.size}>
-            {filteredUsers.map((user) => (
-                <div 
-                    key={user._id} 
-                    className="user-search-item"
-                    onClick={() => onUserSelect(user)}
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            onUserSelect(user);
-                        }
-                    }}
-                >
-                    <img 
-                        src={getUserProfileImageUrl(user.profileImage)} 
-                        alt={`${user.username}'s avatar`}
-                        className="user-avatar"
-                        onError={(e) => {
-                            e.target.src = '/images/Frame 47.svg';
-                        }}
-                    />
-                    <div className="user-info">
-                        <p className="user-name">{user.username}</p>
-                        <p className={`user-role role-${user.role}`}>
-                            {formatUserRole(user.role)}
-                        </p>
-                    </div>
-                    <div className="user-status">
-                        {(() => {
-                            // Always use real-time status from getUserStatus, ignore cached user.status
-                            const status = getUserStatus(user._id) || 'offline';
-                            const isOnline = status === 'online';
-                            return (
-                                <>
-                                    <div className={`status-indicator ${isOnline ? 'status-online' : 'status-offline'}`}></div>
-                                    <span className="status-text">{isOnline ? 'Online' : 'Offline'}</span>
-                                </>
-                            );
-                        })()}
-                    </div>
-                </div>
-            ))}
         </div>
     );
 };

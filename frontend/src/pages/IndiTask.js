@@ -15,62 +15,62 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 // Image Upload Modal Component
 const ImageUploadModal = ({ isOpen, onClose, onImageUpload }) => {
-  if (!isOpen) return null;
+    if (!isOpen) return null;
 
-  return (
-    <div 
-      className="modal-overlay-update" 
-      onClick={onClose}
-    >
-      <div 
-        className="modal-content-update" 
-        onClick={(e) => e.stopPropagation()}
-      >
-        
-        <div className="img-add-container">
-          <img
-            src="/images/imageupload 1.svg"
-            alt="Add Image Icon"
-            className="add-image-icon"
-            width="130px"
-          />
-          <p className="add-image-text">Image of fault (optional)</p>
-          <div className="line-divider"></div>
-          <div className="image-btn-container">
-            <label htmlFor="fileInput" className="image-input">
-              <img
-                src="/images/Plus.svg"
-                alt="Upload Icon"
-                className="upload-icon"
-                width="15px"
-                height="15px"
-              />
-              Upload
-            </label>
-            <input 
-              type="file" 
-              id="fileInput" 
-              accept="image/*"
-              onChange={onImageUpload}
-              style={{ display: "none" }} 
-            />
-            <label htmlFor="cameraInput" className="image-input">
-              Use Camera
-            </label>
-            <input
-              type="file"
-              id="cameraInput"
-              accept="image/*"
-              capture="environment"
-              onChange={onImageUpload}
-              className="image-input"
-              style={{ display: "none" }}
-            />
-          </div>
+    return (
+        <div
+            className="modal-overlay-update"
+            onClick={onClose}
+        >
+            <div
+                className="modal-content-update"
+                onClick={(e) => e.stopPropagation()}
+            >
+
+                <div className="img-add-container">
+                    <img
+                        src="/images/imageupload 1.svg"
+                        alt="Add Image Icon"
+                        className="add-image-icon"
+                        width="130px"
+                    />
+                    <p className="add-image-text">Image of fault (optional)</p>
+                    <div className="line-divider"></div>
+                    <div className="image-btn-container">
+                        <label htmlFor="fileInput" className="image-input">
+                            <img
+                                src="/images/Plus.svg"
+                                alt="Upload Icon"
+                                className="upload-icon"
+                                width="15px"
+                                height="15px"
+                            />
+                            Upload
+                        </label>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            accept="image/*"
+                            onChange={onImageUpload}
+                            style={{ display: "none" }}
+                        />
+                        <label htmlFor="cameraInput" className="image-input">
+                            Use Camera
+                        </label>
+                        <input
+                            type="file"
+                            id="cameraInput"
+                            accept="image/*"
+                            capture="environment"
+                            onChange={onImageUpload}
+                            className="image-input"
+                            style={{ display: "none" }}
+                        />
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 const SecNav = ({ task, onRemoveTask }) => {
@@ -135,18 +135,18 @@ const SecNav = ({ task, onRemoveTask }) => {
                     <p style={{ paddingTop: 4 }}>{task ? `#${task._id.toString().slice(-4)}` : '#----'}</p>
                 </div>
                 {task && task.status !== 'Completed' && (
-                <div className="main-right" onClick={(e) => e.stopPropagation()}>
-            <li>
-              <img src="/images/more vertical.svg" alt="Menu Icon" className="menu-icon" width="22px"
-                height="22px" />
-              <ul className="dropdown">
-                <li onClick={onRemoveTask}>
-                  <img src="/images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px"
-                    height="22px" />Remove Task
-                </li>
-              </ul>
-            </li>
-          </div>
+                    <div className="main-right" onClick={(e) => e.stopPropagation()}>
+                        <li>
+                            <img src="/images/more vertical.svg" alt="Menu Icon" className="menu-icon" width="22px"
+                                height="22px" />
+                            <ul className="dropdown">
+                                <li onClick={onRemoveTask}>
+                                    <img src="/images/delete.svg" alt="Delete Icon" className="dropdown-icon" width="22px"
+                                        height="22px" />Remove Task
+                                </li>
+                            </ul>
+                        </li>
+                    </div>
                 )}
             </div>
         </div>
@@ -245,7 +245,7 @@ const IndiTask = () => {
                                 'Authorization': `Bearer ${localStorage.getItem('token')}`
                             }
                         });
-                        
+
                         if (clearCommentsResponse.ok) {
                             const result = await clearCommentsResponse.json();
                             console.log('Comments cleared successfully:', result);
@@ -343,15 +343,15 @@ const IndiTask = () => {
                 // Update the UI immediately with what was saved
                 if (responseData.data && responseData.data.comment) {
                     const savedComment = responseData.data.comment;
-                    
+
                     // Update the comment text to match what was saved
                     setCommentText(savedComment.commentText || commentText);
-                    
+
                     // Update image preview to show the saved image URL
                     if (savedComment.photoUrl) {
                         setImagePreview(`${API_BASE_URL}${savedComment.photoUrl}`);
                     }
-                    
+
                     // Clear the selected file since it's now saved
                     setSelectedImage(null);
                 }
@@ -400,7 +400,7 @@ const IndiTask = () => {
             case 'E1':
                 return '#EAF3DE';
             case 'E6':
-                return '#F1EFCD';
+                return '#EAE0D8';
             case 'W4':
                 return '#EAE5CB';
             case 'W6':
@@ -533,20 +533,20 @@ const IndiTask = () => {
                                 <div className="additional-img">
                                     {/* Show comment photo if available */}
                                     {report?.comments && report.comments.length > 0 && report.comments[report.comments.length - 1].photoUrl ? (
-                                       
-                                            <img
-                                                src={`${API_BASE_URL}${report.comments[report.comments.length - 1].photoUrl}`}
-                                                alt="Comment Image"
-                                                className="report-image"
-                                                style={{ height: "100%" }}
-                                                onError={(e) => {
-                                                    console.log('Comment image load error, URL:', e.target.src);
-                                                    e.target.style.display = 'none';
-                                                    e.target.parentElement.style.display = 'none';
-                                                    e.target.parentElement.nextElementSibling.style.display = 'block';
-                                                }}
-                                            />
-                                        
+
+                                        <img
+                                            src={`${API_BASE_URL}${report.comments[report.comments.length - 1].photoUrl}`}
+                                            alt="Comment Image"
+                                            className="report-image"
+                                            style={{ height: "100%" }}
+                                            onError={(e) => {
+                                                console.log('Comment image load error, URL:', e.target.src);
+                                                e.target.style.display = 'none';
+                                                e.target.parentElement.style.display = 'none';
+                                                e.target.parentElement.nextElementSibling.style.display = 'block';
+                                            }}
+                                        />
+
                                     ) : (task?.notes && task.notes.length > 0 && task.notes[task.notes.length - 1].photoUrl ? (
                                         <div className="report-image-container">
                                             <img
@@ -597,91 +597,91 @@ const IndiTask = () => {
                                     </button>
                                 </div>
                                 <div className="additional-img">
-                                    
-                                        {imagePreview ? (
-                                            // Show uploaded image (either new or existing)
-                                            <div className="image-present">
-                                                <img
-                                                    src={imagePreview}
-                                                    alt={selectedImage ? "Uploaded report" : "Existing comment image"}
-                                                    className="report-image"
-                                                    height="100%"
-                                                />
-                                                <img
-                                                    src="/images/update.svg"
-                                                    alt="update Icon"
-                                                    className="update-icon"
-                                                    width="35px"
-                                                    height="35px"
-                                                    onClick={toggleModal}
-                                                    style={{ cursor: 'pointer' }}
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={removeImage}
-                                                    className="remove-image-btn"
-                                                    title={selectedImage ? "Remove new image" : "Remove current image"}
-                                                    style={{
-                                                        position: 'absolute',
-                                                        top: '10px',
-                                                        right: '10px',
-                                                        background: 'red',
-                                                        color: 'white',
-                                                        border: 'none',
-                                                        borderRadius: '50%',
-                                                        width: '30px',
-                                                        height: '30px',
-                                                        cursor: 'pointer',
-                                                        fontSize: '16px'
-                                                    }}
-                                                >
-                                                    ×
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            // Show upload interface
-                                            <div className="img-add-container">
-                                                <img
-                                                    src="/images/imageupload 1.svg"
-                                                    alt="Add Image Icon"
-                                                    className="add-image-icon"
-                                                    width="130px"
-                                                />
-                                                <p className="add-image-text">Image of fault (optional)</p>
-                                                <div className="line-divider"></div>
-                                                <div className="image-btn-container">
-                                                    <label htmlFor="directFileInput" className="image-input">
-                                                        <img
-                                                            src="/images/Plus.svg"
-                                                            alt="Upload Icon"
-                                                            className="upload-icon"
-                                                            width="15px"
-                                                            height="15px"
-                                                        />
-                                                        Upload
-                                                    </label>
-                                                    <input
-                                                        type="file"
-                                                        id="directFileInput"
-                                                        accept="image/*"
-                                                        onChange={handleImageUpload}
-                                                        style={{ display: "none" }}
+
+                                    {imagePreview ? (
+                                        // Show uploaded image (either new or existing)
+                                        <div className="image-present">
+                                            <img
+                                                src={imagePreview}
+                                                alt={selectedImage ? "Uploaded report" : "Existing comment image"}
+                                                className="report-image"
+                                                height="100%"
+                                            />
+                                            <img
+                                                src="/images/update.svg"
+                                                alt="update Icon"
+                                                className="update-icon"
+                                                width="35px"
+                                                height="35px"
+                                                onClick={toggleModal}
+                                                style={{ cursor: 'pointer' }}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={removeImage}
+                                                className="remove-image-btn"
+                                                title={selectedImage ? "Remove new image" : "Remove current image"}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '10px',
+                                                    right: '10px',
+                                                    background: 'red',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    borderRadius: '50%',
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    cursor: 'pointer',
+                                                    fontSize: '16px'
+                                                }}
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        // Show upload interface
+                                        <div className="img-add-container">
+                                            <img
+                                                src="/images/imageupload 1.svg"
+                                                alt="Add Image Icon"
+                                                className="add-image-icon"
+                                                width="130px"
+                                            />
+                                            <p className="add-image-text">Image of fault (optional)</p>
+                                            <div className="line-divider"></div>
+                                            <div className="image-btn-container">
+                                                <label htmlFor="directFileInput" className="image-input">
+                                                    <img
+                                                        src="/images/Plus.svg"
+                                                        alt="Upload Icon"
+                                                        className="upload-icon"
+                                                        width="15px"
+                                                        height="15px"
                                                     />
-                                                    <label htmlFor="directCameraInput" className="image-input">
-                                                        Use Camera
-                                                    </label>
-                                                    <input
-                                                        type="file"
-                                                        id="directCameraInput"
-                                                        accept="image/*"
-                                                        capture="environment"
-                                                        onChange={handleImageUpload}
-                                                        style={{ display: "none" }}
-                                                    />
-                                                </div>
+                                                    Upload
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    id="directFileInput"
+                                                    accept="image/*"
+                                                    onChange={handleImageUpload}
+                                                    style={{ display: "none" }}
+                                                />
+                                                <label htmlFor="directCameraInput" className="image-input">
+                                                    Use Camera
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    id="directCameraInput"
+                                                    accept="image/*"
+                                                    capture="environment"
+                                                    onChange={handleImageUpload}
+                                                    style={{ display: "none" }}
+                                                />
                                             </div>
-                                        )}
-                                   
+                                        </div>
+                                    )}
+
                                 </div>
                                 <div className="spacer" />
                             </div>
@@ -689,16 +689,16 @@ const IndiTask = () => {
                     </div>
                 )}
             </div>
-            
+
             {/* Image Upload Modal */}
-            <ImageUploadModal 
-                isOpen={isModalOpen} 
-                onClose={closeModal} 
+            <ImageUploadModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
                 onImageUpload={handleImageUploadWithModal}
             />
-            
+
             {/* AI Chat Bot */}
-            <AIChatBot 
+            <AIChatBot
                 isOpen={isAIChatOpen}
                 onClose={() => setIsAIChatOpen(false)}
                 reportData={{
@@ -715,18 +715,18 @@ const IndiTask = () => {
                     contextType: 'admin-task-management'
                 }}
             />
-            
+
             {/* Floating AI Chat Button */}
-            <button 
+            <button
                 className="ai-chat-icon-button"
                 onClick={() => setIsAIChatOpen(true)}
                 title="Open AI Assistant"
             >
-                <img 
-                    src="/images/Chat Icon.svg" 
-                    alt="AI Chat" 
-                    width="24" 
-                    height="24" 
+                <img
+                    src="/images/Chat Icon.svg"
+                    alt="AI Chat"
+                    width="24"
+                    height="24"
                 />
             </button>
         </div>
