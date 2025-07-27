@@ -9,5 +9,47 @@ services:
         - frontend/**
     routes:
       - type: rewrite
+        source: /
+        destination: /index.html
+      - type: rewrite
+        source: /dashboard
+        destination: /index.html
+      - type: rewrite
+        source: /dashboard/*
+        destination: /index.html
+      - type: rewrite
+        source: /dashboard/**
+        destination: /index.html
+      - type: rewrite
+        source: /admin
+        destination: /index.html
+      - type: rewrite
+        source: /admin/*
+        destination: /index.html
+      - type: rewrite
+        source: /admin/**
+        destination: /index.html
+      - type: rewrite
+        source: /chat
+        destination: /index.html
+      - type: rewrite
+        source: /chat/*
+        destination: /index.html
+      - type: rewrite
+        source: /chat/**
+        destination: /index.html
+      - type: rewrite
+        source: /profile
+        destination: /index.html
+      - type: rewrite
+        source: /profile/*
+        destination: /index.html
+      - type: rewrite
+        source: /notifications
+        destination: /index.html
+      - type: rewrite
+        source: /notifications/*
+        destination: /index.html
+      - type: rewrite
         source: /*
         destination: /index.html
