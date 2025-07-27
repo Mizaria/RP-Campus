@@ -1,16 +1,48 @@
-# Specific route redirects for better SPA handling
+# Authentication routes
+/login                        /index.html   200
+/signup                       /index.html   200
+/signup-profile               /index.html   200
+/signup-admin                 /index.html   200
+
+# Dashboard routes
 /dashboard                    /index.html   200
 /dashboard/*                  /index.html   200
 /dashboard/report/*           /index.html   200
+
+# Admin routes
 /admin                        /index.html   200
 /admin/*                      /index.html   200
 /admin/profile                /index.html   200
+/admin/announcement-form      /index.html   200
+
+# Report routes
+/reports                      /index.html   200
+/reports/*                    /index.html   200
+/reports/new                  /index.html   200
+/report/*                     /index.html   200
+
+# Task management routes
+/mytasks                      /index.html   200
+/mytasks/*                    /index.html   200
+/task/*                       /index.html   200
+/history                      /index.html   200
+/history/*                    /index.html   200
+
+# Chat routes
 /chat                         /index.html   200
 /chat/*                       /index.html   200
+
+# Profile routes
 /profile                      /index.html   200
 /profile/*                    /index.html   200
+/profile/edit                 /index.html   200
+
+# Notification routes
 /notifications                /index.html   200
 /notifications/*              /index.html   200
+
+# Announcement routes
+/announcement-form            /index.html   200
 
 # Fallback for any other routes
 /*                            /index.html   200
