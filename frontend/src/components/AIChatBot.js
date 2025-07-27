@@ -43,7 +43,7 @@ const AIChatBot = ({ isOpen, onClose, reportData }) => {
     const testFlowiseConnection = async () => {
         try {
             console.log('Testing Flowise API connection...');
-            const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/eacdb077-6f74-45da-82e1-9ae6f0441734', {
+            const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/108ffeb9-4efe-4345-8402-e1b9bfbf883c', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
