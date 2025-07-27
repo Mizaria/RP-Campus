@@ -36,7 +36,7 @@ const SecNav = ({ otherUser, isOnline }) => {
 
     // Update online status when onlineUsers changes
     const [currentUserOnlineStatus, setCurrentUserOnlineStatus] = useState(isOnline);
-    
+
     useEffect(() => {
         if (otherUser) {
             const newStatus = getUserStatus(otherUser._id) === 'online';
@@ -78,11 +78,11 @@ const SecNav = ({ otherUser, isOnline }) => {
     // Handle user selection from dropdown
     const handleUserSelect = (selectedUser) => {
         console.log('Selected user:', selectedUser);
-        
+
         // Clear the search and close dropdown
         clearSearch();
         setIsSearchFocused(false);
-        
+
         // Navigate to chat with the selected user
         navigate(`/chat/${selectedUser._id}`);
     };
@@ -91,9 +91,9 @@ const SecNav = ({ otherUser, isOnline }) => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
-                searchRef.current && 
+                searchRef.current &&
                 !searchRef.current.contains(event.target) &&
-                dropdownRef.current && 
+                dropdownRef.current &&
                 !dropdownRef.current.contains(event.target)
             ) {
                 setIsSearchFocused(false);
@@ -131,10 +131,10 @@ const SecNav = ({ otherUser, isOnline }) => {
                 <div className="bar-search">
                     <div className="user-search-container">
                         <img src="/images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
-                        <input 
+                        <input
                             ref={searchRef}
-                            type="text" 
-                            placeholder="Search users..." 
+                            type="text"
+                            placeholder="Search users..."
                             value={searchQuery}
                             onChange={handleSearchChange}
                             onFocus={handleSearchFocus}
@@ -197,15 +197,15 @@ const MessageItem = ({ message, isOwn, otherUser, currentUser, getImageUrl }) =>
     const isMessageRead = message.readBy && message.readBy.includes(currentUser?.id);
 
     return (
-        <div 
+        <div
             className={`message-item ${isOwn ? 'sent' : 'received'}`}
             data-message-id={message._id}
             data-from-other={!isOwn}
             data-is-read={isMessageRead}
         >
-            <img 
-                src={getProfileImageUrl(userToShow?.profileImage)} 
-                alt="Avatar" 
+            <img
+                src={getProfileImageUrl(userToShow?.profileImage)}
+                alt="Avatar"
                 className="message-avatar"
                 onError={(e) => {
                     e.target.src = "/images/Frame 47.svg";
@@ -215,24 +215,24 @@ const MessageItem = ({ message, isOwn, otherUser, currentUser, getImageUrl }) =>
                 backgroundColor: isOwn ? (currentUser?.role === 'admin' ? '#EFE9AF' : '#DDF1C6') : undefined
             }}>
                 {message.type === 'image' && message.image ? (
-                    <img 
-                        src={getImageUrl(message.image)} 
-                        alt="Message" 
+                    <img
+                        src={getImageUrl(message.image)}
+                        alt="Message"
                         className="message-image"
                         onError={(e) => {
                             e.target.style.display = 'none';
                         }}
                     />
                 ) : null}
-                
+
                 {message.text && (
                     <p className="message-text">{message.text}</p>
                 )}
-                
+
                 <div className="message-time">
                     {formatTime(message.createdAt)}
                 </div>
-                
+
                 {isOwn && (
                     <div className="message-status">
                         <span className="read-indicator">
@@ -258,12 +258,12 @@ const ChatMessage = () => {
     const { user } = useAuth();
     const { getUserStatus, onlineUsers } = useSocket();
     const navigate = useNavigate();
-    
+
     const [isNavbarVisible, setIsNavbarVisible] = useState(true);
     const [messageText, setMessageText] = useState('');
     const messagesEndRef = useRef(null);
     const fileInputRef = useRef(null);
-    
+
     // Use the chat hook
     const {
         messages,
@@ -282,7 +282,7 @@ const ChatMessage = () => {
 
     // Check if the other user is online (updates when onlineUsers changes)
     const [isOnline, setIsOnline] = useState(false);
-    
+
     useEffect(() => {
         if (otherUser) {
             const newStatus = getUserStatus(otherUser._id) === 'online';
@@ -318,7 +318,7 @@ const ChatMessage = () => {
                         const messageId = entry.target.getAttribute('data-message-id');
                         const isFromOtherUser = entry.target.getAttribute('data-from-other') === 'true';
                         const isRead = entry.target.getAttribute('data-is-read') === 'true';
-                        
+
                         // Mark as read if it's from the other user and not already read
                         if (messageId && isFromOtherUser && !isRead) {
                             markAsRead(messageId);
@@ -378,7 +378,7 @@ const ChatMessage = () => {
         }
 
         await sendImageMessage(file);
-        
+
         // Reset file input
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
@@ -455,10 +455,8 @@ const ChatMessage = () => {
                                 />
                             ))
                         )}
-                        
                         {isTyping && (
                             <div className="typing-indicator">
-                                <span>{otherUser?.username} is typing</span>
                                 <div className="typing-dots">
                                     <div className="typing-dot"></div>
                                     <div className="typing-dot"></div>
@@ -466,15 +464,15 @@ const ChatMessage = () => {
                                 </div>
                             </div>
                         )}
-                        
+
                         <div ref={messagesEndRef} />
                     </div>
-                    
+
                     <div className="chat-input-container">
                         {!isConnected && (
-                            <div style={{ 
-                                padding: '8px', 
-                                background: '#fff3cd', 
+                            <div style={{
+                                padding: '8px',
+                                background: '#fff3cd',
                                 border: '1px solid #ffeaa7',
                                 borderRadius: '4px',
                                 marginBottom: '8px',
@@ -484,7 +482,7 @@ const ChatMessage = () => {
                                 Connection lost. Trying to reconnect...
                             </div>
                         )}
-                        
+
                         <div className="chat-input-wrapper" style={{
                             '--focus-border-color': user?.role === 'admin' ? '#E9D674' : '#799C5F',
                             '--focus-border-color-rgb': user?.role === 'admin' ? '233, 214, 116' : '121, 156, 95'
@@ -508,7 +506,7 @@ const ChatMessage = () => {
                                     e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
                                 }}
                             />
-                            
+
                             <div className="input-controls">
                                 {/* File upload button */}
                                 <button
@@ -519,7 +517,7 @@ const ChatMessage = () => {
                                 >
                                     <img src="/images/Plus.svg" alt="Upload" />
                                 </button>
-                                
+
                                 {/* Hidden file input */}
                                 <input
                                     ref={fileInputRef}
@@ -528,7 +526,7 @@ const ChatMessage = () => {
                                     accept="image/*"
                                     onChange={handleImageUpload}
                                 />
-                                
+
                                 {/* Send button */}
                                 <button
                                     className="input-btn send-btn"

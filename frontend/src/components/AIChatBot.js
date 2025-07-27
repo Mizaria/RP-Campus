@@ -43,13 +43,14 @@ const AIChatBot = ({ isOpen, onClose, reportData }) => {
     const testFlowiseConnection = async () => {
         try {
             console.log('Testing Flowise API connection...');
+            // Use the same endpoint as the main chat for consistency
             const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/108ffeb9-4efe-4345-8402-e1b9bfbf883c', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    question: "Test connection",
+                    question: "Hello, are you working?",
                     overrideConfig: {
                         returnSourceDocuments: false
                     }
@@ -58,8 +59,12 @@ const AIChatBot = ({ isOpen, onClose, reportData }) => {
             
             if (response.ok) {
                 console.log('✅ Flowise API connection successful');
+                const data = await response.json();
+                console.log('✅ Test response:', data);
             } else {
                 console.warn('⚠️ Flowise API connection test failed:', response.status);
+                const errorText = await response.text();
+                console.warn('⚠️ Error details:', errorText);
             }
         } catch (error) {
             console.error('❌ Flowise API connection test error:', error);
@@ -78,10 +83,16 @@ const AIChatBot = ({ isOpen, onClose, reportData }) => {
         };
 
         setMessages(prev => [...prev, userMessage]);
+        const currentInput = inputMessage;
         setInputMessage('');
         setIsLoading(true);
 
         try {
+            // Validate input length
+            if (currentInput.trim().length > 2000) {
+                throw new Error('Message too long. Please keep your question under 2000 characters.');
+            }
+
             // Create context about the report and task
             const reportContext = reportData ? `
 Report Context:
@@ -105,26 +116,38 @@ Task Management Context:
 ` : `
 - Assigned To: ${reportData.assignedTo?.username || 'Unassigned'}
 `}
-User Question: ${inputMessage}
-` : inputMessage;
+User Question: ${currentInput}
+` : currentInput;
 
-            console.log('Sending to Flowise API:', reportContext);
+            console.log('Sending to Flowise API:', {
+                endpoint: 'https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/108ffeb9-4efe-4345-8402-e1b9bfbf883c',
+                contextLength: reportContext.length,
+                hasReportData: !!reportData
+            });
 
-            const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/eacdb077-6f74-45da-82e1-9ae6f0441734', {
+            // Create abort controller for timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
+            const response = await fetch('https://gaiadahakavoid-flowise.hf.space/api/v1/prediction/108ffeb9-4efe-4345-8402-e1b9bfbf883c', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
                 body: JSON.stringify({
                     question: reportContext,
                     overrideConfig: {
                         returnSourceDocuments: false
                     }
-                })
+                }),
+                signal: controller.signal
             });
 
+            clearTimeout(timeoutId);
+
             console.log('Response status:', response.status);
-            console.log('Response headers:', response.headers);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
             if (!response.ok) {
                 const errorText = await response.text();
@@ -134,21 +157,36 @@ User Question: ${inputMessage}
 
             const data = await response.json();
             
-            console.log('AI Response data:', data);
-            console.log('Response text length:', data.text?.length || data.answer?.length || 0);
-            console.log('Full response text:', data.text || data.answer);
+            console.log('AI Response data structure:', {
+                hasText: !!data.text,
+                hasAnswer: !!data.answer,
+                dataType: typeof data,
+                keys: Object.keys(data),
+                fullData: data
+            });
             
             // Handle different response formats from Flowise
             let responseText = '';
-            if (data.text) {
-                responseText = data.text;
-            } else if (data.answer) {
-                responseText = data.answer;
+            if (data.text && typeof data.text === 'string') {
+                responseText = data.text.trim();
+            } else if (data.answer && typeof data.answer === 'string') {
+                responseText = data.answer.trim();
+            } else if (data.response && typeof data.response === 'string') {
+                responseText = data.response.trim();
             } else if (typeof data === 'string') {
-                responseText = data;
+                responseText = data.trim();
+            } else if (data.message && typeof data.message === 'string') {
+                responseText = data.message.trim();
             } else {
-                responseText = JSON.stringify(data);
+                console.warn('Unexpected response format:', data);
+                responseText = "I received your message but couldn't process the response format. Please try again.";
             }
+            
+            if (!responseText || responseText.length === 0) {
+                responseText = "I understand your question but couldn't generate a response. Please try rephrasing your question.";
+            }
+            
+            console.log('Final response text:', responseText);
             
             const botMessage = {
                 id: Date.now() + 1,
@@ -163,18 +201,25 @@ User Question: ${inputMessage}
             console.error('Error details:', {
                 message: error.message,
                 stack: error.stack,
-                name: error.name
+                name: error.name,
+                type: error.constructor.name
             });
             
             let errorText = "I'm sorry, I'm experiencing technical difficulties. Please try again later.";
             
             // Provide more specific error messages based on error type
-            if (error.message.includes('Failed to fetch')) {
+            if (error.name === 'AbortError') {
+                errorText = "The request timed out. The AI service might be busy. Please try again.";
+            } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
                 errorText = "I'm unable to connect to the AI service. Please check your internet connection and try again.";
             } else if (error.message.includes('HTTP error! status: 4')) {
                 errorText = "I'm having trouble processing your request. Please try rephrasing your question.";
             } else if (error.message.includes('HTTP error! status: 5')) {
                 errorText = "The AI service is temporarily unavailable. Please try again in a few moments.";
+            } else if (error.message.includes('Message too long')) {
+                errorText = error.message;
+            } else if (error.message.includes('JSON')) {
+                errorText = "I received an invalid response from the AI service. Please try again.";
             }
             
             const errorMessage = {

@@ -387,7 +387,7 @@ const IndiTask = () => {
 
         switch (buildingCode) {
             case 'E4':
-            case 'E5':
+            case 'E3':
                 return '#E0F1EB';
             case 'W2':
             case 'W1':
@@ -401,6 +401,8 @@ const IndiTask = () => {
                 return '#EAF3DE';
             case 'E6':
                 return '#EAE0D8';
+            case 'E5':
+                return '#F1EFCD';
             case 'W4':
                 return '#EAE5CB';
             case 'W6':

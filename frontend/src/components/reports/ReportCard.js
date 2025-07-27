@@ -36,28 +36,30 @@ export const ReportCard = ({ report, onEdit, onDelete, onClick }) => {
     const buildingCode = building.toUpperCase();
     
     switch (buildingCode) {
-      case 'E4':
-      case 'E5':
-        return '#E0F1EB';
-      case 'W2':
-      case 'W1':
-        return '#E6F3F5';
-      case 'W3':
-      case 'W5':
-        return '#F5E6F1';
-      case 'E2':
-        return '#EFE7F2';
-      case 'E1':
-        return '#EAF3DE';
-      case 'E6':
-        return '#EAE0D8';
-      case 'W4':
-        return '#EAE5CB';
-      case 'W6':
-        return '#EAE0D8';
-      default:
-        return '#E0E0E0';
-    }
+            case 'E4':
+            case 'E3':
+                return '#E0F1EB';
+            case 'W2':
+            case 'W1':
+                return '#E6F3F5';
+            case 'W3':
+            case 'W5':
+                return '#F5E6F1';
+            case 'E2':
+                return '#EFE7F2';
+            case 'E1':
+                return '#EAF3DE';
+            case 'E6':
+                return '#EAE0D8';
+            case 'E5':
+                return '#F1EFCD';
+            case 'W4':
+                return '#EAE5CB';
+            case 'W6':
+                return '#EAE0D8';
+            default:
+                return '#E0E0E0';
+        }
   };
 
 

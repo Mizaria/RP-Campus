@@ -231,28 +231,70 @@
     display: none;
 }
 
-/* Typing Indicator */
+/* Enhanced Typing Indicator */
 .typing-indicator {
     display: flex;
     align-items: center;
-    padding: 8px 16px;
+    gap: 12px;
+    padding: 20px 16px;
+    margin: 8px 0 8px 12px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    width: 7%;
+    animation: fadeInUp 0.3s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.typing-indicator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2.5s infinite;
+}
+
+.typing-indicator span {
+    font-size: 13px;
     color: #666;
-    font-size: 14px;
-    font-style: italic;
+    font-weight: 500;
+    font-style: normal;
+    white-space: nowrap;
+    animation: fadeIn 0.5s ease-out;
 }
 
 .typing-dots {
     display: flex;
+    align-items: center;
     gap: 4px;
-    margin-left: 8px;
+    margin-left: auto;
 }
 
 .typing-dot {
-    width: 4px;
-    height: 4px;
-    background-color: #666;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    animation: typingPulse 1.4s infinite ease-in-out;
+    background: linear-gradient(135deg, #799C5F, #5a7a45);
+    animation: typingPulse 1.5s infinite ease-in-out;
+    box-shadow: 0 2px 4px rgba(121, 156, 95, 0.3);
+    transform: scale(0.8);
+}
+
+/* Admin theme for typing dots */
+.dashboard .typing-indicator .typing-dot {
+    background: linear-gradient(135deg, #cecece, #9f9f9f);
+    box-shadow: 0 2px 4px rgba(233, 214, 116, 0.3);
+}
+
+/* Staggered animation for each dot */
+.typing-dot:nth-child(1) {
+    animation-delay: 0s;
 }
 
 .typing-dot:nth-child(2) {
@@ -263,14 +305,129 @@
     animation-delay: 0.4s;
 }
 
+/* Enhanced Keyframe Animations */
 @keyframes typingPulse {
     0%, 60%, 100% {
         transform: scale(0.8);
-        opacity: 0.5;
+        opacity: 0.6;
     }
     30% {
-        transform: scale(1);
+        transform: scale(1.2);
         opacity: 1;
+        box-shadow: 0 3px 8px rgba(121, 156, 95, 0.4);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Enhanced hover effect */
+.typing-indicator:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 1);
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .typing-indicator {
+        width: 15%;
+        padding: 1px 14px;
+        gap: 8px;
+        margin-left: 8px;
+    }
+    
+    .typing-indicator span {
+        font-size: 12px;
+    }
+    
+    .typing-dot {
+        width: 6px;
+        height: 6px;
+    }
+    
+    .typing-avatar {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .typing-indicator {
+        max-width: 140px;
+        padding: 8px 12px;
+        gap: 6px;
+        margin-left: 6px;
+    }
+    
+    .typing-indicator span {
+        font-size: 11px;
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .typing-dot {
+        width: 5px;
+        height: 5px;
+    }
+    
+    .typing-dots {
+        gap: 3px;
+    }
+    
+    .typing-avatar {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    .typing-indicator,
+    .typing-dot {
+        animation: none;
+    }
+    
+    .typing-indicator {
+        opacity: 1;
+        transform: none;
+    }
+    
+    .typing-dot {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    
+    .typing-indicator::before {
+        animation: none;
     }
 }
 
