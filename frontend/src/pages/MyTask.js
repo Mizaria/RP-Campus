@@ -68,13 +68,13 @@ const SecNav = ({ searchTerm, onSearchChange }) => {
         <div className="mainBackground" style={{ backgroundImage: 'url(/images/adminmainbackground.svg)' }}>
             <div className="nav-bar">
                 <div className="bar-item-menu" onClick={toggleNavbar}>
-                    <img src="images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
+                    <img src="/images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
                 </div>
                 <div className="bar-item-modal" onClick={toggleModel}>
-                    <img src="images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
+                    <img src="/images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
                 </div>
                 <div className="bar-search">
-                    <img src="images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
+                    <img src="/images/Search Icon.svg" alt="Search Icon" width="20px" height="20px" />
                     <input
                         type="text"
                         placeholder="Search reports..."
