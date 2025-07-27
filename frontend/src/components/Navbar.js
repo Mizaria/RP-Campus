@@ -6,7 +6,6 @@ import NotificationIcon from './NotificationIcon';
 import backgroundImage from '../assets/images/mainBackground.svg'; // Adjust the path as necessary
 import '../assets/styles/Navbar.css'; // Import your custom CSS for the navbar
 import { NavLink } from "react-router-dom";
-import adminbackgroundImage from '../assets/images/adminmainbackground.svg'; // Adjust the path as necessary
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -58,7 +57,7 @@ const Navbar = () => {
         <div
           className="navBackground"
           style={{
-            backgroundImage: `url(${user?.role === 'admin' ? adminbackgroundImage : backgroundImage})`
+            backgroundImage: `url(${user?.role === 'admin' ? '/images/adminmainbackground.svg' : backgroundImage})`
           }}
         >
           <div className="nav-box">

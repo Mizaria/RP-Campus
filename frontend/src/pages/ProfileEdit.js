@@ -9,7 +9,6 @@ import useProfile from '../hooks/useProfile';
 import { useAuth } from '../contexts/AuthContext';
 import { authAPI } from '../services/api';
 import backgroundImage from '../assets/images/mainBackground.svg';
-import adminBackgroundImage from '../assets/images/adminmainbackground.svg';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
@@ -136,7 +135,7 @@ const ProfileEdit = () => {
         <div 
           className="mainBackground" 
           style={{ 
-            backgroundImage: `url(${isAdmin ? adminBackgroundImage : backgroundImage})` 
+            backgroundImage: `url(${isAdmin ? '/images/adminmainbackground.svg' : backgroundImage})` 
           }}
         >
         {/* Top Navigation Bar */}

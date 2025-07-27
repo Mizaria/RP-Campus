@@ -6,7 +6,6 @@ import NotificationIcon from '../components/NotificationIcon';
 import '../assets/styles/Dashboard.css';
 import '../assets/styles/ProfileStyles.css';
 import backgroundImage from '../assets/images/mainBackground.svg';
-import adminBackgroundImage from '../assets/images/adminmainbackground.svg';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
@@ -72,7 +71,7 @@ const AdminProfile = () => {
         <div 
           className="navBackground"
           style={{
-            backgroundImage: `url(${user?.role === 'admin' ? adminBackgroundImage : backgroundImage})`
+            backgroundImage: `url(${user?.role === 'admin' ? '/images/adminmainbackground.svg' : backgroundImage})`
           }}
         >
           <div className="nav-box">
@@ -135,7 +134,7 @@ const AdminProfile = () => {
         <div 
           className="mainBackground" 
           style={{ 
-            backgroundImage: `url(${user?.role === 'admin' ? adminBackgroundImage : backgroundImage})` 
+            backgroundImage: `url(${user?.role === 'admin' ? '/images/adminmainbackground.svg' : backgroundImage})` 
           }}
         >
           {/* Top Navigation Bar */}

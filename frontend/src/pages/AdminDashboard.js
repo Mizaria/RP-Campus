@@ -7,8 +7,7 @@ import NotificationIcon from '../components/NotificationIcon';
 import useAdminDashboard from '../hooks/useAdminDashboard';
 import useAdminReports from '../hooks/useAdminReports';
 import useToast from '../hooks/useToast';
-import '../assets/styles/AdminDashboard.css';
-import backgroundImage from '../assets/images/adminmainbackground.svg'; // Adjust the path as necessary 
+import '../assets/styles/AdminDashboard.css'; 
 
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
@@ -67,7 +66,7 @@ const SecNav = ({ searchTerm, onSearchChange }) => {
     }));
   };
   return (
-    <div className="mainBackground" style={{ backgroundImage: `url(${backgroundImage})` }}>
+    <div className="mainBackground" style={{ backgroundImage: 'url(/images/adminmainbackground.svg)' }}>
       <div className="nav-bar">
         <div className="bar-item-menu" onClick={toggleNavbar}>
           <img src="images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />

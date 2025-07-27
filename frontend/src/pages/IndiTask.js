@@ -8,7 +8,6 @@ import useAdminTasks from '../hooks/useAdminTasks';
 import useToast from '../hooks/useToast';
 import { ToastContainer } from '../components/common/Toast';
 import '../assets/styles/IndiTask.css';
-import backgroundImage from '../assets/images/adminmainbackground.svg';
 
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
@@ -115,7 +114,7 @@ const SecNav = ({ task, onRemoveTask }) => {
         }));
     };
     return (
-        <div className="mainBackground" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div className="mainBackground" style={{ backgroundImage: 'url(/images/adminmainbackground.svg)' }}>
             <div className="nav-bar">
                 <div className="bar-item-menu" onClick={toggleNavbar}>
                     <img src="/images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />

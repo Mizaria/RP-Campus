@@ -11,7 +11,6 @@ import '../assets/styles/Chat.css';
 import '../assets/styles/UserSearch.css';
 import '../assets/styles/ChatConversations.css';
 import backgroundImage from '../assets/images/mainBackground.svg';
-import adminbackgroundImage from '../assets/images/adminmainbackground.svg';
 
 // Base URL for API calls from environment variables
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
@@ -118,7 +117,7 @@ const SecNav = () => {
     };
 
     return (
-         <div className="mainBackground" style={{ backgroundImage: `url(${user?.role === 'admin' ? adminbackgroundImage : backgroundImage})` }}>
+         <div className="mainBackground" style={{ backgroundImage: `url(${user?.role === 'admin' ? '/images/adminmainbackground.svg' : backgroundImage})` }}>
             <div className="nav-bar">
                 <div className="bar-item-menu" onClick={toggleNavbar}>
                     <img src="/images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
