@@ -8,7 +8,6 @@ import NotificationIcon from '../components/NotificationIcon';
 import useProfile from '../hooks/useProfile';
 import { useAuth } from '../contexts/AuthContext';
 import { authAPI } from '../services/api';
-import backgroundImage from '../assets/images/mainBackground.svg';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
@@ -135,7 +134,7 @@ const ProfileEdit = () => {
         <div 
           className="mainBackground" 
           style={{ 
-            backgroundImage: `url(${isAdmin ? '/images/adminmainbackground.svg' : backgroundImage})` 
+            backgroundImage: `url(${isAdmin ? '/images/adminmainbackground.svg' : '/images/mainBackground.svg'})` 
           }}
         >
         {/* Top Navigation Bar */}

@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext';
 import NotificationIcon from '../components/NotificationIcon';
 import useReportUpdate from '../hooks/useReportUpdate';
 import '../assets/styles/ReportForm.css';
-import backgroundImage from '../assets/images/mainBackground.svg';
 
 // Image Upload Modal Component
 const ImageUploadModal = ({ isOpen, onClose, onImageUpload }) => {
@@ -113,7 +112,7 @@ const SecNav = () => {
     }));
   };
   return (
-    <div className="mainBackground" style={{ backgroundImage: `url(${backgroundImage})` }}>
+    <div className="mainBackground" style={{ backgroundImage: 'url(/images/mainBackground.svg)' }}>
       <div className="nav-bar">
         <div className="bar-item-menu" onClick={toggleNavbar}>
           <img src="/images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />

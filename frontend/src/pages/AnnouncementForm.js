@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { useAnnouncements } from '../hooks/useAnnouncements';
 import NotificationIcon from '../components/NotificationIcon';
 import '../assets/styles/Announcement.css';
-import backgroundImage from '../assets/images/mainBackground.svg';
 
 
 // Base URL for API calls from environment variables
@@ -51,7 +50,7 @@ const SecNav = () => {
         }));
     };
     return (
-        <div className="mainBackground" style={{ backgroundImage: `url(${user?.role === 'admin' ? '/images/adminmainbackground.svg' : backgroundImage})` }}>
+        <div className="mainBackground" style={{ backgroundImage: `url(${user?.role === 'admin' ? '/images/adminmainbackground.svg' : '/images/mainBackground.svg'})` }}>
             <div className="nav-bar">
                 <div className="bar-item-menu" onClick={toggleNavbar}>
                     <img src="/images/Menu Icon.svg" alt="Menu Icon" width="20px" height="20px" />
